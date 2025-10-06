@@ -1,3 +1,23 @@
+[**AddressBook for University Student Club Exco Members**]
+
+**Target Users:** University student club exco members (responsible for managing member information, attendance & duty rosters). Designed for busy, fast typists who need to update records quickly during the semester.
+
+**Value Proposition:**
+- Manage members, mark attendance, assign tags, handle finance, and track duty rosters quickly through a Command Line Interface (CLI).
+- Example: Typing `markPresent 'jason'` is much faster than searching for a name in Excel and checking a box.
+
+**Key Features:**
+- **Member Management:** Add, edit, and remove members efficiently.
+- **Attendance Tracking:** Mark attendance instantly during events or meetings.
+- **Tagging System:** Organize members with customizable tags (e.g., roles, interests).
+- **Finance Management:** Track payments, dues, and club finances.
+- **Duty Roster:** Assign and update duty rosters on the fly.
+
+**Why Use This AddressBook?**
+- Natural fit for student clubs: simple contacts + attendance logs + tags.
+- CLI benefits: Fast, keyboard-driven workflows for quick updates.
+- Easily explainable and manageable for new exco members.
+
 [![CI Status](https://github.com/se-edu/addressbook-level3/workflows/Java%20CI/badge.svg)](https://github.com/se-edu/addressbook-level3/actions)
 
 ![Ui](docs/images/Ui.png)
