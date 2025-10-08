@@ -18,6 +18,9 @@ public class DeleteCommand extends Command {
 
     public static final String COMMAND_WORD = "delete";
 
+    /**
+     * Usage message for help and documentation.
+     */
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the person identified by the index number used in the displayed person list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
@@ -27,10 +30,21 @@ public class DeleteCommand extends Command {
 
     private final Index targetIndex;
 
+    /**
+     * Constructs a DeleteCommand to remove a member at the specified index from the displayed member list.
+     *
+     * @param targetIndex Index of the member to delete (1-based as shown to user).
+     */
     public DeleteCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
 
+    /**
+     * Executes the delete command: removes the member at the specified index from the displayed member list.
+     * @param model The model containing the member list.
+     * @return CommandResult with success message and deleted member details.
+     * @throws CommandException if the index is invalid.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
@@ -60,6 +74,11 @@ public class DeleteCommand extends Command {
         return targetIndex.equals(otherDeleteCommand.targetIndex);
     }
 
+    /**
+     * Returns a string representation of the DeleteCommand.
+     *
+     * @return String describing the command and target index.
+     */
     @Override
     public String toString() {
         return new ToStringBuilder(this)
