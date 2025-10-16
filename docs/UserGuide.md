@@ -93,6 +93,26 @@ Shows a list of all persons in the address book.
 
 Format: `list`
 
+### Searching by name and/or tags: `search`
+
+Filters the displayed list by **name** and/or **tags**.
+
+**Format:** `search [n/NAME_QUERY] [t/TAG]… [any/]`
+
+* `n/NAME_QUERY` — case-insensitive **token-prefix** match on the person’s name  
+  (e.g., `n/char oli` matches “Charlotte Oliveira”).
+* `t/TAG` — repeatable; filters by tags.  
+  Default logic is **AND** (must contain all listed tags).
+* `any/` — optional flag; changes tag logic to **OR** (contains *any* of the listed tags).
+* At least one of `n/` or `t/` must be supplied.
+
+**Examples:**
+* `search n/char`
+* `search t/treasurer t/committee`
+* `search n/david t/family`
+* `search t/dance t/logistics any/`
+
+
 ### Editing a person : `edit`
 
 Edits an existing person in the address book.
@@ -196,5 +216,6 @@ Action | Format, Examples
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Search** | `search [n/NAME_QUERY] [t/TAG]… [any/]`<br> e.g., `search n/char`, `search t/treasurer t/committee`, `search t/dance t/logistics any/`
 **List** | `list`
 **Help** | `help`
