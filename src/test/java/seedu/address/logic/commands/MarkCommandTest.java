@@ -31,7 +31,8 @@ public class MarkCommandTest {
         Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON);
 
-        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSON_SUCCESS, personToMark.getName());
+        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSON_SUCCESS + " Points awarded: %2$d",
+                personToMark.getName(), personToMark.getPoints().addPoint().getValue());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         Person markedPerson = new Person(
@@ -63,7 +64,8 @@ public class MarkCommandTest {
         Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON);
 
-        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSON_SUCCESS, personToMark.getName());
+        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSON_SUCCESS + " Points awarded: %2$d",
+                personToMark.getName(), personToMark.getPoints().addPoint().getValue());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         Person markedPerson = new Person(
