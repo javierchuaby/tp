@@ -56,7 +56,19 @@ public class Person {
         this.points = new Points();
     }
 
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, boolean isPresent, Points points) {
+    /**
+     * Full constructor with explicit present status and points.
+     * Every field must be present and not null.
+     */
+    public Person(
+            Name name,
+            Phone phone,
+            Email email,
+            Address address,
+            Set<Tag> tags,
+            boolean isPresent,
+            Points points
+    ) {
         requireAllNonNull(name, phone, email, address, tags, points);
         this.name = name;
         this.phone = phone;
@@ -83,6 +95,9 @@ public class Person {
         return address;
     }
 
+    /**
+     * Returns the immutable points associated with this person.
+     */
     public Points getPoints() {
         return points;
     }
