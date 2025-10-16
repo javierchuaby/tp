@@ -38,6 +38,12 @@ public class Points {
         return new Points(this.value + 1);
     }
 
+    /**
+     * Returns a new Points with {@code delta} subtracted; result is never negative.
+     *
+     * @param delta non-negative amount to subtract
+     * @throws IllegalArgumentException if {@code delta} is negative
+     */
     public Points subtract(int delta) {
         if (delta < 0) {
             throw new IllegalArgumentException("Delta must be non-negative");
@@ -45,6 +51,9 @@ public class Points {
         return new Points(Math.max(0, this.value - delta));
     }
 
+    /**
+     * Returns a new Points with one point subtracted; floors at zero.
+     */
     public Points subtractPoint() {
         return subtract(1);
     }
