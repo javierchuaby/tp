@@ -10,51 +10,94 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 
 <fx:root type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-         title="Address App" minWidth="450" minHeight="600" onCloseRequest="#handleExit">
+         title="ClubTrack" minWidth="450" minHeight="600" onCloseRequest="#handleExit">
   <icons>
     <Image url="@/images/address_book_32.png" />
   </icons>
   <scene>
     <Scene>
       <stylesheets>
-        <URL value="@DarkTheme.css" />
-        <URL value="@Extensions.css" />
+        <URL value="@clubtrack-theme.css" />
       </stylesheets>
 
-      <VBox>
-        <MenuBar fx:id="menuBar" VBox.vgrow="NEVER">
-          <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit" />
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleHelp" text="Help" />
-          </Menu>
-        </MenuBar>
+      <StackPane>
+        <children>
+          <VBox>
+            <!-- Header -->
+            <VBox styleClass="header-bar" VBox.vgrow="NEVER">
+              <children>
+                <javafx.scene.control.Label text="ClubTrack" styleClass="app-title" />
+                <javafx.scene.control.Label text="Track members • Attendance • Roles" styleClass="app-subtitle" />
+              </children>
+            </VBox>
 
-        <StackPane VBox.vgrow="NEVER" fx:id="commandBoxPlaceholder" styleClass="pane-with-border">
-          <padding>
-            <Insets top="5" right="10" bottom="5" left="10" />
-          </padding>
-        </StackPane>
+            <!-- Menu bar with File/Edit/Help -->
+            <MenuBar VBox.vgrow="NEVER">
+              <menus>
+                <Menu text="File">
+                  <items>
+                    <MenuItem text="Exit" onAction="#handleExit" />
+                  </items>
+                </Menu>
+                <Menu text="Edit" />
+                <Menu text="Help">
+                  <items>
+                    <MenuItem text="Help" onAction="#handleHelp" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
 
-        <StackPane VBox.vgrow="NEVER" fx:id="resultDisplayPlaceholder" styleClass="pane-with-border"
-                   minHeight="100" prefHeight="100" maxHeight="100">
-          <padding>
-            <Insets top="5" right="10" bottom="5" left="10" />
-          </padding>
-        </StackPane>
+            <!-- Command box -->
+            <StackPane VBox.vgrow="NEVER" styleClass="command-container">
+              <StackPane fx:id="commandBoxPlaceholder" />
+            </StackPane>
 
-        <VBox fx:id="personList" styleClass="pane-with-border" minWidth="340" prefWidth="340" VBox.vgrow="ALWAYS">
-          <padding>
-            <Insets top="10" right="10" bottom="10" left="10" />
-          </padding>
-          <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS"/>
-        </VBox>
+            <!-- Full-width members panel -->
+            <StackPane VBox.vgrow="ALWAYS" styleClass="members-panel">
+              <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS"/>
+            </StackPane>
 
-        <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
-      </VBox>
+            <!-- Keep result display placeholder for controller wiring, but don't layout it -->
+            <StackPane fx:id="resultDisplayPlaceholder" managed="false" visible="false" />
+
+            <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
+          </VBox>
+
+          <!-- Help Overlay -->
+          <StackPane fx:id="helpOverlay" visible="false" pickOnBounds="false">
+            <children>
+              <!-- Dimmed background -->
+              <javafx.scene.layout.StackPane style="-fx-background-color: rgba(15,23,42,0.55);" pickOnBounds="true"/>
+              <!-- Card -->
+              <javafx.scene.layout.VBox spacing="10" maxWidth="720" styleClass="pane-with-border"
+                                        style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;">
+                <padding>
+                  <Insets top="16" right="16" bottom="16" left="16" />
+                </padding>
+                <children>
+                  <HBox alignment="CENTER_RIGHT">
+                    <children>
+                      <javafx.scene.control.Label text="Help — Available Commands" style="-fx-font-size: 18px; -fx-font-weight: 700; -fx-text-fill: #0f172a;"/>
+                      <Region HBox.hgrow="ALWAYS"/>
+                      <javafx.scene.control.Button text="Close" onAction="#handleCloseHelpOverlay" />
+                    </children>
+                  </HBox>
+                  <javafx.scene.control.ScrollPane fitToWidth="true" prefViewportHeight="500">
+                    <content>
+                      <javafx.scene.control.Label fx:id="helpOverlayContent" wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #334155;" />
+                    </content>
+                  </javafx.scene.control.ScrollPane>
+                </children>
+              </javafx.scene.layout.VBox>
+            </children>
+          </StackPane>
+        </children>
+      </StackPane>
     </Scene>
   </scene>
 </fx:root>

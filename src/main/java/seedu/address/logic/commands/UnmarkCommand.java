@@ -2,7 +2,9 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -10,6 +12,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 /**
  * Marks a person as absent identified using it's displayed index from the address book.
@@ -56,23 +59,18 @@ public class UnmarkCommand extends Command {
 
         Person personToUnmark = lastShownList.get(targetIndex.getZeroBased());
 
-        // If already absent, avoid subtracting points and inform the user
-        if (!personToUnmark.isPresent()) {
-            return new CommandResult(String.format(
-                "Member '%1$s' is already marked absent. No points deducted.",
-                personToUnmark.getName()
-            ));
-        }
+        // Clone tags and remove the "present" tag if exists
+        Set<Tag> updatedTags = new HashSet<>(personToUnmark.getTags());
+        updatedTags.remove(new Tag("present"));
 
-        // Create a new Person with isPresent set to false
+        // Create a new Person with isPresent set to false and updated tags
         Person unmarkedPerson = new Person(
             personToUnmark.getName(),
             personToUnmark.getPhone(),
             personToUnmark.getEmail(),
             personToUnmark.getAddress(),
-            personToUnmark.getTags(),
-            false,
-            personToUnmark.getPoints().subtractPoint()
+            updatedTags,
+            false
         );
 
         model.setPerson(personToUnmark, unmarkedPerson);

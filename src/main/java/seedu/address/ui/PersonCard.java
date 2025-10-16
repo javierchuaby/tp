@@ -54,9 +54,13 @@ public class PersonCard extends UiPart<Region> {
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
-        points.setText("Points: " + person.getPoints().getValue()); // Set points label
+
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+                .forEach(tag -> {
+                    Label chip = new Label(tag.tagName);
+                    chip.getStyleClass().add("chip");
+                    tags.getChildren().add(chip);
+                });
     }
 }

@@ -2,7 +2,9 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -10,6 +12,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 /**
  * Marks a person as present identified using it's displayed index from the address book.
@@ -56,22 +59,18 @@ public class MarkCommand extends Command {
 
         Person personToMark = lastShownList.get(targetIndex.getZeroBased());
 
-        if (personToMark.isPresent()) {
-            return new CommandResult(String.format(
-                "Member '%1$s' is already marked present. No additional points awarded.",
-                personToMark.getName()
-            ));
-        }
+        // Clone tags and add the "present" tag if not already present
+        Set<Tag> updatedTags = new HashSet<>(personToMark.getTags());
+        updatedTags.add(new Tag("present"));
 
-        // Create a new Person with isPresent set to true
+        // Create a new Person with isPresent set to true and updated tags
         Person markedPerson = new Person(
             personToMark.getName(),
             personToMark.getPhone(),
             personToMark.getEmail(),
             personToMark.getAddress(),
-            personToMark.getTags(),
-            true,
-            personToMark.getPoints().addPoint()
+            updatedTags,
+            true
         );
 
         model.setPerson(personToMark, markedPerson);

@@ -12,6 +12,9 @@ public class AttendanceCommand extends Command {
 
     public static final String COMMAND_WORD = "attendance";
 
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons marked present.\n"
+            + "Example: " + COMMAND_WORD;
+
     public static final String MESSAGE_SUCCESS = "Listed all persons marked as present.";
 
     @Override
