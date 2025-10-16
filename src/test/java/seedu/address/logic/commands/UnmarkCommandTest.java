@@ -31,18 +31,13 @@ public class UnmarkCommandTest {
         Person personToUnmark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         UnmarkCommand unmarkCommand = new UnmarkCommand(INDEX_FIRST_PERSON);
 
-        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS, personToUnmark.getName());
+        // Since typical persons are created as absent by default, expect the "already marked absent" message
+        String expectedMessage = String.format(
+                "Member '%1$s' is already marked absent. No points deducted.",
+                personToUnmark.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        Person unmarkedPerson = new Person(
-            personToUnmark.getName(),
-            personToUnmark.getPhone(),
-            personToUnmark.getEmail(),
-            personToUnmark.getAddress(),
-            personToUnmark.getTags(),
-            false
-        );
-        expectedModel.setPerson(personToUnmark, unmarkedPerson);
+        // No change to the person since they're already absent
 
         assertCommandSuccess(unmarkCommand, model, expectedMessage, expectedModel);
     }
@@ -62,19 +57,51 @@ public class UnmarkCommandTest {
         Person personToUnmark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         UnmarkCommand unmarkCommand = new UnmarkCommand(INDEX_FIRST_PERSON);
 
-        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS, personToUnmark.getName());
+        // Since typical persons are created as absent by default, expect the "already marked absent" message
+        String expectedMessage = String.format(
+                "Member '%1$s' is already marked absent. No points deducted.",
+                personToUnmark.getName());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        Person unmarkedPerson = new Person(
-            personToUnmark.getName(),
-            personToUnmark.getPhone(),
-            personToUnmark.getEmail(),
-            personToUnmark.getAddress(),
-            personToUnmark.getTags(),
-            false
-        );
-        expectedModel.setPerson(personToUnmark, unmarkedPerson);
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
+        // No change to the person since they're already absent
+
+        assertCommandSuccess(unmarkCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_presentPersonUnfilteredList_success() {
+        // First mark a person as present
+        Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person markedPerson = new Person(
+            personToMark.getName(),
+            personToMark.getPhone(),
+            personToMark.getEmail(),
+            personToMark.getAddress(),
+            personToMark.getTags(),
+            true,
+            personToMark.getPoints().addPoint()
+        );
+        model.setPerson(personToMark, markedPerson);
+
+        // Now test unmarking them
+        UnmarkCommand unmarkCommand = new UnmarkCommand(INDEX_FIRST_PERSON);
+
+        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS
+                + " 1 point deducted. New total: %2$d",
+                markedPerson.getName(), markedPerson.getPoints().subtractPoint().getValue());
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Person unmarkedPerson = new Person(
+            markedPerson.getName(),
+            markedPerson.getPhone(),
+            markedPerson.getEmail(),
+            markedPerson.getAddress(),
+            markedPerson.getTags(),
+            false,
+            markedPerson.getPoints().subtractPoint()
+        );
+        expectedModel.setPerson(markedPerson, unmarkedPerson);
 
         assertCommandSuccess(unmarkCommand, model, expectedMessage, expectedModel);
     }

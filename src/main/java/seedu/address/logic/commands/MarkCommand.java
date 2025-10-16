@@ -74,7 +74,9 @@ public class MarkCommand extends Command {
         );
 
         model.setPerson(personToMark, markedPerson);
-        return new CommandResult(String.format(MESSAGE_MARK_PERSON_SUCCESS, personToMark.getName()));
+        return new CommandResult(String.format(MESSAGE_MARK_PERSON_SUCCESS + " Points awarded: %2$d",
+            personToMark.getName(),
+            markedPerson.getPoints().getValue()));
     }
 
     @Override

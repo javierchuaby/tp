@@ -74,7 +74,11 @@ public class UnmarkCommand extends Command {
         );
 
         model.setPerson(personToUnmark, unmarkedPerson);
-        return new CommandResult(String.format(MESSAGE_UNMARK_PERSON_SUCCESS, personToUnmark.getName()));
+        return new CommandResult(String.format(
+            MESSAGE_UNMARK_PERSON_SUCCESS + " 1 point deducted. New total: %2$d",
+            personToUnmark.getName(),
+            unmarkedPerson.getPoints().getValue()
+        ));
     }
 
     @Override
