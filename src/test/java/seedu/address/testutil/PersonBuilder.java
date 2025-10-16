@@ -40,6 +40,7 @@ public class PersonBuilder {
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
         isPresent = false; // Ensure default is set
+        points = new Points(); // Initialize with default 0 points
     }
 
     /**
@@ -52,6 +53,7 @@ public class PersonBuilder {
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
         isPresent = personToCopy.isPresent();
+        points = personToCopy.getPoints(); // Copy the points
     }
 
     /**
