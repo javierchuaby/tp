@@ -104,6 +104,9 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Points} status of the {@code Person} that we are building.
+     */
     public PersonBuilder withPoints(int value) {
         this.points = new Points(value);
         return this;

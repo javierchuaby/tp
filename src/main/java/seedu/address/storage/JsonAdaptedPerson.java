@@ -112,10 +112,10 @@ class JsonAdaptedPerson {
         final Address modelAddress = new Address(address);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        final Points modelPoints = new Points(points);     // Add this
+        final Points modelPoints = new Points(points);
 
         return new Person(modelName, modelPhone, modelEmail, modelAddress,
-            modelTags, isPresent, modelPoints);  // Use full constructor
+            modelTags, isPresent, modelPoints);
     }
 
 }
