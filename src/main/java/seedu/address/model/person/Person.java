@@ -25,6 +25,7 @@ public class Person {
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
     private final boolean isPresent;
+    private final Points points;
 
     /**
      * Every field must be present and not null.
@@ -37,6 +38,7 @@ public class Person {
         this.address = address;
         this.tags.addAll(tags);
         this.isPresent = false; // Default to absent
+        this.points = new Points();
     }
 
     /**
@@ -51,6 +53,30 @@ public class Person {
         this.address = address;
         this.tags.addAll(tags);
         this.isPresent = isPresent;
+        this.points = new Points();
+    }
+
+    /**
+     * Full constructor with explicit present status and points.
+     * Every field must be present and not null.
+     */
+    public Person(
+            Name name,
+            Phone phone,
+            Email email,
+            Address address,
+            Set<Tag> tags,
+            boolean isPresent,
+            Points points
+    ) {
+        requireAllNonNull(name, phone, email, address, tags, points);
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.tags.addAll(tags);
+        this.isPresent = isPresent;
+        this.points = points;
     }
 
     public Name getName() {
@@ -67,6 +93,13 @@ public class Person {
 
     public Address getAddress() {
         return address;
+    }
+
+    /**
+     * Returns the immutable points associated with this person.
+     */
+    public Points getPoints() {
+        return points;
     }
 
     /**
@@ -94,7 +127,7 @@ public class Person {
         }
 
         return otherPerson != null
-                && otherPerson.getName().equals(getName());
+            && otherPerson.getName().equals(getName());
     }
 
     /**
@@ -114,28 +147,30 @@ public class Person {
 
         Person otherPerson = (Person) other;
         return name.equals(otherPerson.name)
-                && phone.equals(otherPerson.phone)
-                && email.equals(otherPerson.email)
-                && address.equals(otherPerson.address)
-                && tags.equals(otherPerson.tags)
-                && isPresent == otherPerson.isPresent;
+            && phone.equals(otherPerson.phone)
+            && email.equals(otherPerson.email)
+            && address.equals(otherPerson.address)
+            && tags.equals(otherPerson.tags)
+            && isPresent == otherPerson.isPresent
+            && points.equals(otherPerson.points);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, isPresent);
+        return Objects.hash(name, phone, email, address, tags, isPresent, points);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("name", name)
-                .add("phone", phone)
-                .add("email", email)
-                .add("address", address)
-                .add("tags", tags)
-                .add("isPresent", isPresent)
-                .toString();
+            .add("name", name)
+            .add("phone", phone)
+            .add("email", email)
+            .add("address", address)
+            .add("tags", tags)
+            .add("isPresent", isPresent)
+            .add("points", points)
+            .toString();
     }
 }

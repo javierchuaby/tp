@@ -9,6 +9,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Tag;
+import seedu.address.model.person.Points;
 import seedu.address.model.util.SampleDataUtil;
 
 /**
@@ -27,6 +28,7 @@ public class PersonBuilder {
     private Address address;
     private Set<Tag> tags;
     private boolean isPresent = false;
+    private Points points;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -38,6 +40,7 @@ public class PersonBuilder {
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
         isPresent = false; // Ensure default is set
+        points = new Points(); // Initialize with default 0 points
     }
 
     /**
@@ -50,6 +53,7 @@ public class PersonBuilder {
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
         isPresent = personToCopy.isPresent();
+        points = personToCopy.getPoints(); // Copy the points
     }
 
     /**
@@ -100,8 +104,16 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Points} status of the {@code Person} that we are building.
+     */
+    public PersonBuilder withPoints(int value) {
+        this.points = new Points(value);
+        return this;
+    }
+
     public Person build() {
-        return new Person(name, phone, email, address, tags, isPresent);
+        return new Person(name, phone, email, address, tags, isPresent, points);
     }
 
 }
