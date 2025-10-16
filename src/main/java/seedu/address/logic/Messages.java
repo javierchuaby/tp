@@ -20,6 +20,8 @@ public class Messages {
     public static final String MESSAGE_ATTENDANCE_LISTED_OVERVIEW = "%1$d persons marked as present listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
+    public static final String MESSAGE_TAG_SUCCESS = "Tag added: %1$s";
+    public static final String MESSAGE_UNTAG_SUCCESS = "Tag removed: %1$s";
 
     /**
      * Returns an error message indicating the duplicate prefixes.
