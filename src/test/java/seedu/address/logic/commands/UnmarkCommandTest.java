@@ -38,6 +38,8 @@ public class UnmarkCommandTest {
             personToUnmark.getName(),
             personToUnmark.getPhone(),
             personToUnmark.getEmail(),
+            personToUnmark.getYearOfStudy(),
+            personToUnmark.getFaculty(),
             personToUnmark.getAddress(),
             personToUnmark.getTags(),
             false
@@ -69,6 +71,8 @@ public class UnmarkCommandTest {
             personToUnmark.getName(),
             personToUnmark.getPhone(),
             personToUnmark.getEmail(),
+            personToUnmark.getYearOfStudy(),
+            personToUnmark.getFaculty(),
             personToUnmark.getAddress(),
             personToUnmark.getTags(),
             false

@@ -5,6 +5,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_YEAROFSTUDY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_FACULTY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -98,10 +100,12 @@ public class EditCommand extends Command {
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
+        int updatedYearOfStudy = editPersonDescriptor.getYearOfStudy().orElse(personToEdit.getYearOfStudy());
+        String updatedFaculty = editPersonDescriptor.getFaculty().orElse(personToEdit.getFaculty());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedYearOfStudy, updatedFaculty, updatedAddress, updatedTags);
     }
 
     @Override
@@ -111,11 +115,10 @@ public class EditCommand extends Command {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof EditCommand)) {
+        if (!(other instanceof EditCommand otherEditCommand)) {
             return false;
         }
 
-        EditCommand otherEditCommand = (EditCommand) other;
         return index.equals(otherEditCommand.index)
                 && editPersonDescriptor.equals(otherEditCommand.editPersonDescriptor);
     }
@@ -136,6 +139,8 @@ public class EditCommand extends Command {
         private Name name;
         private Phone phone;
         private Email email;
+        private int yearOfStudy;
+        private String faculty;
         private Address address;
         private Set<Tag> tags;
 
@@ -149,6 +154,8 @@ public class EditCommand extends Command {
             setName(toCopy.name);
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
+            setYearOfStudy(toCopy.yearOfStudy);
+            setFaculty(toCopy.faculty);
             setAddress(toCopy.address);
             setTags(toCopy.tags);
         }
@@ -157,7 +164,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, yearOfStudy, faculty, address, tags);
         }
 
         public void setName(Name name) {
@@ -183,6 +190,21 @@ public class EditCommand extends Command {
         public Optional<Email> getEmail() {
             return Optional.ofNullable(email);
         }
+
+        public void setYearOfStudy(Integer yearOfStudy) {
+            this.yearOfStudy = yearOfStudy;
+        }
+
+        public Optional<Integer> getYearOfStudy() { return Optional.of(yearOfStudy); }
+
+        public void setFaculty(String faculty) {
+            this.faculty = faculty;
+        }
+
+        public Optional<String> getFaculty() {
+            return Optional.ofNullable(faculty);
+        }
+
 
         public void setAddress(Address address) {
             this.address = address;
@@ -216,14 +238,15 @@ public class EditCommand extends Command {
             }
 
             // instanceof handles nulls
-            if (!(other instanceof EditPersonDescriptor)) {
+            if (!(other instanceof EditPersonDescriptor otherEditPersonDescriptor)) {
                 return false;
             }
 
-            EditPersonDescriptor otherEditPersonDescriptor = (EditPersonDescriptor) other;
             return Objects.equals(name, otherEditPersonDescriptor.name)
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
+                    && Objects.equals(yearOfStudy, otherEditPersonDescriptor.yearOfStudy)
+                    && Objects.equals(faculty, otherEditPersonDescriptor.faculty)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
         }
@@ -234,6 +257,8 @@ public class EditCommand extends Command {
                     .add("name", name)
                     .add("phone", phone)
                     .add("email", email)
+                    .add("year of study", yearOfStudy)
+                    .add("faculty", faculty)
                     .add("address", address)
                     .add("tags", tags)
                     .toString();

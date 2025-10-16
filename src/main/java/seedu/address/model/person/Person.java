@@ -29,6 +29,7 @@ public class Person {
     private final boolean isPresent;
 
     /**
+     * Constructor with isPresent set to false as default.
      * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email, int yearOfStudy, String faculty, Address address, Set<Tag> tags) {
@@ -40,14 +41,15 @@ public class Person {
         this.faculty = faculty;
         this.address = address;
         this.tags.addAll(tags);
-        this.isPresent = false; // Default to absent
+        this.isPresent = false;
     }
 
     /**
-     * Constructor with present status.
-     * Every field must be present and not null.
+     *
+     * Overloaded constructor that allows specifying isPresent status.
      */
-    public Person(Name name, Phone phone, Email email, int yearOfStudy, String faculty, Address address, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, int yearOfStudy, String faculty,
+                  Address address, Set<Tag> tags, boolean isPresent) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
@@ -56,7 +58,7 @@ public class Person {
         this.faculty = faculty;
         this.address = address;
         this.tags.addAll(tags);
-        this.isPresent = false; // Default to absent
+        this.isPresent = isPresent;
     }
 
     public Name getName() {
@@ -77,7 +79,7 @@ public class Person {
 
     public int getYearOfStudy() { return yearOfStudy; }
 
-    public String faculty = getFaculty() { return faculty; }
+    public String getFaculty() { return faculty; }
 
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
