@@ -40,7 +40,8 @@ public class MarkCommandTest {
             personToMark.getEmail(),
             personToMark.getAddress(),
             personToMark.getTags(),
-            true
+            true,
+            personToMark.getPoints().addPoint()
         );
         expectedModel.setPerson(personToMark, markedPerson);
 
@@ -71,7 +72,8 @@ public class MarkCommandTest {
             personToMark.getEmail(),
             personToMark.getAddress(),
             personToMark.getTags(),
-            true
+            true,
+            personToMark.getPoints().addPoint()
         );
         expectedModel.setPerson(personToMark, markedPerson);
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
