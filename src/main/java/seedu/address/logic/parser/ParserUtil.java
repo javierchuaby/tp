@@ -21,6 +21,8 @@ import seedu.address.model.person.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    public static final String MESSAGE_INVALID_YOS = "Year of study must be an integer between 1 and 4.";
+    public static final String MESSAGE_INVALID_FACULTY = "Faculty is invalid.";
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
