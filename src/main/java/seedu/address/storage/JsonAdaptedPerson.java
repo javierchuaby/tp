@@ -27,6 +27,8 @@ class JsonAdaptedPerson {
     private final String name;
     private final String phone;
     private final String email;
+    private final int yearOfStudy;
+    private final String faculty;
     private final String address;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
@@ -35,11 +37,15 @@ class JsonAdaptedPerson {
      */
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email, @JsonProperty("address") String address,
+            @JsonProperty("email") String email, @JsonProperty("yearOfStudy") int yearOfStudy,
+            @JsonProperty("faculty") String faculty,
+            @JsonProperty("address") String address,
             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.yearOfStudy = yearOfStudy;
+        this.faculty = faculty;
         this.address = address;
         if (tags != null) {
             this.tags.addAll(tags);

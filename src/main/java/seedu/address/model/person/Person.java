@@ -20,6 +20,8 @@ public class Person {
     private final Name name;
     private final Phone phone;
     private final Email email;
+    private final int yearOfStudy;
+    private final String faculty;
 
     // Data fields
     private final Address address;
@@ -29,11 +31,13 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, int yearOfStudy, String faculty, Address address, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.yearOfStudy = yearOfStudy;
+        this.faculty = faculty;
         this.address = address;
         this.tags.addAll(tags);
         this.isPresent = false; // Default to absent
@@ -43,14 +47,16 @@ public class Person {
      * Constructor with present status.
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, boolean isPresent) {
+    public Person(Name name, Phone phone, Email email, int yearOfStudy, String faculty, Address address, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.yearOfStudy = yearOfStudy;
+        this.faculty = faculty;
         this.address = address;
         this.tags.addAll(tags);
-        this.isPresent = isPresent;
+        this.isPresent = false; // Default to absent
     }
 
     public Name getName() {
@@ -68,6 +74,10 @@ public class Person {
     public Address getAddress() {
         return address;
     }
+
+    public int getYearOfStudy() { return yearOfStudy; }
+
+    public String faculty = getFaculty() { return faculty; }
 
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}

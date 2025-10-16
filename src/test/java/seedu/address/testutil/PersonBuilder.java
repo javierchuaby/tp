@@ -19,11 +19,15 @@ public class PersonBuilder {
     public static final String DEFAULT_NAME = "Amy Bee";
     public static final String DEFAULT_PHONE = "85355255";
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
+    public static final string DEFAULT_YEAROFSTUDY = "1";
+    public static final String DEFAULT_FACULTY = "School of Computing";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
 
     private Name name;
     private Phone phone;
     private Email email;
+    private int yearOfStudy;
+    private String faculty;
     private Address address;
     private Set<Tag> tags;
     private boolean isPresent = false;
@@ -35,6 +39,8 @@ public class PersonBuilder {
         name = new Name(DEFAULT_NAME);
         phone = new Phone(DEFAULT_PHONE);
         email = new Email(DEFAULT_EMAIL);
+        yearOfStudy = DEFAULT_YEAROFSTUDY;
+        faculty = DEFAULT_FACULTY;
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
         isPresent = false; // Ensure default is set
@@ -47,6 +53,8 @@ public class PersonBuilder {
         name = personToCopy.getName();
         phone = personToCopy.getPhone();
         email = personToCopy.getEmail();
+        yearOfStudy = personToCopy.getYearOfStudy();
+        faculty = personToCopy.getFaculty();
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
         isPresent = personToCopy.isPresent();
@@ -93,6 +101,22 @@ public class PersonBuilder {
     }
 
     /**
+     * Sets the {@code Year of Study} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withYearOfStudy(int yearOfStudy) {
+        this.yearOfStudy = yearOfStudy;
+        return this;
+    }
+
+    /**
+     * Sets the {@code Faculty} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withFaculty(String faculty) {
+        this.faculty = faculty;
+        return this;
+    }
+
+    /**
      * Sets the {@code Present} status of the {@code Person} that we are building.
      */
     public PersonBuilder withPresent(boolean isPresent) {
@@ -101,7 +125,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, phone, email, address, tags, isPresent);
+        return new Person(name, phone, email, yearOfStudy, faculty, address, tags, isPresent);
     }
 
 }
