@@ -1,111 +1,131 @@
 package seedu.address.logic.commands;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
-import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
-
-import org.junit.jupiter.api.Test;
-
-import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
-import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
-import seedu.address.model.UserPrefs;
-import seedu.address.model.person.Person;
-
 /**
  * Contains integration tests (interaction with the Model) and unit tests for MarkCommand.
  */
 public class MarkCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private seedu.address.model.Model model = new seedu.address.model.ModelManager(
+            seedu.address.testutil.TypicalPersons.getTypicalAddressBook(),
+            new seedu.address.model.UserPrefs()
+    );
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void execute_validIndexUnfilteredList_success() {
-        Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON);
+        seedu.address.model.person.Person personToMark =
+                model.getFilteredPersonList()
+                        .get(seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON.getZeroBased());
+        seedu.address.logic.commands.MarkCommand markCommand =
+                new seedu.address.logic.commands.MarkCommand(seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON);
 
-        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSON_SUCCESS, personToMark.getName());
+        String expectedMessage = String.format(
+                seedu.address.logic.commands.MarkCommand.MESSAGE_MARK_PERSON_SUCCESS,
+                personToMark.getName()
+        );
 
-        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        Person markedPerson = new Person(
-            personToMark.getName(),
-            personToMark.getPhone(),
-            personToMark.getEmail(),
-            personToMark.getAddress(),
-            personToMark.getTags(),
-            true
+        seedu.address.model.ModelManager expectedModel =
+                new seedu.address.model.ModelManager(model.getAddressBook(), new seedu.address.model.UserPrefs());
+        java.util.Set<seedu.address.model.tag.Tag> updatedTags = new java.util.HashSet<>(personToMark.getTags());
+        updatedTags.add(new seedu.address.model.tag.Tag("present"));
+        seedu.address.model.person.Person markedPerson = new seedu.address.model.person.Person(
+                personToMark.getName(),
+                personToMark.getPhone(),
+                personToMark.getEmail(),
+                personToMark.getAddress(),
+                updatedTags,
+                true
         );
         expectedModel.setPerson(personToMark, markedPerson);
 
-        assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
+        seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess(
+                markCommand, model, expectedMessage, expectedModel
+        );
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
-        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        MarkCommand markCommand = new MarkCommand(outOfBoundIndex);
+        seedu.address.commons.core.index.Index outOfBoundIndex =
+                seedu.address.commons.core.index.Index.fromOneBased(model.getFilteredPersonList().size() + 1);
+        seedu.address.logic.commands.MarkCommand markCommand =
+                new seedu.address.logic.commands.MarkCommand(outOfBoundIndex);
 
-        assertCommandFailure(markCommand, model, Messages.MESSAGE_INVALID_MEMBER_DISPLAYED_INDEX);
+        seedu.address.logic.commands.CommandTestUtil.assertCommandFailure(
+                markCommand, model, seedu.address.logic.Messages.MESSAGE_INVALID_MEMBER_DISPLAYED_INDEX
+        );
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void execute_validIndexFilteredList_success() {
-        showPersonAtIndex(model, INDEX_FIRST_PERSON);
+        seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex(
+                model, seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON
+        );
 
-        Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON);
+        seedu.address.model.person.Person personToMark =
+                model.getFilteredPersonList()
+                        .get(seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON.getZeroBased());
+        seedu.address.logic.commands.MarkCommand markCommand =
+                new seedu.address.logic.commands.MarkCommand(seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON);
 
-        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSON_SUCCESS, personToMark.getName());
+        String expectedMessage = String.format(
+                seedu.address.logic.commands.MarkCommand.MESSAGE_MARK_PERSON_SUCCESS,
+                personToMark.getName()
+        );
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        Person markedPerson = new Person(
-            personToMark.getName(),
-            personToMark.getPhone(),
-            personToMark.getEmail(),
-            personToMark.getAddress(),
-            personToMark.getTags(),
-            true
+        seedu.address.model.Model expectedModel =
+                new seedu.address.model.ModelManager(model.getAddressBook(), new seedu.address.model.UserPrefs());
+        java.util.Set<seedu.address.model.tag.Tag> updatedTags = new java.util.HashSet<>(personToMark.getTags());
+        updatedTags.add(new seedu.address.model.tag.Tag("present"));
+        seedu.address.model.person.Person markedPerson = new seedu.address.model.person.Person(
+                personToMark.getName(),
+                personToMark.getPhone(),
+                personToMark.getEmail(),
+                personToMark.getAddress(),
+                updatedTags,
+                true
         );
         expectedModel.setPerson(personToMark, markedPerson);
-        showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
+        seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex(
+                expectedModel, seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON
+        );
 
-        assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
+        seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess(
+                markCommand, model, expectedMessage, expectedModel
+        );
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void equals() {
-        MarkCommand markFirstCommand = new MarkCommand(INDEX_FIRST_PERSON);
-        MarkCommand markSecondCommand = new MarkCommand(INDEX_SECOND_PERSON);
+        seedu.address.logic.commands.MarkCommand markFirstCommand =
+                new seedu.address.logic.commands.MarkCommand(seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON);
+        seedu.address.logic.commands.MarkCommand markSecondCommand =
+                new seedu.address.logic.commands.MarkCommand(seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON);
 
         // same object -> returns true
-        assertTrue(markFirstCommand.equals(markFirstCommand));
+        org.junit.jupiter.api.Assertions.assertTrue(markFirstCommand.equals(markFirstCommand));
 
         // same values -> returns true
-        MarkCommand markFirstCommandCopy = new MarkCommand(INDEX_FIRST_PERSON);
-        assertTrue(markFirstCommand.equals(markFirstCommandCopy));
+        seedu.address.logic.commands.MarkCommand markFirstCommandCopy =
+                new seedu.address.logic.commands.MarkCommand(seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON);
+        org.junit.jupiter.api.Assertions.assertTrue(markFirstCommand.equals(markFirstCommandCopy));
 
         // different types -> returns false
-        assertFalse(markFirstCommand.equals(1));
+        org.junit.jupiter.api.Assertions.assertFalse(markFirstCommand.equals(1));
 
         // null -> returns false
-        assertFalse(markFirstCommand.equals(null));
+        org.junit.jupiter.api.Assertions.assertFalse(markFirstCommand.equals(null));
 
         // different person -> returns false
-        assertFalse(markFirstCommand.equals(markSecondCommand));
+        org.junit.jupiter.api.Assertions.assertFalse(markFirstCommand.equals(markSecondCommand));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void toStringMethod() {
-        Index targetIndex = Index.fromOneBased(1);
-        MarkCommand markCommand = new MarkCommand(targetIndex);
-        String expected = MarkCommand.class.getCanonicalName() + "{targetIndex=" + targetIndex + "}";
-        assertEquals(expected, markCommand.toString());
+        seedu.address.commons.core.index.Index targetIndex =
+                seedu.address.commons.core.index.Index.fromOneBased(1);
+        seedu.address.logic.commands.MarkCommand markCommand =
+                new seedu.address.logic.commands.MarkCommand(targetIndex);
+        String expected = seedu.address.logic.commands.MarkCommand.class.getCanonicalName()
+                + "{targetIndex=" + targetIndex + "}";
+        org.junit.jupiter.api.Assertions.assertEquals(expected, markCommand.toString());
     }
 }
