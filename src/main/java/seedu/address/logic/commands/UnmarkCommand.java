@@ -56,6 +56,14 @@ public class UnmarkCommand extends Command {
 
         Person personToUnmark = lastShownList.get(targetIndex.getZeroBased());
 
+        // If already absent, avoid subtracting points and inform the user
+        if (!personToUnmark.isPresent()) {
+            return new CommandResult(String.format(
+                "Member '%1$s' is already marked absent. No points deducted.",
+                personToUnmark.getName()
+            ));
+        }
+
         // Create a new Person with isPresent set to false
         Person unmarkedPerson = new Person(
             personToUnmark.getName(),
@@ -63,11 +71,16 @@ public class UnmarkCommand extends Command {
             personToUnmark.getEmail(),
             personToUnmark.getAddress(),
             personToUnmark.getTags(),
-            false
+            false,
+            personToUnmark.getPoints().subtractPoint()
         );
 
         model.setPerson(personToUnmark, unmarkedPerson);
-        return new CommandResult(String.format(MESSAGE_UNMARK_PERSON_SUCCESS, personToUnmark.getName()));
+        return new CommandResult(String.format(
+            MESSAGE_UNMARK_PERSON_SUCCESS + " 1 point deducted. New total: %2$d",
+            personToUnmark.getName(),
+            unmarkedPerson.getPoints().getValue()
+        ));
     }
 
     @Override

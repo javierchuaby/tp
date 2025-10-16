@@ -8,6 +8,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Points;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -27,6 +28,7 @@ public class PersonBuilder {
     private Address address;
     private Set<Tag> tags;
     private boolean isPresent = false;
+    private Points points;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -100,8 +102,13 @@ public class PersonBuilder {
         return this;
     }
 
+    public PersonBuilder withPoints(int value) {
+        this.points = new Points(value);
+        return this;
+    }
+
     public Person build() {
-        return new Person(name, phone, email, address, tags, isPresent);
+        return new Person(name, phone, email, address, tags, isPresent, points);
     }
 
 }

@@ -56,6 +56,13 @@ public class MarkCommand extends Command {
 
         Person personToMark = lastShownList.get(targetIndex.getZeroBased());
 
+        if (personToMark.isPresent()) {
+            return new CommandResult(String.format(
+                "Member '%1$s' is already marked present. No additional points awarded.",
+                personToMark.getName()
+            ));
+        }
+
         // Create a new Person with isPresent set to true
         Person markedPerson = new Person(
             personToMark.getName(),
@@ -63,11 +70,14 @@ public class MarkCommand extends Command {
             personToMark.getEmail(),
             personToMark.getAddress(),
             personToMark.getTags(),
-            true
+            true,
+            personToMark.getPoints().addPoint()
         );
 
         model.setPerson(personToMark, markedPerson);
-        return new CommandResult(String.format(MESSAGE_MARK_PERSON_SUCCESS, personToMark.getName()));
+        return new CommandResult(String.format(MESSAGE_MARK_PERSON_SUCCESS + " Points awarded: %2$d",
+            personToMark.getName(),
+            markedPerson.getPoints().getValue()));
     }
 
     @Override
