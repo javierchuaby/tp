@@ -135,7 +135,7 @@ Filters the displayed list by **name** and/or **tags**.
 
 * `n/NAME_QUERY` — case-insensitive **token-prefix** match on the member’s name  
   (e.g., `n/char oli` matches “Charlotte Oliveira”).
-* `t/TAG` — repeatable; filters by tags.  
+* `t/TAG` — repeatable; filters by tags.
   Default logic is **AND** (must contain all listed tags).
 * `any/` — optional flag; changes tag logic to **OR** (contains *any* of the listed tags).
 * At least one of `n/` or `t/` must be supplied.
