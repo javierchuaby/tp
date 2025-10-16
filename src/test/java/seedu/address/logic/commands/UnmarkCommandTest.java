@@ -31,7 +31,9 @@ public class UnmarkCommandTest {
         Person personToUnmark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         UnmarkCommand unmarkCommand = new UnmarkCommand(INDEX_FIRST_PERSON);
 
-        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS, personToUnmark.getName());
+        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS
+                + " 1 point deducted. New total: %2$d",
+                personToUnmark.getName(), personToUnmark.getPoints().subtractPoint().getValue());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         Person unmarkedPerson = new Person(
@@ -63,7 +65,9 @@ public class UnmarkCommandTest {
         Person personToUnmark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         UnmarkCommand unmarkCommand = new UnmarkCommand(INDEX_FIRST_PERSON);
 
-        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS, personToUnmark.getName());
+        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS
+                + " 1 point deducted. New total: %2$d",
+                personToUnmark.getName(), personToUnmark.getPoints().subtractPoint().getValue());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         Person unmarkedPerson = new Person(
