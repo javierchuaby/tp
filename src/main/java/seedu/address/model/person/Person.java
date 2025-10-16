@@ -20,6 +20,8 @@ public class Person {
     private final Name name;
     private final Phone phone;
     private final Email email;
+    private final int yearOfStudy;
+    private final String faculty;
 
     // Data fields
     private final Address address;
@@ -28,13 +30,16 @@ public class Person {
     private final Points points;
 
     /**
+     * Constructor with isPresent set to false as default.
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, int yearOfStudy, String faculty, Address address, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.yearOfStudy = yearOfStudy;
+        this.faculty = faculty;
         this.address = address;
         this.tags.addAll(tags);
         this.isPresent = false; // Default to absent
@@ -42,14 +47,17 @@ public class Person {
     }
 
     /**
-     * Constructor with present status.
-     * Every field must be present and not null.
+     *
+     * Overloaded constructor that allows specifying isPresent status.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, boolean isPresent) {
+    public Person(Name name, Phone phone, Email email, int yearOfStudy, String faculty,
+                  Address address, Set<Tag> tags, boolean isPresent) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.yearOfStudy = yearOfStudy;
+        this.faculty = faculty;
         this.address = address;
         this.tags.addAll(tags);
         this.isPresent = isPresent;
@@ -94,6 +102,10 @@ public class Person {
     public Address getAddress() {
         return address;
     }
+
+    public int getYearOfStudy() { return yearOfStudy; }
+
+    public String getFaculty() { return faculty; }
 
     /**
      * Returns the immutable points associated with this person.

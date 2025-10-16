@@ -39,13 +39,15 @@ public class MarkCommandTest {
         Set<Tag> updatedTags = new HashSet<>(personToMark.getTags());
         updatedTags.add(new Tag("present"));
         Person markedPerson = new Person(
-                personToMark.getName(),
-                personToMark.getPhone(),
-                personToMark.getEmail(),
-                personToMark.getAddress(),
-                updatedTags,
-                true,
-                personToMark.getPoints().addPoint()
+            personToMark.getName(),
+            personToMark.getPhone(),
+            personToMark.getEmail(),
+            personToMark.getYearOfStudy(),
+            personToMark.getFaculty(),
+            personToMark.getAddress(),
+            personToMark.getTags(),
+            true,
+            personToMark.getPoints().addPoint()
         );
 
         String expectedMessage = String.format(
@@ -81,6 +83,8 @@ public class MarkCommandTest {
                 personToMark.getName(),
                 personToMark.getPhone(),
                 personToMark.getEmail(),
+                personToMark.getYearOfStudy(),
+                personToMark.getFaculty(),
                 personToMark.getAddress(),
                 updatedTags,
                 true,

@@ -68,6 +68,8 @@ public class UnmarkCommand extends Command {
             personToUnmark.getName(),
             personToUnmark.getPhone(),
             personToUnmark.getEmail(),
+            personToUnmark.getYearOfStudy(),
+            personToUnmark.getFaculty(),
             personToUnmark.getAddress(),
             updatedTags,
             false

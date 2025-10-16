@@ -68,6 +68,8 @@ public class MarkCommand extends Command {
             personToMark.getName(),
             personToMark.getPhone(),
             personToMark.getEmail(),
+            personToMark.getYearOfStudy(),
+            personToMark.getFaculty(),
             personToMark.getAddress(),
             updatedTags,
             true,

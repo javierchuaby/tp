@@ -29,6 +29,8 @@ class JsonAdaptedPerson {
     private final String name;
     private final String phone;
     private final String email;
+    private final int yearOfStudy;
+    private final String faculty;
     private final String address;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final boolean isPresent;
@@ -46,6 +48,8 @@ class JsonAdaptedPerson {
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.yearOfStudy = yearOfStudy;
+        this.faculty = faculty;
         this.address = address;
         if (tags != null) {
             this.tags.addAll(tags);
@@ -61,6 +65,8 @@ class JsonAdaptedPerson {
         name = source.getName().fullName;
         phone = source.getPhone().value;
         email = source.getEmail().value;
+        yearOfStudy = source.getYearOfStudy();
+        faculty = source.getFaculty();
         address = source.getAddress().value;
         tags.addAll(source.getTags().stream()
             .map(JsonAdaptedTag::new)
@@ -103,6 +109,14 @@ class JsonAdaptedPerson {
             throw new IllegalValueException(Email.MESSAGE_CONSTRAINTS);
         }
         final Email modelEmail = new Email(email);
+
+        if (yearOfStudy < 1 || yearOfStudy > 4) {
+            throw new IllegalValueException("Year of Study must be between 1 and 4");
+        }
+
+        if (faculty == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "Faculty"));
+        }
 
         if (address == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName()));
