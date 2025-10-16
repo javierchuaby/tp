@@ -63,14 +63,15 @@ public class MarkCommand extends Command {
         Set<Tag> updatedTags = new HashSet<>(personToMark.getTags());
         updatedTags.add(new Tag("present"));
 
-        // Create a new Person with isPresent set to true and updated tags
+        // Create a new Person with isPresent set to true, updated tags, and incremented points
         Person markedPerson = new Person(
             personToMark.getName(),
             personToMark.getPhone(),
             personToMark.getEmail(),
             personToMark.getAddress(),
             updatedTags,
-            true
+            true,
+            personToMark.getPoints().addPoint()
         );
 
         model.setPerson(personToMark, markedPerson);
