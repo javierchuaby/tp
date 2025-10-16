@@ -19,10 +19,9 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.MarkCommand;
+import seedu.address.logic.commands.PointsCommand;
 import seedu.address.logic.commands.UnmarkCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.logic.commands.PointsCommand;
-import seedu.address.logic.parser.PointsCommandParser;
 
 /**
  * Parses user input.
