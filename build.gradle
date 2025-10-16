@@ -80,6 +80,9 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: jUnitVersion
 
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: jUnitVersion
+
+    coverage.dependsOn test
+    coverage.dependsOn jacocoTestReport
 }
 
 shadowJar {
