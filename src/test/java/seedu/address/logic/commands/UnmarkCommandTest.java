@@ -21,7 +21,6 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Points;
 import seedu.address.model.person.Tag;
 
 /**
@@ -111,13 +110,15 @@ public class UnmarkCommandTest {
         Set<Tag> markedTags = new HashSet<>(personToMark.getTags());
         markedTags.add(new Tag("present"));
         Person markedPerson = new Person(
-            personToMark.getName(),
-            personToMark.getPhone(),
-            personToMark.getEmail(),
-            personToMark.getAddress(),
-            markedTags,
-            true,
-            personToMark.getPoints().addPoint()
+                personToMark.getName(),
+                personToMark.getPhone(),
+                personToMark.getEmail(),
+                personToMark.getYearOfStudy(),
+                personToMark.getFaculty(),
+                personToMark.getAddress(),
+                markedTags,
+                true,
+                personToMark.getPoints().addPoint()
         );
         model.setPerson(personToMark, markedPerson);
 
@@ -127,13 +128,15 @@ public class UnmarkCommandTest {
         Set<Tag> updatedTags = new HashSet<>(markedPerson.getTags());
         updatedTags.remove(new Tag("present"));
         Person unmarkedPerson = new Person(
-            markedPerson.getName(),
-            markedPerson.getPhone(),
-            markedPerson.getEmail(),
-            markedPerson.getAddress(),
-            updatedTags,
-            false,
-            markedPerson.getPoints().subtractPoint()
+                markedPerson.getName(),
+                markedPerson.getPhone(),
+                markedPerson.getEmail(),
+                markedPerson.getYearOfStudy(),
+                markedPerson.getFaculty(),
+                markedPerson.getAddress(),
+                updatedTags,
+                false,
+                markedPerson.getPoints().subtractPoint()
         );
 
         String expectedMessage = String.format(
