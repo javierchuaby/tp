@@ -72,7 +72,8 @@ public class UnmarkCommandTest {
             personToUnmark.getEmail(),
             personToUnmark.getAddress(),
             personToUnmark.getTags(),
-            false
+            false,
+            personToUnmark.getPoints().subtractPoint()
         );
         expectedModel.setPerson(personToUnmark, unmarkedPerson);
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
