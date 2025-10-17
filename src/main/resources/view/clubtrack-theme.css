@@ -47,21 +47,13 @@
     -fx-effect: dropshadow(gaussian, rgba(0,178,169,0.25), 8, 0, 0, 0);
 }
 
-/* SplitPane */
-.split-pane {
-    -fx-background-color: transparent;
-}
-
 /* Members list panel */
 .members-panel {
     -fx-background-color: transparent;
     -fx-padding: 8 16 8 16;
 }
 
-.list-view {
-    -fx-background-color: transparent;
-}
-
+.list-view { -fx-background-color: transparent; }
 .list-cell {
     -fx-background-color: transparent;
     -fx-padding: 8 6 8 6;
@@ -77,27 +69,16 @@
     -fx-border-width: 1px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 14, 0, 0, 4);
 }
-
 .member-card:hover {
     -fx-translate-y: -1;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 16, 0, 0, 6);
     -fx-border-color: #00B2A9;
 }
 
-.cell_big_label {
-    -fx-text-fill: #E6EAF2;
-    -fx-font-weight: 700;
-}
+.cell_big_label { -fx-text-fill: #E6EAF2; -fx-font-weight: 700; }
+.muted-text, .cell_small_label { -fx-text-fill: #9AA3B2; }
 
-.muted-text, .cell_small_label {
-    -fx-text-fill: #9AA3B2;
-}
-
-#tags {
-    -fx-hgap: 6px;
-    -fx-vgap: 6px;
-}
-
+#tags { -fx-hgap: 6px; -fx-vgap: 6px; }
 .chip {
     -fx-background-color: rgba(0,178,169,0.2);
     -fx-text-fill: #00B2A9;
@@ -107,33 +88,32 @@
     -fx-font-size: 11px;
 }
 
-.chip-attend-present {
-    -fx-background-color: rgba(0,178,169,0.25);
-    -fx-text-fill: #00B2A9;
-}
-
-.chip-attend-absent {
-    -fx-background-color: rgba(220,38,38,0.25);
-    -fx-text-fill: #ef4444;
-}
-
-/* Result display */
+/* Result display (themed) */
 .result-container {
-    -fx-padding: 8 16 8 0;
+    -fx-padding: 6 16 10 16;
 }
 
-.result-display {
+/* Wrap the ResultDisplay root (StackPane inside resultDisplayPlaceholder) */
+.result-container > .stack-pane {
     -fx-background-color: #1C1F26;
-    -fx-text-fill: #E6EAF2;
     -fx-background-radius: 12px;
     -fx-border-radius: 12px;
     -fx-border-color: #2A2F3A;
     -fx-border-width: 1px;
 }
 
-.result-display .content {
+/* TextArea inside ResultDisplay */
+.result-display {
     -fx-background-color: transparent;
+    -fx-text-fill: #E6EAF2;
+    -fx-font-size: 13px;
+    -fx-wrap-text: true;
+    -fx-padding: 8 12 8 12;
+    -fx-border-width: 0;
 }
+.result-display .content { -fx-background-color: transparent; }
+.result-display .scroll-pane, .result-display .scroll-pane .viewport { -fx-background-color: transparent; }
+.result-display:focused { -fx-faint-focus-color: transparent; -fx-focus-color: transparent; }
 
 /* Status bar */
 .status-bar-dark {
@@ -142,9 +122,4 @@
     -fx-border-color: #2A2F3A;
     -fx-border-width: 1 0 0 0;
 }
-
-.status-bar-dark .label {
-    -fx-text-fill: #9AA3B2;
-}
-
-
+.status-bar-dark .label { -fx-text-fill: #9AA3B2; }
