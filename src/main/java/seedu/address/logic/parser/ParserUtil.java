@@ -21,10 +21,15 @@ import seedu.address.model.person.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    /** Public so tests can assert on the exact message. */
+    public static final String MESSAGE_INVALID_YOS = "Year of study must be an integer between 1 and 4.";
+    /** Public so tests can assert on the exact message. */
+    public static final String MESSAGE_INVALID_FACULTY = "Faculty cannot be empty.";
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
      * trimmed.
+     *
      * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
      */
     public static Index parseIndex(String oneBasedIndex) throws ParseException {
@@ -81,33 +86,28 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code int year} into an {@code Year}.
-     * Leading and trailing whitespaces will be trimmed.
+     * Parses a {@code int year} representing year-of-study.
      *
-     * @throws ParseException if the given {@code address} is invalid.
+     * @throws ParseException if {@code year} is outside the supported range.
      */
     public static int parseYearOfStudy(int year) throws ParseException {
-        try {
-            if (year < 1 || year > 4) {
-                throw new ParseException("Year of study must be between 1 and 4.");
-            }
-            return year;
-        } catch (NumberFormatException e) {
-            throw new ParseException("Year of study must be a number.");
+        if (year < 1 || year > 4) {
+            throw new ParseException(MESSAGE_INVALID_YOS);
         }
+        return year;
     }
 
     /**
-     * Parses a {@code String faculty} into an {@code Faculty}.
+     * Parses a {@code String faculty}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code address} is invalid.
+     * @throws ParseException if the given {@code faculty} is blank.
      */
     public static String parseFaculty(String faculty) throws ParseException {
         requireNonNull(faculty);
         String trimmedFaculty = faculty.trim();
         if (trimmedFaculty.isEmpty()) {
-            throw new ParseException("Faculty cannot be empty.");
+            throw new ParseException(MESSAGE_INVALID_FACULTY);
         }
         return trimmedFaculty;
     }

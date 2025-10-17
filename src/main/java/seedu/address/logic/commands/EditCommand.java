@@ -5,8 +5,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_YEAROFSTUDY;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_FACULTY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -58,7 +56,7 @@ public class EditCommand extends Command {
     private final EditPersonDescriptor editPersonDescriptor;
 
     /**
-     * @param index of the person in the filtered person list to edit
+     * @param index index of the person in the filtered person list to edit
      * @param editPersonDescriptor details to edit the person with
      */
     public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor) {
@@ -100,12 +98,22 @@ public class EditCommand extends Command {
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
-        int updatedYearOfStudy = editPersonDescriptor.getYearOfStudy().orElse(personToEdit.getYearOfStudy());
-        String updatedFaculty = editPersonDescriptor.getFaculty().orElse(personToEdit.getFaculty());
+        int updatedYearOfStudy = editPersonDescriptor.getYearOfStudy()
+                .orElse(personToEdit.getYearOfStudy());
+        String updatedFaculty = editPersonDescriptor.getFaculty()
+                .orElse(personToEdit.getFaculty());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedYearOfStudy, updatedFaculty, updatedAddress, updatedTags);
+        return new Person(
+                updatedName,
+                updatedPhone,
+                updatedEmail,
+                updatedYearOfStudy,
+                updatedFaculty,
+                updatedAddress,
+                updatedTags
+        );
     }
 
     @Override
@@ -139,7 +147,7 @@ public class EditCommand extends Command {
         private Name name;
         private Phone phone;
         private Email email;
-        private int yearOfStudy;
+        private Integer yearOfStudy; // nullable to indicate "not edited"
         private String faculty;
         private Address address;
         private Set<Tag> tags;
@@ -195,7 +203,9 @@ public class EditCommand extends Command {
             this.yearOfStudy = yearOfStudy;
         }
 
-        public Optional<Integer> getYearOfStudy() { return Optional.of(yearOfStudy); }
+        public Optional<Integer> getYearOfStudy() {
+            return Optional.ofNullable(yearOfStudy);
+        }
 
         public void setFaculty(String faculty) {
             this.faculty = faculty;
@@ -204,7 +214,6 @@ public class EditCommand extends Command {
         public Optional<String> getFaculty() {
             return Optional.ofNullable(faculty);
         }
-
 
         public void setAddress(Address address) {
             this.address = address;
