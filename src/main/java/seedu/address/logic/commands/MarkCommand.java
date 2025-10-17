@@ -29,6 +29,7 @@ public class MarkCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_MARK_PERSON_SUCCESS = "Member '%1$s' marked present.";
+    public static final String MESSAGE_ALREADY_PRESENT_NOOP = "Member '%1$s' is already marked present. No points awarded.";
 
     private final Index targetIndex;
 
@@ -57,6 +58,11 @@ public class MarkCommand extends Command {
         }
 
         Person personToMark = lastShownList.get(targetIndex.getZeroBased());
+
+        // If already present, do not award points again
+        if (personToMark.isPresent()) {
+            return new CommandResult(String.format(MESSAGE_ALREADY_PRESENT_NOOP, personToMark.getName()));
+        }
 
         // Preserve existing tags; do not add extra tag for presence
         Set<Tag> preservedTags = personToMark.getTags();
