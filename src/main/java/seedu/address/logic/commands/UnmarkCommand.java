@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,8 +11,8 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Tag;
 import seedu.address.model.person.Points;
+import seedu.address.model.person.Tag;
 
 /**
  * Marks a person as absent identified using it's displayed index from the address book.
@@ -31,6 +30,7 @@ public class UnmarkCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_UNMARK_PERSON_SUCCESS = "Member '%1$s' marked absent.";
+    public static final String MESSAGE_ALREADY_ABSENT_NOOP = "Member '%1$s' is already absent. No changes made.";
 
     private final Index targetIndex;
 
@@ -60,16 +60,18 @@ public class UnmarkCommand extends Command {
 
         Person personToUnmark = lastShownList.get(targetIndex.getZeroBased());
 
-        // Clone tags and remove the "present" tag if exists
-        Set<Tag> updatedTags = new HashSet<>(personToUnmark.getTags());
-        updatedTags.remove(new Tag("present"));
+        // If already absent, no-op
+        if (!personToUnmark.isPresent()) {
+            return new CommandResult(String.format(MESSAGE_ALREADY_ABSENT_NOOP, personToUnmark.getName()));
+        }
 
-        // Calculate new points (deduct 1 if they have points to deduct)
-        Points newPoints = personToUnmark.getPoints().getValue() > 0 
-            ? personToUnmark.getPoints().subtractPoint() 
-            : personToUnmark.getPoints();
+        // Preserve existing tags; do not manage a special presence tag
+        Set<Tag> preservedTags = personToUnmark.getTags();
 
-        // Create a new Person with isPresent set to false, updated tags, and adjusted points
+        // Decide whether to deduct a point when marking absent. For now: do not deduct automatically on absence.
+        Points newPoints = personToUnmark.getPoints();
+
+        // Create a new Person with isPresent set to false and preserved points
         Person unmarkedPerson = new Person(
             personToUnmark.getName(),
             personToUnmark.getPhone(),
@@ -77,16 +79,15 @@ public class UnmarkCommand extends Command {
             personToUnmark.getYearOfStudy(),
             personToUnmark.getFaculty(),
             personToUnmark.getAddress(),
-            updatedTags,
+            preservedTags,
             false,
             newPoints
         );
 
         model.setPerson(personToUnmark, unmarkedPerson);
         return new CommandResult(String.format(
-            MESSAGE_UNMARK_PERSON_SUCCESS + " 1 point deducted. New total: %2$d",
-            personToUnmark.getName(),
-            unmarkedPerson.getPoints().getValue()
+            MESSAGE_UNMARK_PERSON_SUCCESS,
+            personToUnmark.getName()
         ));
     }
 
