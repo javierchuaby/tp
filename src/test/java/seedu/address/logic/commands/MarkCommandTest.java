@@ -36,8 +36,6 @@ public class MarkCommandTest {
         Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON);
 
-        Set<Tag> updatedTags = new HashSet<>(personToMark.getTags());
-        updatedTags.add(new Tag("present"));
         Person markedPerson = new Person(
             personToMark.getName(),
             personToMark.getPhone(),
@@ -46,7 +44,7 @@ public class MarkCommandTest {
             personToMark.getFaculty(),
             personToMark.getAddress(),
             personToMark.getTags(),
-            true,
+            true, // Mark as present
             personToMark.getPoints().addPoint()
         );
 
@@ -77,8 +75,6 @@ public class MarkCommandTest {
         Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON);
 
-        Set<Tag> updatedTags = new HashSet<>(personToMark.getTags());
-        updatedTags.add(new Tag("present"));
         Person markedPerson = new Person(
                 personToMark.getName(),
                 personToMark.getPhone(),
@@ -86,8 +82,8 @@ public class MarkCommandTest {
                 personToMark.getYearOfStudy(),
                 personToMark.getFaculty(),
                 personToMark.getAddress(),
-                updatedTags,
-                true,
+                personToMark.getTags(),
+                true, // Mark as present
                 personToMark.getPoints().addPoint()
         );
 
