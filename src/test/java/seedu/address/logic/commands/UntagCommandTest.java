@@ -25,13 +25,18 @@ public class UntagCommandTest {
         Model expectedModel = new ModelManager();
         Person expectedPerson = new PersonBuilder().withTags("friend").build();
         expectedModel.addPerson(expectedPerson);
+        HashSet<Tag> newTags = new HashSet<>(expectedPerson.getTags());
+        newTags.remove(tag);
         expectedModel.setPerson(expectedPerson, new Person(
             expectedPerson.getName(),
             expectedPerson.getPhone(),
             expectedPerson.getEmail(),
+            expectedPerson.getYearOfStudy(),
+            expectedPerson.getFaculty(),
             expectedPerson.getAddress(),
-            new HashSet<>(),
-            expectedPerson.isPresent()
+            newTags,
+            expectedPerson.isPresent(),
+            expectedPerson.getPoints()
         ));
         String expectedMessage = String.format(UntagCommand.MESSAGE_SUCCESS, tag);
 
