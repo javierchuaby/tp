@@ -23,28 +23,15 @@ import seedu.address.model.person.Tag;
 
 /**
  * Parses input arguments and creates a new {@link AddCommand} object.
+ * Required prefixes: {@code n/ p/ e/ y/ f/ a/}. Optional: multiple {@code t/}.
  */
 public class AddCommandParser implements Parser<AddCommand> {
 
-    /**
-     * Parses the given {@code String} of arguments in the context of {@link AddCommand}
-     * and returns an {@code AddCommand} object for execution.
-     *
-     * @param args Raw argument string following the {@code add} command word.
-     * @return An {@code AddCommand} that adds a new person.
-     * @throws ParseException If the user input does not conform to the expected format.
-     */
+    @Override
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                args,
-                PREFIX_NAME,
-                PREFIX_PHONE,
-                PREFIX_EMAIL,
-                PREFIX_YEAROFSTUDY,
-                PREFIX_FACULTY,
-                PREFIX_ADDRESS,
-                PREFIX_TAG
-        );
+                args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                PREFIX_YEAROFSTUDY, PREFIX_FACULTY, PREFIX_ADDRESS, PREFIX_TAG);
 
         if (!arePrefixesPresent(argMultimap,
                 PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_YEAROFSTUDY, PREFIX_FACULTY)
@@ -53,13 +40,13 @@ public class AddCommandParser implements Parser<AddCommand> {
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(
-                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_YEAROFSTUDY, PREFIX_FACULTY, PREFIX_ADDRESS
-        );
+                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_YEAROFSTUDY, PREFIX_FACULTY, PREFIX_ADDRESS);
 
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
-        int yearOfStudy = ParserUtil.parseYearOfStudy(Integer.parseInt(argMultimap.getValue(PREFIX_YEAROFSTUDY).get()));
+        int yearOfStudy = ParserUtil.parseYearOfStudy(
+                Integer.parseInt(argMultimap.getValue(PREFIX_YEAROFSTUDY).get()));
         String faculty = ParserUtil.parseFaculty(argMultimap.getValue(PREFIX_FACULTY).get());
         Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
@@ -68,9 +55,6 @@ public class AddCommandParser implements Parser<AddCommand> {
         return new AddCommand(person);
     }
 
-    /**
-     * Returns true if all the specified prefixes contain non-empty values in {@code argumentMultimap}.
-     */
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
