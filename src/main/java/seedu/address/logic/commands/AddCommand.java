@@ -24,6 +24,7 @@ public class AddCommand extends Command {
 
     public static final String COMMAND_WORD = "add";
 
+    // in AddCommand.java
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a new member to the club membership list. "
             + "Parameters: "
             + PREFIX_NAME + "NAME "
@@ -42,6 +43,7 @@ public class AddCommand extends Command {
             + PREFIX_ADDRESS + "Blk 123, #01-01 "
             + PREFIX_TAG + "committee "
             + PREFIX_TAG + "treasurer";
+
 
     public static final String MESSAGE_SUCCESS = "New member added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON =

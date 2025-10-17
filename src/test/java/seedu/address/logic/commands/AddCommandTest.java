@@ -35,6 +35,8 @@ public class AddCommandTest {
     @Test
     public void execute_personAcceptedByModel_addSuccessful() throws Exception {
         ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+
+        // PersonBuilder provides valid defaults for all required fields (incl. yearOfStudy, faculty)
         Person validPerson = new PersonBuilder().build();
 
         CommandResult commandResult = new AddCommand(validPerson).execute(modelStub);
@@ -55,6 +57,7 @@ public class AddCommandTest {
 
     @Test
     public void equals() {
+        // use builder to ensure all required fields exist for both persons
         Person alice = new PersonBuilder().withName("Alice").build();
         Person bob = new PersonBuilder().withName("Bob").build();
         AddCommand addAliceCommand = new AddCommand(alice);
@@ -84,8 +87,12 @@ public class AddCommandTest {
         assertEquals(expected, addCommand.toString());
     }
 
+    // ============================
+    // Model stubs
+    // ============================
+
     /**
-     * A default model stub that have all of the methods failing.
+     * A default model stub in which all methods throw by default.
      */
     private class ModelStub implements Model {
         @Override
@@ -119,11 +126,6 @@ public class AddCommandTest {
         }
 
         @Override
-        public void addPerson(Person person) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
         public void setAddressBook(ReadOnlyAddressBook newData) {
             throw new AssertionError("This method should not be called.");
         }
@@ -144,6 +146,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public void addPerson(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void setPerson(Person target, Person editedPerson) {
             throw new AssertionError("This method should not be called.");
         }
@@ -160,7 +167,7 @@ public class AddCommandTest {
     }
 
     /**
-     * A Model stub that contains a single person.
+     * A Model stub that already contains one person (used to test duplicates).
      */
     private class ModelStubWithPerson extends ModelStub {
         private final Person person;
@@ -178,7 +185,7 @@ public class AddCommandTest {
     }
 
     /**
-     * A Model stub that always accept the person being added.
+     * A Model stub that accepts any person added and records them.
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
@@ -200,5 +207,4 @@ public class AddCommandTest {
             return new AddressBook();
         }
     }
-
 }
