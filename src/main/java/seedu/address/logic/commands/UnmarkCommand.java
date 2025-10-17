@@ -13,6 +13,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Tag;
+import seedu.address.model.person.Points;
 
 /**
  * Marks a person as absent identified using it's displayed index from the address book.
@@ -63,7 +64,12 @@ public class UnmarkCommand extends Command {
         Set<Tag> updatedTags = new HashSet<>(personToUnmark.getTags());
         updatedTags.remove(new Tag("present"));
 
-        // Create a new Person with isPresent set to false and updated tags
+        // Calculate new points (deduct 1 if they have points to deduct)
+        Points newPoints = personToUnmark.getPoints().getValue() > 0 
+            ? personToUnmark.getPoints().subtractPoint() 
+            : personToUnmark.getPoints();
+
+        // Create a new Person with isPresent set to false, updated tags, and adjusted points
         Person unmarkedPerson = new Person(
             personToUnmark.getName(),
             personToUnmark.getPhone(),
@@ -72,7 +78,8 @@ public class UnmarkCommand extends Command {
             personToUnmark.getFaculty(),
             personToUnmark.getAddress(),
             updatedTags,
-            false
+            false,
+            newPoints
         );
 
         model.setPerson(personToUnmark, unmarkedPerson);
