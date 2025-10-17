@@ -141,7 +141,7 @@ public class EditCommand extends Command {
         private Name name;
         private Phone phone;
         private Email email;
-        private int yearOfStudy;
+        private Integer yearOfStudy;
         private String faculty;
         private Address address;
         private Set<Tag> tags;
@@ -197,7 +197,9 @@ public class EditCommand extends Command {
             this.yearOfStudy = yearOfStudy;
         }
 
-        public Optional<Integer> getYearOfStudy() { return Optional.of(yearOfStudy); }
+        public Optional<Integer> getYearOfStudy() { 
+            return Optional.ofNullable(yearOfStudy); 
+        }
 
         public void setFaculty(String faculty) {
             this.faculty = faculty;
