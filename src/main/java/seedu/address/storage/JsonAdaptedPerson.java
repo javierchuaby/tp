@@ -40,15 +40,19 @@ class JsonAdaptedPerson {
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
      */
     @JsonCreator
-    public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
-                             @JsonProperty("email") String email, @JsonProperty("address") String address,
+    public JsonAdaptedPerson(@JsonProperty("name") String name, 
+                             @JsonProperty("phone") String phone,
+                             @JsonProperty("email") String email, 
+                             @JsonProperty("yearOfStudy") Integer yearOfStudy,
+                             @JsonProperty("faculty") String faculty,
+                             @JsonProperty("address") String address,
                              @JsonProperty("tags") List<JsonAdaptedTag> tags,
                              @JsonProperty("isPresent") Boolean isPresent,
                              @JsonProperty("points") Integer points) {
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.yearOfStudy = yearOfStudy;
+        this.yearOfStudy = yearOfStudy != null ? yearOfStudy : 1; // Default to year 1
         this.faculty = faculty;
         this.address = address;
         if (tags != null) {
@@ -129,8 +133,8 @@ class JsonAdaptedPerson {
         final Set<Tag> modelTags = new HashSet<>(personTags);
         final Points modelPoints = new Points(points);
 
-        return new Person(modelName, modelPhone, modelEmail, modelAddress,
-            modelTags, isPresent, modelPoints);
+        return new Person(modelName, modelPhone, modelEmail, yearOfStudy, faculty, 
+            modelAddress, modelTags, isPresent, modelPoints);
     }
 
 }
