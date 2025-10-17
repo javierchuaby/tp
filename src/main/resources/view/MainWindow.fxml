@@ -63,13 +63,13 @@
             </StackPane>
 
             <!-- Keep result display placeholder for controller wiring, but don't layout it -->
-            <StackPane fx:id="resultDisplayPlaceholder" managed="false" visible="true" />
+            <StackPane fx:id="resultDisplayPlaceholder"/>
 
             <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
           </VBox>
 
           <!-- Help Overlay -->
-          <StackPane fx:id="helpOverlay" visible="true" pickOnBounds="false">
+          <StackPane fx:id="helpOverlay" visible="false" pickOnBounds="false">
             <children>
               <!-- Dimmed background -->
               <javafx.scene.layout.StackPane style="-fx-background-color: rgba(15,23,42,0.55);" pickOnBounds="true"/>

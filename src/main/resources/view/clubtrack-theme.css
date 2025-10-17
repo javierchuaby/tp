@@ -132,8 +132,8 @@
 }
 
 .result-display .content {
-    -fx-background-color: transparent;
-}
+    -fx-background-color: transparent, #383838, transparent, #383838;
+    -fx-background-radius: 0;}
 
 /* Status bar */
 .status-bar-dark {
