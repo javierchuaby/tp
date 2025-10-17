@@ -31,6 +31,7 @@ public class MarkCommandTest {
         Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON);
 
+        // Preserve existing tags, set isPresent=true, increment points by one
         Person markedPerson = new Person(
             personToMark.getName(),
             personToMark.getPhone(),
@@ -39,7 +40,7 @@ public class MarkCommandTest {
             personToMark.getFaculty(),
             personToMark.getAddress(),
             personToMark.getTags(),
-            true, // Mark as present
+            true,
             personToMark.getPoints().addPoint()
         );
 
@@ -70,6 +71,7 @@ public class MarkCommandTest {
         Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON);
 
+        // Preserve existing tags, set isPresent=true, increment points by one
         Person markedPerson = new Person(
                 personToMark.getName(),
                 personToMark.getPhone(),
@@ -78,7 +80,7 @@ public class MarkCommandTest {
                 personToMark.getFaculty(),
                 personToMark.getAddress(),
                 personToMark.getTags(),
-                true, // Mark as present
+                true,
                 personToMark.getPoints().addPoint()
         );
 
