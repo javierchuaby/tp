@@ -21,7 +21,6 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Points;
 import seedu.address.model.person.Tag;
 
 /**
@@ -114,6 +113,8 @@ public class UnmarkCommandTest {
             personToMark.getName(),
             personToMark.getPhone(),
             personToMark.getEmail(),
+            personToMark.getYearOfStudy(),
+            personToMark.getFaculty(),
             personToMark.getAddress(),
             markedTags,
             true,
@@ -130,6 +131,8 @@ public class UnmarkCommandTest {
             markedPerson.getName(),
             markedPerson.getPhone(),
             markedPerson.getEmail(),
+            markedPerson.getYearOfStudy(),
+            markedPerson.getFaculty(),
             markedPerson.getAddress(),
             updatedTags,
             false,
