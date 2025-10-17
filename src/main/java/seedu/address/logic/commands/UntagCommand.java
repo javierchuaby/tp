@@ -36,9 +36,12 @@ public class UntagCommand extends Command {
             personToUntag.getName(),
             personToUntag.getPhone(),
             personToUntag.getEmail(),
+            personToUntag.getYearOfStudy(),
+            personToUntag.getFaculty(),
             personToUntag.getAddress(),
             updatedTags,
-            personToUntag.isPresent()
+            personToUntag.isPresent(),
+            personToUntag.getPoints()
         );
         model.setPerson(personToUntag, updatedPerson);
         return new CommandResult(String.format(MESSAGE_SUCCESS, tag));
