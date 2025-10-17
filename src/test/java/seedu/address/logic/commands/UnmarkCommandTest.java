@@ -10,6 +10,9 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -18,6 +21,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Tag;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for UnmarkCommand.
@@ -29,40 +33,30 @@ public class UnmarkCommandTest {
     @Test
     public void execute_validIndexUnfilteredList_success() {
         Person personToUnmark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        // Ensure the person is currently present to test successful unmark
-        Person presentVersion = new Person(
+        UnmarkCommand unmarkCommand = new UnmarkCommand(INDEX_FIRST_PERSON);
+
+        Set<Tag> updatedTags = new HashSet<>(personToUnmark.getTags());
+        updatedTags.remove(new Tag("present"));
+        Person unmarkedPerson = new Person(
                 personToUnmark.getName(),
                 personToUnmark.getPhone(),
                 personToUnmark.getEmail(),
                 personToUnmark.getYearOfStudy(),
                 personToUnmark.getFaculty(),
                 personToUnmark.getAddress(),
-                personToUnmark.getTags(),
-                true,
-                personToUnmark.getPoints());
-        model.setPerson(personToUnmark, presentVersion);
-
-        UnmarkCommand unmarkCommand = new UnmarkCommand(INDEX_FIRST_PERSON);
-
-        Person unmarkedPerson = new Person(
-                presentVersion.getName(),
-                presentVersion.getPhone(),
-                presentVersion.getEmail(),
-                presentVersion.getYearOfStudy(),
-                presentVersion.getFaculty(),
-                presentVersion.getAddress(),
-                presentVersion.getTags(),
+                updatedTags,
                 false,
-                presentVersion.getPoints()
+                personToUnmark.getPoints().subtractPoint()
         );
 
         String expectedMessage = String.format(
-                UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS,
-                presentVersion.getName()
+                UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS + " 1 point deducted. New total: %2$d",
+                personToUnmark.getName(),
+                unmarkedPerson.getPoints().getValue()
         );
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.setPerson(presentVersion, unmarkedPerson);
+        expectedModel.setPerson(personToUnmark, unmarkedPerson);
 
         assertCommandSuccess(unmarkCommand, model, expectedMessage, expectedModel);
     }
@@ -80,40 +74,30 @@ public class UnmarkCommandTest {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person personToUnmark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        // Ensure present first
-        Person presentVersion = new Person(
+        UnmarkCommand unmarkCommand = new UnmarkCommand(INDEX_FIRST_PERSON);
+
+        Set<Tag> updatedTags = new HashSet<>(personToUnmark.getTags());
+        updatedTags.remove(new Tag("present"));
+        Person unmarkedPerson = new Person(
                 personToUnmark.getName(),
                 personToUnmark.getPhone(),
                 personToUnmark.getEmail(),
                 personToUnmark.getYearOfStudy(),
                 personToUnmark.getFaculty(),
                 personToUnmark.getAddress(),
-                personToUnmark.getTags(),
-                true,
-                personToUnmark.getPoints());
-        model.setPerson(personToUnmark, presentVersion);
-
-        UnmarkCommand unmarkCommand = new UnmarkCommand(INDEX_FIRST_PERSON);
-
-        Person unmarkedPerson = new Person(
-                presentVersion.getName(),
-                presentVersion.getPhone(),
-                presentVersion.getEmail(),
-                presentVersion.getYearOfStudy(),
-                presentVersion.getFaculty(),
-                presentVersion.getAddress(),
-                presentVersion.getTags(),
+                updatedTags,
                 false,
-                presentVersion.getPoints()
+                personToUnmark.getPoints().subtractPoint()
         );
 
         String expectedMessage = String.format(
-                UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS,
-                presentVersion.getName()
+                UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS + " 1 point deducted. New total: %2$d",
+                personToUnmark.getName(),
+                unmarkedPerson.getPoints().getValue()
         );
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.setPerson(presentVersion, unmarkedPerson);
+        expectedModel.setPerson(personToUnmark, unmarkedPerson);
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
 
         assertCommandSuccess(unmarkCommand, model, expectedMessage, expectedModel);
@@ -121,43 +105,48 @@ public class UnmarkCommandTest {
 
     @Test
     public void execute_presentPersonUnfilteredList_success() {
-        // First create a present person with +1 point as might happen after marking present
-        Person base = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Person markedPresent = new Person(
-                base.getName(),
-                base.getPhone(),
-                base.getEmail(),
-                base.getYearOfStudy(),
-                base.getFaculty(),
-                base.getAddress(),
-                base.getTags(),
+        // First mark a person as present
+        Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Set<Tag> markedTags = new HashSet<>(personToMark.getTags());
+        markedTags.add(new Tag("present"));
+        Person markedPerson = new Person(
+                personToMark.getName(),
+                personToMark.getPhone(),
+                personToMark.getEmail(),
+                personToMark.getYearOfStudy(),
+                personToMark.getFaculty(),
+                personToMark.getAddress(),
+                markedTags,
                 true,
-                base.getPoints().addPoint()
+                personToMark.getPoints().addPoint()
         );
-        model.setPerson(base, markedPresent);
+        model.setPerson(personToMark, markedPerson);
 
-        // Now test unmarking them (points unchanged)
+        // Now test unmarking them
         UnmarkCommand unmarkCommand = new UnmarkCommand(INDEX_FIRST_PERSON);
 
+        Set<Tag> updatedTags = new HashSet<>(markedPerson.getTags());
+        updatedTags.remove(new Tag("present"));
         Person unmarkedPerson = new Person(
-                markedPresent.getName(),
-                markedPresent.getPhone(),
-                markedPresent.getEmail(),
-                markedPresent.getYearOfStudy(),
-                markedPresent.getFaculty(),
-                markedPresent.getAddress(),
-                markedPresent.getTags(),
+                markedPerson.getName(),
+                markedPerson.getPhone(),
+                markedPerson.getEmail(),
+                markedPerson.getYearOfStudy(),
+                markedPerson.getFaculty(),
+                markedPerson.getAddress(),
+                updatedTags,
                 false,
-                markedPresent.getPoints()
+                markedPerson.getPoints().subtractPoint()
         );
 
         String expectedMessage = String.format(
-                UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS,
-                markedPresent.getName()
+                UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS + " 1 point deducted. New total: %2$d",
+                markedPerson.getName(),
+                unmarkedPerson.getPoints().getValue()
         );
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.setPerson(markedPresent, unmarkedPerson);
+        expectedModel.setPerson(markedPerson, unmarkedPerson);
 
         assertCommandSuccess(unmarkCommand, model, expectedMessage, expectedModel);
     }

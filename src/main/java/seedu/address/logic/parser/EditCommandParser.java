@@ -4,11 +4,11 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_YEAROFSTUDY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_FACULTY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_YEAROFSTUDY;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,31 +22,39 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Tag;
 
 /**
- * Parses input arguments and creates a new EditCommand object
+ * Parses input arguments and creates a new {@link EditCommand} object.
  */
 public class EditCommandParser implements Parser<EditCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the EditCommand
-     * and returns an EditCommand object for execution.
-     * @throws ParseException if the user input does not conform the expected format
+     * Parses the given {@code String} of arguments in the context of the {@link EditCommand}
+     * and returns an {@code EditCommand} object for execution.
+     *
+     * @throws ParseException if the user input does not conform to the expected format.
      */
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, 
-                    PREFIX_YEAROFSTUDY, PREFIX_FACULTY, PREFIX_ADDRESS, PREFIX_TAG);
+
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
+                args,
+                PREFIX_NAME,
+                PREFIX_PHONE,
+                PREFIX_EMAIL,
+                PREFIX_YEAROFSTUDY,
+                PREFIX_FACULTY,
+                PREFIX_ADDRESS,
+                PREFIX_TAG
+        );
 
         Index index;
-
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, 
-            PREFIX_YEAROFSTUDY, PREFIX_FACULTY, PREFIX_ADDRESS);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
 
@@ -59,16 +67,10 @@ public class EditCommandParser implements Parser<EditCommand> {
         if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
             editPersonDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get()));
         }
-        if (argMultimap.getValue(PREFIX_YEAROFSTUDY).isPresent()) {
-            editPersonDescriptor.setYearOfStudy(ParserUtil.parseYearOfStudy(
-                Integer.parseInt(argMultimap.getValue(PREFIX_YEAROFSTUDY).get())));
-        }
-        if (argMultimap.getValue(PREFIX_FACULTY).isPresent()) {
-            editPersonDescriptor.setFaculty(ParserUtil.parseFaculty(argMultimap.getValue(PREFIX_FACULTY).get()));
-        }
         if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
             editPersonDescriptor.setAddress(ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get()));
         }
+        // Note: Add parsing for yearOfStudy/faculty here if you expose them via edit.
         parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {
@@ -80,8 +82,8 @@ public class EditCommandParser implements Parser<EditCommand> {
 
     /**
      * Parses {@code Collection<String> tags} into a {@code Set<Tag>} if {@code tags} is non-empty.
-     * If {@code tags} contain only one element which is an empty string, it will be parsed into a
-     * {@code Set<Tag>} containing zero tags.
+     * If {@code tags} contains only one element which is an empty string, it will be parsed into
+     * an empty {@code Set<Tag>}.
      */
     private Optional<Set<Tag>> parseTagsForEdit(Collection<String> tags) throws ParseException {
         assert tags != null;
@@ -89,8 +91,9 @@ public class EditCommandParser implements Parser<EditCommand> {
         if (tags.isEmpty()) {
             return Optional.empty();
         }
-        Collection<String> tagSet = tags.size() == 1 && tags.contains("") ? Collections.emptySet() : tags;
+        Collection<String> tagSet = (tags.size() == 1 && tags.contains(""))
+                ? Collections.emptySet()
+                : tags;
         return Optional.of(ParserUtil.parseTags(tagSet));
     }
-
 }

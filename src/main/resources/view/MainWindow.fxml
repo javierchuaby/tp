@@ -57,15 +57,13 @@
               <StackPane fx:id="commandBoxPlaceholder" />
             </StackPane>
 
-            <!-- Result display (visible) -->
-            <StackPane VBox.vgrow="NEVER" styleClass="result-container">
-              <StackPane fx:id="resultDisplayPlaceholder" />
-            </StackPane>
-
             <!-- Full-width members panel -->
             <StackPane VBox.vgrow="ALWAYS" styleClass="members-panel">
               <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS"/>
             </StackPane>
+
+            <!-- Keep result display placeholder for controller wiring, but don't layout it -->
+            <StackPane fx:id="resultDisplayPlaceholder"/>
 
             <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
           </VBox>

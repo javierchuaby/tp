@@ -8,10 +8,9 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.model.person.Tag;
 
 /**
- * Represents a Person in the address book.
+ * Represents a Person (club member).
  * Guarantees: details are present and not null, field values are validated, immutable.
  */
 public class Person {
@@ -30,10 +29,12 @@ public class Person {
     private final Points points;
 
     /**
-     * Constructor with isPresent set to false as default.
+     * Constructs a {@code Person} with {@code isPresent=false} and fresh {@code Points}.
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, int yearOfStudy, String faculty, Address address, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email,
+                  int yearOfStudy, String faculty,
+                  Address address, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
@@ -42,16 +43,17 @@ public class Person {
         this.faculty = faculty;
         this.address = address;
         this.tags.addAll(tags);
-        this.isPresent = false; // Default to absent
+        this.isPresent = false;
         this.points = new Points();
     }
 
     /**
-     *
-     * Overloaded constructor that allows specifying isPresent status.
+     * Constructs a {@code Person} with explicit presence.
      */
-    public Person(Name name, Phone phone, Email email, int yearOfStudy, String faculty,
-                  Address address, Set<Tag> tags, boolean isPresent) {
+    public Person(Name name, Phone phone, Email email,
+                  int yearOfStudy, String faculty,
+                  Address address, Set<Tag> tags,
+                  boolean isPresent) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
@@ -65,20 +67,12 @@ public class Person {
     }
 
     /**
-     * Full constructor with explicit present status and points.
-     * Every field must be present and not null.
+     * Constructs a {@code Person} with explicit presence and points.
      */
-    public Person(
-            Name name,
-            Phone phone,
-            Email email,
-            int yearOfStudy,
-            String faculty,
-            Address address,
-            Set<Tag> tags,
-            boolean isPresent,
-            Points points
-    ) {
+    public Person(Name name, Phone phone, Email email,
+                  int yearOfStudy, String faculty,
+                  Address address, Set<Tag> tags,
+                  boolean isPresent, Points points) {
         requireAllNonNull(name, phone, email, address, tags, points);
         this.name = name;
         this.phone = phone;
@@ -103,94 +97,76 @@ public class Person {
         return email;
     }
 
+    public int getYearOfStudy() {
+        return yearOfStudy;
+    }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
     public Address getAddress() {
         return address;
     }
 
-    public int getYearOfStudy() { return yearOfStudy; }
-
-    public String getFaculty() { return faculty; }
-
-    /**
-     * Returns the immutable points associated with this person.
-     */
-    public Points getPoints() {
-        return points;
-    }
-
-    /**
-     * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
-     * if modification is attempted.
-     */
     public Set<Tag> getTags() {
         return Collections.unmodifiableSet(tags);
     }
 
-    /**
-     * Returns true if the person is marked as present.
-     */
     public boolean isPresent() {
         return isPresent;
     }
 
-    /**
-     * Returns true if both persons have the same name.
-     * This defines a weaker notion of equality between two persons.
-     */
+    /** Returns the immutable points associated with this person. */
+    public Points getPoints() {
+        return points;
+    }
+
+    /** Weaker identity: same name. */
     public boolean isSamePerson(Person otherPerson) {
         if (otherPerson == this) {
             return true;
         }
-
-        return otherPerson != null
-            && otherPerson.getName().equals(getName());
+        return otherPerson != null && otherPerson.getName().equals(getName());
     }
 
-    /**
-     * Returns true if both persons have the same identity and data fields.
-     * This defines a stronger notion of equality between two persons.
-     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
-
-        // instanceof handles nulls
         if (!(other instanceof Person)) {
             return false;
         }
-
-        Person otherPerson = (Person) other;
-        return name.equals(otherPerson.name)
-            && phone.equals(otherPerson.phone)
-            && email.equals(otherPerson.email)
-            && yearOfStudy == otherPerson.yearOfStudy
-            && faculty.equals(otherPerson.faculty)
-            && address.equals(otherPerson.address)
-            && tags.equals(otherPerson.tags)
-            && isPresent == otherPerson.isPresent
-            && points.equals(otherPerson.points);
+        Person o = (Person) other;
+        return name.equals(o.name)
+                && phone.equals(o.phone)
+                && email.equals(o.email)
+                && yearOfStudy == o.yearOfStudy
+                && Objects.equals(faculty, o.faculty)
+                && address.equals(o.address)
+                && tags.equals(o.tags)
+                && isPresent == o.isPresent
+                && points.equals(o.points);
     }
 
     @Override
     public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
         return Objects.hash(name, phone, email, yearOfStudy, faculty, address, tags, isPresent, points);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-            .add("name", name)
-            .add("phone", phone)
-            .add("email", email)
-            .add("yearOfStudy", yearOfStudy)
-            .add("faculty", faculty)
-            .add("address", address)
-            .add("tags", tags)
-            .add("isPresent", isPresent)
-            .add("points", points)
-            .toString();
+                .add("name", name)
+                .add("phone", phone)
+                .add("email", email)
+                .add("yearOfStudy", yearOfStudy)
+                .add("faculty", faculty)
+                .add("address", address)
+                .add("tags", tags)
+                .add("isPresent", isPresent)
+                .add("points", points)
+                .toString();
     }
 }
