@@ -1,7 +1,5 @@
 package seedu.address.model.person;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * Represents a Person's points in the club.
  * Guarantees: point value is non-negative, immutable.
@@ -17,7 +15,6 @@ public class Points {
      * @throws IllegalArgumentException if points are negative.
      */
     public Points(int points) {
-        requireNonNull(points);
         if (points < 0) {
             throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
         }
