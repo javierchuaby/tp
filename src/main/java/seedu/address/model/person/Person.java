@@ -72,6 +72,8 @@ public class Person {
             Name name,
             Phone phone,
             Email email,
+            int yearOfStudy,
+            String faculty,
             Address address,
             Set<Tag> tags,
             boolean isPresent,
@@ -81,6 +83,8 @@ public class Person {
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.yearOfStudy = yearOfStudy;
+        this.faculty = faculty;
         this.address = address;
         this.tags.addAll(tags);
         this.isPresent = isPresent;
@@ -161,6 +165,8 @@ public class Person {
         return name.equals(otherPerson.name)
             && phone.equals(otherPerson.phone)
             && email.equals(otherPerson.email)
+            && yearOfStudy == otherPerson.yearOfStudy
+            && faculty.equals(otherPerson.faculty)
             && address.equals(otherPerson.address)
             && tags.equals(otherPerson.tags)
             && isPresent == otherPerson.isPresent
@@ -170,7 +176,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, isPresent, points);
+        return Objects.hash(name, phone, email, yearOfStudy, faculty, address, tags, isPresent, points);
     }
 
     @Override
@@ -179,6 +185,8 @@ public class Person {
             .add("name", name)
             .add("phone", phone)
             .add("email", email)
+            .add("yearOfStudy", yearOfStudy)
+            .add("faculty", faculty)
             .add("address", address)
             .add("tags", tags)
             .add("isPresent", isPresent)
