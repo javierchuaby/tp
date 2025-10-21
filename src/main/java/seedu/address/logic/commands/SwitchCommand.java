@@ -54,4 +54,21 @@ public class SwitchCommand extends Command {
         model.setAddressBookFilePath(getFilePath());
         return new CommandResult(String.format(MESSAGE_SUCCESS, listName));
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof SwitchCommand)) {
+            return false;
+        }
+        SwitchCommand otherCmd = (SwitchCommand) other;
+        return listName.equals(otherCmd.listName);
+    }
+
+    @Override
+    public int hashCode() {
+        return listName.hashCode();
+    }
 }

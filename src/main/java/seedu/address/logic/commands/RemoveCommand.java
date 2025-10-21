@@ -50,4 +50,21 @@ public class RemoveCommand extends Command {
         requireNonNull(model);
         return new CommandResult(String.format(MESSAGE_SUCCESS, listName));
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof RemoveCommand)) {
+            return false;
+        }
+        RemoveCommand otherCmd = (RemoveCommand) other;
+        return listName.equals(otherCmd.listName);
+    }
+
+    @Override
+    public int hashCode() {
+        return listName.hashCode();
+    }
 }
