@@ -11,7 +11,6 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Points;
 import seedu.address.model.person.Tag;
 
 /**
@@ -60,16 +59,8 @@ public class UnmarkCommand extends Command {
 
         Person personToUnmark = lastShownList.get(targetIndex.getZeroBased());
 
-        // If already absent, no-op
-        if (!personToUnmark.isPresent()) {
-            return new CommandResult(String.format(MESSAGE_ALREADY_ABSENT_NOOP, personToUnmark.getName()));
-        }
-
         // Preserve existing tags; do not manage a special presence tag
         Set<Tag> preservedTags = personToUnmark.getTags();
-
-        // Decide whether to deduct a point when marking absent. For now: do not deduct automatically on absence.
-        Points newPoints = personToUnmark.getPoints();
 
         // Create a new Person with isPresent set to false and preserved points
         Person unmarkedPerson = new Person(
@@ -81,7 +72,7 @@ public class UnmarkCommand extends Command {
             personToUnmark.getAddress(),
             preservedTags,
             false,
-            newPoints
+            personToUnmark.getPoints()
         );
 
         model.setPerson(personToUnmark, unmarkedPerson);

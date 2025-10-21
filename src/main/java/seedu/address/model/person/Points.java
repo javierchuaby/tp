@@ -29,6 +29,19 @@ public class Points {
     }
 
     /**
+     * Returns a new Points with {@code delta} added.
+     *
+     * @param delta non-negative amount to add
+     * @throws IllegalArgumentException if {@code delta} is negative
+     */
+    public Points add(int delta) {
+        if (delta < 0) {
+            throw new IllegalArgumentException("Delta must be non-negative");
+        }
+        return new Points(this.value + delta);
+    }
+
+    /**
      * Returns a new Points object with one point added.
      */
     public Points addPoint() {
