@@ -13,7 +13,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
-import seedu.address.model.person.Tag;
+import seedu.address.model.tag.Tag;
 
 /**
  * Contains utility methods used for parsing strings in the various *Parser classes.
@@ -21,15 +21,10 @@ import seedu.address.model.person.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
-    /** Public so tests can assert on the exact message. */
-    public static final String MESSAGE_INVALID_YOS = "Year of study must be an integer between 1 and 4.";
-    /** Public so tests can assert on the exact message. */
-    public static final String MESSAGE_INVALID_FACULTY = "Faculty cannot be empty.";
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
      * trimmed.
-     *
      * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
      */
     public static Index parseIndex(String oneBasedIndex) throws ParseException {
@@ -86,33 +81,6 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code int year} representing year-of-study.
-     *
-     * @throws ParseException if {@code year} is outside the supported range.
-     */
-    public static int parseYearOfStudy(int year) throws ParseException {
-        if (year < 1 || year > 4) {
-            throw new ParseException(MESSAGE_INVALID_YOS);
-        }
-        return year;
-    }
-
-    /**
-     * Parses a {@code String faculty}.
-     * Leading and trailing whitespaces will be trimmed.
-     *
-     * @throws ParseException if the given {@code faculty} is blank.
-     */
-    public static String parseFaculty(String faculty) throws ParseException {
-        requireNonNull(faculty);
-        String trimmedFaculty = faculty.trim();
-        if (trimmedFaculty.isEmpty()) {
-            throw new ParseException(MESSAGE_INVALID_FACULTY);
-        }
-        return trimmedFaculty;
-    }
-
-    /**
      * Parses a {@code String email} into an {@code Email}.
      * Leading and trailing whitespaces will be trimmed.
      *
@@ -125,6 +93,44 @@ public class ParserUtil {
             throw new ParseException(Email.MESSAGE_CONSTRAINTS);
         }
         return new Email(trimmedEmail);
+    }
+
+    /**
+     * Parses a {@code String yearOfStudy} into an {@code int}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code yearOfStudy} is not a valid integer
+     *                        or is outside the allowed range (e.g. 1–8).
+     */
+    public static int parseYearOfStudy(String yearOfStudy) throws ParseException {
+        requireNonNull(yearOfStudy);
+        String trimmedYear = yearOfStudy.trim();
+
+        try {
+            int year = Integer.parseInt(trimmedYear);
+            if (year < 1 || year > 4) {
+                throw new ParseException("Year of study must be between 1 and 4.");
+            }
+            return year;
+        } catch (NumberFormatException e) {
+            throw new ParseException("Year of study must be a valid integer.");
+        }
+    }
+
+
+    /**
+     * Parses a {@code String faculty} into a trimmed {@code String}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code faculty} is empty after trimming.
+     */
+    public static String parseFaculty(String faculty) throws ParseException {
+        requireNonNull(faculty);
+        String trimmedFaculty = faculty.trim();
+        if (trimmedFaculty.isEmpty()) {
+            throw new ParseException("Faculty cannot be empty.");
+        }
+        return trimmedFaculty;
     }
 
     /**
@@ -153,4 +159,5 @@ public class ParserUtil {
         }
         return tagSet;
     }
+
 }

@@ -81,7 +81,7 @@ public class TypicalPersons {
             .withPhone(VALID_PHONE_AMY)
             .withEmail(VALID_EMAIL_AMY)
             .withAddress(VALID_ADDRESS_AMY)
-            .withYearOfStudy(Integer.parseInt(VALID_YEAROFSTUDY_AMY))
+            .withYearOfStudy(VALID_YEAROFSTUDY_AMY)
             .withFaculty(VALID_FACULTY_AMY)
             .withTags(VALID_TAG_FRIEND)
             .build();
@@ -90,7 +90,7 @@ public class TypicalPersons {
             .withPhone(VALID_PHONE_BOB)
             .withEmail(VALID_EMAIL_BOB)
             .withAddress(VALID_ADDRESS_BOB)
-            .withYearOfStudy(Integer.parseInt(VALID_YEAROFSTUDY_BOB))
+            .withYearOfStudy(VALID_YEAROFSTUDY_BOB)
             .withFaculty(VALID_FACULTY_BOB)
             .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
             .build();
