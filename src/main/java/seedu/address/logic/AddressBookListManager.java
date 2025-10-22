@@ -1,0 +1,103 @@
+// New helper to centralize list-level storage operations
+package seedu.address.logic;
+
+import static java.util.Objects.requireNonNull;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.exceptions.DataLoadingException;
+import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.AddressBook;
+import seedu.address.model.Model;
+import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.storage.Storage;
+
+/**
+ * Helper/service class that encapsulates switching and removing address book list files.
+ * Keeps file-level logic out of {@link LogicManager} to preserve single responsibility.
+ */
+public class AddressBookListManager {
+
+    public static final String FILE_OPS_ERROR_FORMAT = "Could not save data due to the following error: %s";
+
+    private static final Logger logger = LogsCenter.getLogger(AddressBookListManager.class);
+
+    private final Storage storage;
+
+    public AddressBookListManager(Storage storage) {
+        this.storage = storage;
+    }
+
+    /**
+     * Switches the given model to use the list identified by {@code listName}.
+     * If the corresponding file exists, it is loaded; otherwise a new empty file is created.
+     */
+    public void switchToList(String listName, Model model) throws CommandException {
+        requireNonNull(listName);
+        requireNonNull(model);
+
+        Path filePath = Paths.get("data", listName + ".json");
+        try {
+            Optional<ReadOnlyAddressBook> data = storage.readAddressBook(filePath);
+            if (data.isPresent()) {
+                model.setAddressBook(data.get());
+            } else {
+                model.setAddressBook(new AddressBook());
+                storage.saveAddressBook(model.getAddressBook(), filePath);
+            }
+            model.setAddressBookFilePath(filePath);
+        } catch (DataLoadingException dle) {
+            logger.warning("Failed to load list at " + filePath + ". Starting with empty list.");
+            model.setAddressBook(new AddressBook());
+            try {
+                storage.saveAddressBook(model.getAddressBook(), filePath);
+            } catch (IOException ioe) {
+                throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
+            }
+            model.setAddressBookFilePath(filePath);
+        } catch (IOException ioe) {
+            throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
+        }
+    }
+
+    /**
+     * Removes the list file identified by {@code listName}. If it was the currently loaded list,
+     * reverts the model to the default address book file without overwriting existing default data.
+     */
+    public void removeList(String listName, Model model) throws CommandException {
+        requireNonNull(listName);
+        requireNonNull(model);
+
+        Path filePath = Paths.get("data", listName + ".json");
+        try {
+            java.nio.file.Files.deleteIfExists(filePath);
+            // If the removed list was the currently loaded one, revert to default
+            if (filePath.equals(model.getAddressBookFilePath())) {
+                Path defaultPath = Paths.get("data", "addressbook.json");
+                try {
+                    Optional<ReadOnlyAddressBook> defaultData = storage.readAddressBook(defaultPath);
+                    if (defaultData.isPresent()) {
+                        model.setAddressBook(defaultData.get());
+                    } else {
+                        model.setAddressBook(new AddressBook());
+                        storage.saveAddressBook(model.getAddressBook(), defaultPath);
+                    }
+                    model.setAddressBookFilePath(defaultPath);
+                } catch (DataLoadingException dle) {
+                    logger.warning("Default address book at " + defaultPath + " could not be loaded. "
+                            + "Starting with an empty in-memory list without overwriting the file.");
+                    model.setAddressBook(new AddressBook());
+                    model.setAddressBookFilePath(defaultPath);
+                }
+            }
+        } catch (IOException ioe) {
+            throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
+        }
+    }
+}
+
