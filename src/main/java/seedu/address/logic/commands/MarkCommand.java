@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -59,11 +58,10 @@ public class MarkCommand extends Command {
 
         Person personToMark = lastShownList.get(targetIndex.getZeroBased());
 
-        // Clone tags and add the "present" tag if not already present
-        Set<Tag> updatedTags = new HashSet<>(personToMark.getTags());
-        updatedTags.add(new Tag("present"));
+        // Preserve existing tags; do not add extra tag for presence
+        Set<Tag> preservedTags = personToMark.getTags();
 
-        // Create a new Person with isPresent set to true, updated tags, and incremented points
+        // Create a new Person with isPresent set to true and incremented points
         Person markedPerson = new Person(
             personToMark.getName(),
             personToMark.getPhone(),
@@ -71,15 +69,14 @@ public class MarkCommand extends Command {
             personToMark.getYearOfStudy(),
             personToMark.getFaculty(),
             personToMark.getAddress(),
-            updatedTags,
+            preservedTags,
             true,
-            personToMark.getPoints().addPoint()
+            personToMark.getPoints()
         );
 
         model.setPerson(personToMark, markedPerson);
-        return new CommandResult(String.format(MESSAGE_MARK_PERSON_SUCCESS + " Points awarded: %2$d",
-            personToMark.getName(),
-            markedPerson.getPoints().getValue()));
+        return new CommandResult(String.format(MESSAGE_MARK_PERSON_SUCCESS,
+            personToMark.getName()));
     }
 
     @Override

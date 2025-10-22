@@ -3,12 +3,21 @@
     "name": "Alice Pauline",
     "phone": "94351253",
     "email": "alice@example.com",
+    "yearOfStudy": 2,
+    "faculty": "School of Computing",
     "address": "123, Jurong West Ave 6, #08-111",
+    "isPresent": false,
+    "points": 0,
     "tags": [ "friends" ]
   }, {
     "name": "Alice Pauline",
     "phone": "94351253",
     "email": "pauline@example.com",
-    "address": "4th street"
+    "yearOfStudy": 1,
+    "faculty": "Faculty of Science",
+    "address": "4th street",
+    "isPresent": false,
+    "points": 0,
+    "tags": [ ]
   } ]
 }

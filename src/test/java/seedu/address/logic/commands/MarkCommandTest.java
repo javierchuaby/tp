@@ -10,7 +10,6 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -76,8 +75,7 @@ public class MarkCommandTest {
         Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         MarkCommand markCommand = new MarkCommand(INDEX_FIRST_PERSON);
 
-        Set<Tag> updatedTags = new HashSet<>(personToMark.getTags());
-        updatedTags.add(new Tag("present"));
+        Set<Tag> preservedTags = personToMark.getTags();
         Person markedPerson = new Person(
                 personToMark.getName(),
                 personToMark.getPhone(),
@@ -85,15 +83,14 @@ public class MarkCommandTest {
                 personToMark.getYearOfStudy(),
                 personToMark.getFaculty(),
                 personToMark.getAddress(),
-                updatedTags,
+                preservedTags,
                 true,
-                personToMark.getPoints().addPoint()
+                personToMark.getPoints()
         );
 
         String expectedMessage = String.format(
-                MarkCommand.MESSAGE_MARK_PERSON_SUCCESS + " Points awarded: %2$d",
-                personToMark.getName(),
-                markedPerson.getPoints().getValue()
+                MarkCommand.MESSAGE_MARK_PERSON_SUCCESS,
+                personToMark.getName()
         );
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());

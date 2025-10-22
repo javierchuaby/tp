@@ -3,6 +3,11 @@
     "name": "Hans Muster",
     "phone": "9482424",
     "email": "invalid@email!3e",
-    "address": "4th street"
+    "yearOfStudy": 2,
+    "faculty": "School of Computing",
+    "address": "4th street",
+    "isPresent": false,
+    "points": 0,
+    "tags": [ ]
   } ]
 }
