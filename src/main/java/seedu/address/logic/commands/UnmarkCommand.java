@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +29,7 @@ public class UnmarkCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_UNMARK_PERSON_SUCCESS = "Member '%1$s' marked absent.";
+    public static final String MESSAGE_ALREADY_ABSENT_NOOP = "Member '%1$s' is already absent. No changes made.";
 
     private final Index targetIndex;
 
@@ -59,11 +59,10 @@ public class UnmarkCommand extends Command {
 
         Person personToUnmark = lastShownList.get(targetIndex.getZeroBased());
 
-        // Clone tags and remove the "present" tag if exists
-        Set<Tag> updatedTags = new HashSet<>(personToUnmark.getTags());
-        updatedTags.remove(new Tag("present"));
+        // Preserve existing tags; do not manage a special presence tag
+        Set<Tag> preservedTags = personToUnmark.getTags();
 
-        // Create a new Person with isPresent set to false and updated tags
+        // Create a new Person with isPresent set to false and preserved points
         Person unmarkedPerson = new Person(
             personToUnmark.getName(),
             personToUnmark.getPhone(),
@@ -71,15 +70,15 @@ public class UnmarkCommand extends Command {
             personToUnmark.getYearOfStudy(),
             personToUnmark.getFaculty(),
             personToUnmark.getAddress(),
-            updatedTags,
-            false
+            preservedTags,
+            false,
+            personToUnmark.getPoints()
         );
 
         model.setPerson(personToUnmark, unmarkedPerson);
         return new CommandResult(String.format(
-            MESSAGE_UNMARK_PERSON_SUCCESS + " 1 point deducted. New total: %2$d",
-            personToUnmark.getName(),
-            unmarkedPerson.getPoints().getValue()
+            MESSAGE_UNMARK_PERSON_SUCCESS,
+            personToUnmark.getName()
         ));
     }
 

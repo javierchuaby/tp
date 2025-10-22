@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AddPointsCommand;
 import seedu.address.logic.commands.AttendanceCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
@@ -19,6 +20,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.MarkCommand;
+import seedu.address.logic.commands.MinusPointsCommand;
 import seedu.address.logic.commands.PointsCommand;
 import seedu.address.logic.commands.SearchCommand;
 import seedu.address.logic.commands.TagCommand;
@@ -31,9 +33,11 @@ import seedu.address.logic.parser.exceptions.ParseException;
  */
 public class AddressBookParser {
 
-    /** Used for initial separation of command word and args. */
+    /**
+     * Used for initial separation of command word and args.
+     */
     private static final Pattern BASIC_COMMAND_FORMAT =
-            Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
+        Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
 
     private static final Logger logger = LogsCenter.getLogger(AddressBookParser.class);
 
@@ -48,7 +52,7 @@ public class AddressBookParser {
         final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
         if (!matcher.matches()) {
             throw new ParseException(String.format(
-                    MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
+                MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
         }
 
         final String commandWord = matcher.group("commandWord");
@@ -102,6 +106,12 @@ public class AddressBookParser {
 
         case PointsCommand.COMMAND_WORD:
             return new PointsCommandParser().parse(arguments);
+
+        case AddPointsCommand.COMMAND_WORD:
+            return new AddPointsCommandParser().parse(arguments);
+
+        case MinusPointsCommand.COMMAND_WORD:
+            return new MinusPointsCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);
