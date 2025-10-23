@@ -17,11 +17,11 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
+import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
-import seedu.address.model.ModelManager;
 import seedu.address.storage.Storage;
 
 /**
@@ -29,11 +29,11 @@ import seedu.address.storage.Storage;
  */
 public class AddressBookListManagerTest {
 
+    private static final Path DEFAULT_PATH = Paths.get("data", "addressbook.json");
+
     private AddressBookListManager listManager;
     private FakeStorage storage;
     private Model model;
-
-    private static final Path DEFAULT_PATH = Paths.get("data", "addressbook.json");
 
     @BeforeEach
     public void setUp() {

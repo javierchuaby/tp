@@ -71,7 +71,8 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setAddress(ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get()));
         }
         if (argMultimap.getValue(PREFIX_YEAROFSTUDY).isPresent()) {
-            editPersonDescriptor.setYearOfStudy(ParserUtil.parseYearOfStudy(argMultimap.getValue(PREFIX_YEAROFSTUDY).get()));
+            editPersonDescriptor.setYearOfStudy(
+                    ParserUtil.parseYearOfStudy(argMultimap.getValue(PREFIX_YEAROFSTUDY).get()));
         }
         if (argMultimap.getValue(PREFIX_FACULTY).isPresent()) {
             editPersonDescriptor.setFaculty(ParserUtil.parseFaculty(argMultimap.getValue(PREFIX_FACULTY).get()));
