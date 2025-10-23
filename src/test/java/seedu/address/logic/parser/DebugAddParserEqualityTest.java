@@ -15,7 +15,8 @@ public class DebugAddParserEqualityTest {
         System.out.println("Actual toAdd: " + actual);
         System.out.println("Expected toAdd: " + expected);
         System.out.println("equals: " + expected.equals(actual));
-        System.out.println("expected.toAdd.equals(actual.toAdd): " + expected.getClass().getDeclaredMethod("toString").invoke(expected));
+        System.out.println("expected.toAdd.equals(actual.toAdd): "
+                + expected.getClass().getDeclaredMethod("toString").invoke(expected));
     }
 }
 

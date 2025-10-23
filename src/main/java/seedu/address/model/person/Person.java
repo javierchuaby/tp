@@ -162,6 +162,8 @@ public class Person {
                 .add("name", name)
                 .add("phone", phone)
                 .add("email", email)
+                .add("year of study", yearOfStudy)
+                .add("faculty", faculty)
                 .add("address", address)
                 .add("tags", tags)
                 .add("isPresent", isPresent)
