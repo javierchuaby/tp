@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.stage.Stage?>
 
 <fx:root type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
          title="ClubTrack" minWidth="450" minHeight="600" onCloseRequest="#handleExit">
@@ -46,7 +47,7 @@
                 <Menu text="Edit" />
                 <Menu text="Help">
                   <items>
-                    <MenuItem text="Help" onAction="#handleHelp" />
+                    <MenuItem fx:id="helpMenuItem" text="Help" onAction="#handleHelp" />
                   </items>
                 </Menu>
               </menus>
