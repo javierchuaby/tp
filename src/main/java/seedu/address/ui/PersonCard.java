@@ -39,6 +39,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
+    private Label points;
+    @FXML
     private FlowPane tags;
 
     /**
@@ -52,8 +54,19 @@ public class PersonCard extends UiPart<Region> {
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
+
+        // Display person's points (populate the points Label defined in the FXML)
+        if (points != null) {
+            points.setText(person.getPoints().toString());
+        }
+
+        // Add tags as labeled chips so they match the theme styles
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+                .forEach(tag -> {
+                    Label tagLabel = new Label(tag.tagName);
+                    tagLabel.getStyleClass().add("chip");
+                    tags.getChildren().add(tagLabel);
+                });
     }
 }

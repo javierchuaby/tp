@@ -140,7 +140,7 @@ public class EditCommand extends Command {
         private Phone phone;
         private Email email;
         private String faculty;
-        private int yearOfStudy;
+        private Integer yearOfStudy;
         private Address address;
         private Set<Tag> tags;
 
@@ -154,6 +154,8 @@ public class EditCommand extends Command {
             setName(toCopy.name);
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
+            setYearOfStudy(toCopy.yearOfStudy);
+            setFaculty(toCopy.faculty);
             setAddress(toCopy.address);
             setTags(toCopy.tags);
         }
@@ -162,7 +164,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, yearOfStudy, faculty, address, tags);
         }
 
         public void setName(Name name) {
@@ -189,7 +191,7 @@ public class EditCommand extends Command {
             return Optional.ofNullable(email);
         }
 
-        public void setYearOfStudy(int yearOfStudy) {
+        public void setYearOfStudy(Integer yearOfStudy) {
             this.yearOfStudy = yearOfStudy;
         }
 
@@ -245,6 +247,8 @@ public class EditCommand extends Command {
             return Objects.equals(name, otherEditPersonDescriptor.name)
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
+                    && Objects.equals(yearOfStudy, otherEditPersonDescriptor.yearOfStudy)
+                    && Objects.equals(faculty, otherEditPersonDescriptor.faculty)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
         }
@@ -255,6 +259,8 @@ public class EditCommand extends Command {
                     .add("name", name)
                     .add("phone", phone)
                     .add("email", email)
+                    .add("year of study", yearOfStudy)
+                    .add("faculty", faculty)
                     .add("address", address)
                     .add("tags", tags)
                     .toString();

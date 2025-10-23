@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -49,6 +50,13 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane statusbarPlaceholder;
+
+    // FXML fields for the inline help overlay (defined in MainWindow.fxml)
+    @FXML
+    private StackPane helpOverlay;
+
+    @FXML
+    private Label helpOverlayContent;
 
     /**
      * Creates a {@code MainWindow} with the given {@code Stage} and {@code Logic}.
@@ -144,6 +152,17 @@ public class MainWindow extends UiPart<Stage> {
             helpWindow.show();
         } else {
             helpWindow.focus();
+        }
+    }
+
+    /**
+     * Handler for closing the inline help overlay (button onAction="#handleCloseHelpOverlay").
+     */
+    @FXML
+    private void handleCloseHelpOverlay() {
+        if (helpOverlay != null) {
+            helpOverlay.setVisible(false);
+            helpOverlay.setPickOnBounds(false);
         }
     }
 

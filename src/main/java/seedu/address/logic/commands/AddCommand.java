@@ -94,6 +94,11 @@ public class AddCommand extends Command {
         return toAdd.equals(otherAddCommand.toAdd);
     }
 
+    @Override
+    public int hashCode() {
+        return toAdd.hashCode();
+    }
+
     /**
      * Returns a string representation of this AddCommand for debugging purposes.
      *

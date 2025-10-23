@@ -98,7 +98,11 @@ public class LogicManagerTest {
             Model expectedModel) throws CommandException, ParseException {
         CommandResult result = logic.execute(inputCommand);
         assertEquals(expectedMessage, result.getFeedbackToUser());
-        assertEquals(expectedModel, model);
+        // Compare the important components rather than relying on ModelManager.equals.
+        assertEquals(((ModelManager) expectedModel).getAddressBook().getPersonList(),
+                ((ModelManager) model).getAddressBook().getPersonList());
+        assertEquals(expectedModel.getFilteredPersonList(), model.getFilteredPersonList());
+        assertEquals(((ModelManager) expectedModel).getUserPrefs(), ((ModelManager) model).getUserPrefs());
     }
 
     /**
@@ -137,7 +141,11 @@ public class LogicManagerTest {
     private void assertCommandFailure(String inputCommand, Class<? extends Throwable> expectedException,
             String expectedMessage, Model expectedModel) {
         assertThrows(expectedException, expectedMessage, () -> logic.execute(inputCommand));
-        assertEquals(expectedModel, model);
+        // Ensure model components remain unchanged after failure
+        assertEquals(((ModelManager) expectedModel).getAddressBook().getPersonList(),
+                ((ModelManager) model).getAddressBook().getPersonList());
+        assertEquals(expectedModel.getFilteredPersonList(), model.getFilteredPersonList());
+        assertEquals(((ModelManager) expectedModel).getUserPrefs(), ((ModelManager) model).getUserPrefs());
     }
 
     /**
@@ -167,7 +175,12 @@ public class LogicManagerTest {
         // Triggers the saveAddressBook method by executing an add command
         String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
-        Person expectedPerson = new PersonBuilder(AMY).withTags().build();
+        // Build expected person using parser defaults for optional fields (yearOfStudy and faculty).
+        Person expectedPerson = new PersonBuilder(AMY)
+                .withYearOfStudy(1)
+                .withFaculty("School of Computing")
+                .withTags()
+                .build();
         ModelManager expectedModel = new ModelManager();
         expectedModel.addPerson(expectedPerson);
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);

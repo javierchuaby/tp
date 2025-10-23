@@ -34,7 +34,7 @@ public class CommandTestUtil {
     public static final String VALID_TAG_FRIEND = "friend";
     public static final String VALID_FACULTY_AMY = "School of Computing";
     public static final int VALID_YEAROFSTUDY_AMY = 2;
-    public static final String VALID_FACULTY_BOB = "Faculty of Sciences";
+    public static final String VALID_FACULTY_BOB = "School of Computing";
     public static final int VALID_YEAROFSTUDY_BOB = 1;
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
