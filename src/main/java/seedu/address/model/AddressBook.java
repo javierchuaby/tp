@@ -11,7 +11,7 @@ import seedu.address.model.person.UniquePersonList;
 
 /**
  * Wraps all data at the address-book level
- * Duplicates are not allowed (by .isSamePerson comparison)
+ * Duplicates are not allowed (by .isSameMember comparison)
  */
 public class AddressBook implements ReadOnlyAddressBook {
 
@@ -41,7 +41,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     //// list overwrite operations
 
     /**
-     * Replaces the contents of the person list with {@code persons}.
+     * Replaces the contents of the member list with {@code persons}.
      * {@code persons} must not contain duplicate persons.
      */
     public void setPersons(List<Person> persons) {
@@ -57,10 +57,10 @@ public class AddressBook implements ReadOnlyAddressBook {
         setPersons(newData.getPersonList());
     }
 
-    //// person-level operations
+    //// member-level operations
 
     /**
-     * Returns true if a person with the same identity as {@code person} exists in the address book.
+     * Returns true if a member with the same identity as {@code person} exists in the address book.
      */
     public boolean hasPerson(Person person) {
         requireNonNull(person);
@@ -68,17 +68,17 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Adds a person to the address book.
-     * The person must not already exist in the address book.
+     * Adds a member to the address book.
+     * The member must not already exist in the address book.
      */
     public void addPerson(Person p) {
         persons.add(p);
     }
 
     /**
-     * Replaces the given person {@code target} in the list with {@code editedPerson}.
+     * Replaces the given member {@code target} in the list with {@code editedPerson}.
      * {@code target} must exist in the address book.
-     * The person identity of {@code editedPerson} must not be the same as another existing person in the address book.
+     * The member identity of {@code editedPerson} must not be the same as another existing member in the address book.
      */
     public void setPerson(Person target, Person editedPerson) {
         requireNonNull(editedPerson);
@@ -99,7 +99,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("persons", persons)
+                .add("members", persons)
                 .toString();
     }
 

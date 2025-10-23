@@ -3,7 +3,6 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
-import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -11,7 +10,6 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Tag;
 
 /**
  * Marks a person as present identified using it's displayed index from the address book.
@@ -50,7 +48,7 @@ public class MarkCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
+    List<Person> lastShownList = model.getFilteredPersonList();
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_MEMBER_DISPLAYED_INDEX);
@@ -58,10 +56,7 @@ public class MarkCommand extends Command {
 
         Person personToMark = lastShownList.get(targetIndex.getZeroBased());
 
-        // Preserve existing tags; do not add extra tag for presence
-        Set<Tag> preservedTags = personToMark.getTags();
-
-        // Create a new Person with isPresent set to true and incremented points
+        // Create a new Person with isPresent set to true
         Person markedPerson = new Person(
             personToMark.getName(),
             personToMark.getPhone(),
@@ -69,14 +64,12 @@ public class MarkCommand extends Command {
             personToMark.getYearOfStudy(),
             personToMark.getFaculty(),
             personToMark.getAddress(),
-            preservedTags,
-            true,
-            personToMark.getPoints()
+            personToMark.getTags(),
+            true
         );
 
         model.setPerson(personToMark, markedPerson);
-        return new CommandResult(String.format(MESSAGE_MARK_PERSON_SUCCESS,
-            personToMark.getName()));
+        return new CommandResult(String.format(MESSAGE_MARK_PERSON_SUCCESS, personToMark.getName()));
     }
 
     @Override

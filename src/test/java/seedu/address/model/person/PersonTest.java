@@ -1,5 +1,6 @@
 package seedu.address.model.person;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
@@ -89,11 +90,11 @@ public class PersonTest {
         assertFalse(ALICE.equals(editedAlice));
     }
 
-    /*@Test
+    @Test
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", tags=" + ALICE.getTags()
-                + ", isPresent=" + ALICE.isPresent() + ", points=" + ALICE.getPoints() + "}";
+                + ", isPresent=" + ALICE.isPresent() + "}";
         assertEquals(expected, ALICE.toString());
-    }*/
+    }
 }

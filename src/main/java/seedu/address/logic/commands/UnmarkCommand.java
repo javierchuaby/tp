@@ -3,7 +3,6 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
-import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -11,7 +10,6 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Tag;
 
 /**
  * Marks a person as absent identified using it's displayed index from the address book.
@@ -29,7 +27,6 @@ public class UnmarkCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_UNMARK_PERSON_SUCCESS = "Member '%1$s' marked absent.";
-    public static final String MESSAGE_ALREADY_ABSENT_NOOP = "Member '%1$s' is already absent. No changes made.";
 
     private final Index targetIndex;
 
@@ -51,7 +48,7 @@ public class UnmarkCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
+    List<Person> lastShownList = model.getFilteredPersonList();
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_MEMBER_DISPLAYED_INDEX);
@@ -59,10 +56,7 @@ public class UnmarkCommand extends Command {
 
         Person personToUnmark = lastShownList.get(targetIndex.getZeroBased());
 
-        // Preserve existing tags; do not manage a special presence tag
-        Set<Tag> preservedTags = personToUnmark.getTags();
-
-        // Create a new Person with isPresent set to false and preserved points
+        // Create a new Member with isPresent set to false
         Person unmarkedPerson = new Person(
             personToUnmark.getName(),
             personToUnmark.getPhone(),
@@ -70,16 +64,12 @@ public class UnmarkCommand extends Command {
             personToUnmark.getYearOfStudy(),
             personToUnmark.getFaculty(),
             personToUnmark.getAddress(),
-            preservedTags,
-            false,
-            personToUnmark.getPoints()
+            personToUnmark.getTags(),
+            false
         );
 
         model.setPerson(personToUnmark, unmarkedPerson);
-        return new CommandResult(String.format(
-            MESSAGE_UNMARK_PERSON_SUCCESS,
-            personToUnmark.getName()
-        ));
+        return new CommandResult(String.format(MESSAGE_UNMARK_PERSON_SUCCESS, personToUnmark.getName()));
     }
 
     @Override

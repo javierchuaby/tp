@@ -133,6 +133,7 @@ class JsonAdaptedPerson {
         if (faculty == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "Faculty"));
         }
+        final String modelFaculty = faculty;
         // (Add a Faculty.isValidFaculty(...) check here if you later model it as a value object)
 
         // Address
@@ -150,13 +151,13 @@ class JsonAdaptedPerson {
         final Points modelPoints = new Points(points == null ? 0 : points);
         final boolean modelIsPresent = isPresent != null && isPresent;
 
-        // Build the Person using the full constructor (includes yearOfStudy & faculty)
+        // Build the Person using the full constructor
         return new Person(
                 modelName,
                 modelPhone,
                 modelEmail,
                 modelYearOfStudy,
-                faculty,
+                modelFaculty,
                 modelAddress,
                 modelTags,
                 modelIsPresent,

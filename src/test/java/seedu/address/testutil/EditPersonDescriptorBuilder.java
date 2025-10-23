@@ -73,7 +73,7 @@ public class EditPersonDescriptorBuilder {
      */
     public EditPersonDescriptorBuilder withYearOfStudy(String yearOfStudy) {
         try {
-            descriptor.setYearOfStudy(ParserUtil.parseYearOfStudy(Integer.parseInt(yearOfStudy)));
+            descriptor.setYearOfStudy(ParserUtil.parseYearOfStudy(yearOfStudy));
         } catch (ParseException e) {
             // In tests we expect valid constants; surface invalid test data clearly.
             throw new IllegalArgumentException("Invalid yearOfStudy in test data: " + yearOfStudy, e);
