@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
@@ -81,5 +82,25 @@ public class AddPointsCommand extends Command {
             personToUpdate.getName(),
             pointsToAdd,
             newPoints.getValue()));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof AddPointsCommand)) {
+            return false;
+        }
+
+        AddPointsCommand otherCommand = (AddPointsCommand) other;
+        return targetIndex.equals(otherCommand.targetIndex)
+            && pointsToAdd == otherCommand.pointsToAdd;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(targetIndex, pointsToAdd);
     }
 }
