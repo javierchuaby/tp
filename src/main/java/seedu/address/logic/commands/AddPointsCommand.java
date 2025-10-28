@@ -62,7 +62,17 @@ public class AddPointsCommand extends Command {
         Person personToUpdate = lastShownList.get(targetIndex.getZeroBased());
         Set<Tag> preservedTags = personToUpdate.getTags();
 
-        Points newPoints = new Points(personToUpdate.getPoints().getValue() + pointsToAdd);
+        int currentPoints = personToUpdate.getPoints().getValue();
+        if (pointsToAdd > 0 && currentPoints > Integer.MAX_VALUE - pointsToAdd) {
+            throw new CommandException("Adding " + pointsToAdd + " points would cause overflow. "
+                + "Current points: " + currentPoints + ", Maximum allowed: " + Integer.MAX_VALUE);
+        }
+        if (pointsToAdd < 0 && currentPoints < Integer.MIN_VALUE - pointsToAdd) {
+            throw new CommandException("Subtracting points would cause underflow. "
+                + "Current points: " + currentPoints + ", Minimum allowed: " + Integer.MIN_VALUE);
+        }
+
+        Points newPoints = new Points(currentPoints + pointsToAdd);
 
         Person updatedPerson = new Person(
             personToUpdate.getName(),
