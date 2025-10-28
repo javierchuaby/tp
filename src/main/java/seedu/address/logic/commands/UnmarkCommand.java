@@ -65,7 +65,8 @@ public class UnmarkCommand extends Command {
             personToUnmark.getFaculty(),
             personToUnmark.getAddress(),
             personToUnmark.getTags(),
-            false
+            false,
+            personToUnmark.getPoints()
         );
 
         model.setPerson(personToUnmark, unmarkedPerson);
