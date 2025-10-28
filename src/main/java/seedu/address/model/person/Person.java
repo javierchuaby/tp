@@ -167,6 +167,7 @@ public class Person {
                 .add("address", address)
                 .add("tags", tags)
                 .add("isPresent", isPresent)
+                .add("points", points)
                 .toString();
     }
 
