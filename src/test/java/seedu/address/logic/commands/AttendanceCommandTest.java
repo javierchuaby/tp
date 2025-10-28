@@ -18,9 +18,20 @@ public class AttendanceCommandTest {
         Model model = new ModelManager(new AddressBook(), new UserPrefs());
         Model expectedModel = new ModelManager(new AddressBook(), new UserPrefs());
 
-        // Add persons with different attendance
-        Person presentPerson = new PersonBuilder().withName("Alice").withPresent(true).build();
-        Person absentPerson = new PersonBuilder().withName("Bob").withPresent(false).build();
+        Person presentPerson = new PersonBuilder()
+                .withName("Alice")
+                .withPhone("90000001")
+                .withEmail("alice@example.com")
+                .withPresent(true)
+                .build();
+
+        Person absentPerson = new PersonBuilder()
+                .withName("Bob")
+                .withPhone("90000002")
+                .withEmail("bob@example.com")
+                .withPresent(false)
+                .build();
+
         model.addPerson(presentPerson);
         model.addPerson(absentPerson);
         expectedModel.addPerson(presentPerson);
