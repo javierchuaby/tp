@@ -18,6 +18,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.testutil.PersonBuilder;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for MarkCommand.
@@ -42,7 +43,8 @@ public class MarkCommandTest {
             personToMark.getFaculty(),
             personToMark.getAddress(),
             personToMark.getTags(),
-            true
+            true,
+            personToMark.getPoints()
         );
         expectedModel.setPerson(personToMark, markedPerson);
 
@@ -75,12 +77,36 @@ public class MarkCommandTest {
             personToMark.getFaculty(),
             personToMark.getAddress(),
             personToMark.getTags(),
-            true
+            true,
+            personToMark.getPoints()
         );
         expectedModel.setPerson(personToMark, markedPerson);
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
 
         assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_validIndexAndPersonHasPoints_preservesPoints() {
+        Person personWithPoints = new PersonBuilder().withPoints(100).build();
+        model.addPerson(personWithPoints);
+
+        // Get the index of the person we just added
+        Index lastPersonIndex = Index.fromOneBased(model.getFilteredPersonList().size());
+        MarkCommand markCommand = new MarkCommand(lastPersonIndex);
+
+        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSON_SUCCESS,
+            personWithPoints.getName());
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Person markedPerson = new PersonBuilder(personWithPoints).withPresent(true).build();
+        expectedModel.setPerson(personWithPoints, markedPerson);
+
+        assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
+
+        // Verify points are preserved
+        Person resultPerson = model.getFilteredPersonList().get(lastPersonIndex.getZeroBased());
+        assertEquals(100, resultPerson.getPoints().getValue());
     }
 
     @Test
