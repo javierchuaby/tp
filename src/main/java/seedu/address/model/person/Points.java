@@ -5,6 +5,7 @@ package seedu.address.model.person;
  * Guarantees: point value is non-negative, immutable.
  */
 public class Points {
+    public static final int MAX_POINTS = 1000000;
     public static final String MESSAGE_CONSTRAINTS = "Points should be a non-negative integer";
     private final int value;
 
@@ -16,6 +17,9 @@ public class Points {
      */
     public Points(int points) {
         if (points < 0) {
+            throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
+        }
+        if (points > MAX_POINTS) {
             throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
         }
         this.value = points;
@@ -42,13 +46,6 @@ public class Points {
     }
 
     /**
-     * Returns a new Points object with one point added.
-     */
-    public Points addPoint() {
-        return new Points(this.value + 1);
-    }
-
-    /**
      * Returns a new Points with {@code delta} subtracted; result is never negative.
      *
      * @param delta non-negative amount to subtract
@@ -62,17 +59,17 @@ public class Points {
     }
 
     /**
-     * Returns a new Points with one point subtracted; floors at zero.
-     */
-    public Points subtractPoint() {
-        return subtract(1);
-    }
-
-    /**
      * Returns the point value.
      */
     public int getValue() {
         return value;
+    }
+
+    /**
+     * Returns true if points value is within acceptable business rules
+     */
+    public static boolean isValidPointsValue(int value) {
+        return value >= 0 && value <= MAX_POINTS;
     }
 
     @Override
