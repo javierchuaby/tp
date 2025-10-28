@@ -5,6 +5,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddPointsCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_POINTS;
 
 /**
  * Parses input arguments and creates a new AddPointsCommand object
@@ -17,17 +18,23 @@ public class AddPointsCommandParser implements Parser<AddPointsCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public AddPointsCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
-        String[] splitArgs = trimmedArgs.split("\\s+");
-
-        if (splitArgs.length != 2) {
-            throw new ParseException(
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPointsCommand.MESSAGE_USAGE));
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_POINTS);
+        // Expect preamble to be the index
+        String preamble = argMultimap.getPreamble().trim();
+        if (preamble.isEmpty() || !argMultimap.getValue(PREFIX_POINTS).isPresent()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPointsCommand.MESSAGE_USAGE));
         }
 
         try {
-            Index index = ParserUtil.parseIndex(splitArgs[0]);
-            int points = Integer.parseInt(splitArgs[1]);
+            Index index = ParserUtil.parseIndex(preamble);
+            String pointsStr = argMultimap.getValue(PREFIX_POINTS).get();
+
+            // parse as long to detect overflow / extremely large values
+            long parsedLong = Long.parseLong(pointsStr);
+            if (parsedLong > Integer.MAX_VALUE) {
+                throw new ParseException("Too many points, please use a smaller value.");
+            }
+            int points = (int) parsedLong;
 
             if (points <= 0) {
                 throw new ParseException("Points must be a positive integer");
@@ -35,8 +42,7 @@ public class AddPointsCommandParser implements Parser<AddPointsCommand> {
 
             return new AddPointsCommand(index, points);
         } catch (NumberFormatException nfe) {
-            throw new ParseException(
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPointsCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPointsCommand.MESSAGE_USAGE));
         }
     }
 }
