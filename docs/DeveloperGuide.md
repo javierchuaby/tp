@@ -140,3 +140,20 @@ Use case ends.
 * **Duty Roster**: Schedule assigning specific responsibilities or tasks to club members
 * **Active Member**: A club member who regularly attends events and participates in club activities
 * **Financial Record**: Transaction logs including membership fees, expenses, and other monetary activities
+
+## Class diagram
+
+The following class diagram shows the main high-level components and relationships in the application (logic, model, storage, UI and core domain classes), available at `docs/diagrams/class_diagram.puml`.
+
+![Class diagram](./diagrams/class_diagram.png)
+
+To render the PNG locally (if you don't have the PNG yet), run:
+
+```bash
+# install plantuml (macOS example using Homebrew) if you don't have it:
+# brew install plantuml
+
+# render the diagram to PNG
+plantuml docs/diagrams/class_diagram.puml
+```
+
