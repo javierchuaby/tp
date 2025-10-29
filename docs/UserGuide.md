@@ -227,7 +227,7 @@ Displays the current attendance list, showing who is present and absent.
 ### Switching between lists : `switch`
 
 Switches between different attendance lists, such as separate training days or event rosters.
-The starting list is named `addressbook'.
+The starting list is named `clubtrack`.
 
 **Format:**  
 `switch NAME_OF_LIST`
