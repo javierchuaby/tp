@@ -10,57 +10,66 @@ import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
 
 /**
- * An UI component that displays information of a {@code Person}.
+ * A UI component that displays information of a {@code Person}.
  */
 public class PersonCard extends UiPart<Region> {
 
     private static final String FXML = "PersonListCard.fxml";
 
-    /**
-     * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
-     * As a consequence, UI elements' variable names cannot be set to such keywords
-     * or an exception will be thrown by JavaFX during runtime.
-     *
-     * @see <a href="https://github.com/se-edu/addressbook-level4/issues/336">The issue on AddressBook level 4</a>
-     */
-
     public final Person person;
 
-    @FXML
-    private HBox cardPane;
-    @FXML
-    private Label name;
-    @FXML
-    private Label id;
-    @FXML
-    private Label phone;
-    @FXML
-    private Label address;
-    @FXML
-    private Label email;
-    @FXML
-    private Label points;
-    @FXML
-    private FlowPane tags;
+    @FXML private HBox cardPane;
+    @FXML private Label name;
+    @FXML private Label id;
+    @FXML private Label phone;
+    @FXML private Label address;
+    @FXML private Label email;
+    @FXML private Label points;
+    @FXML private Label meta;
+    @FXML private FlowPane tags;
 
     /**
-     * Creates a {@code PersonCode} with the given {@code Person} and index to display.
+     * Creates a {@code PersonCard} with the given {@code Person} and index to display.
      */
     public PersonCard(Person person, int displayedIndex) {
         super(FXML);
         this.person = person;
+
         id.setText(displayedIndex + ". ");
         name.setText(person.getName().fullName);
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
 
-        // Display person's points (populate the points Label defined in the FXML)
         if (points != null) {
-            points.setText(person.getPoints().toString());
+            points.setText("Points: " + person.getPoints().getValue());
         }
 
-        // Add tags as labeled chips so they match the theme styles
+        String faculty = person.getFaculty();
+        int yearOfStudy = person.getYearOfStudy();
+
+        StringBuilder metaText = new StringBuilder();
+        if (yearOfStudy > 0) {
+            metaText.append("Y").append(yearOfStudy);
+        }
+        if (faculty != null && !faculty.isBlank()) {
+            if (metaText.length() > 0) {
+                metaText.append(" · ");
+            }
+            metaText.append(faculty);
+        }
+
+        if (meta != null) {
+            if (metaText.length() == 0) {
+                meta.setManaged(false);
+                meta.setVisible(false);
+            } else {
+                meta.setText(metaText.toString());
+                meta.setManaged(true);
+                meta.setVisible(true);
+            }
+        }
+
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> {
