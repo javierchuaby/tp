@@ -20,13 +20,20 @@ import seedu.address.model.person.Tag;
  */
 public class ParserUtil {
 
+    /** Message used when an index string is not a non-zero unsigned integer. */
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
 
+    /** Message used when a year of study is missing/invalid (non-integer or out of allowed range). */
+    public static final String MESSAGE_INVALID_YOS = "Year of study must be an integer between 1 and 4.";
+
+    /** Message used when a faculty string is empty after trimming. */
+    public static final String MESSAGE_INVALID_FACULTY = "Faculty cannot be empty.";
+
     /**
-     * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
-     * trimmed.
+     * Parses {@code oneBasedIndex} into an {@code Index} and returns it.
+     * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
+     * @throws ParseException if the specified index is invalid (not a non-zero unsigned integer).
      */
     public static Index parseIndex(String oneBasedIndex) throws ParseException {
         String trimmedIndex = oneBasedIndex.trim();
@@ -100,24 +107,24 @@ public class ParserUtil {
      * Parses a {@code String yearOfStudy} into an {@code int}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code yearOfStudy} is not a valid integer
-     *                        or is outside the allowed range (e.g. 1–8).
+     * <p>Throws a single, consistent message for both non-integer values and out-of-range values,
+     * matching test expectations.</p>
+     *
+     * @throws ParseException if the given {@code yearOfStudy} is not a valid integer in the range [1, 4].
      */
     public static int parseYearOfStudy(String yearOfStudy) throws ParseException {
         requireNonNull(yearOfStudy);
         String trimmedYear = yearOfStudy.trim();
-
         try {
             int year = Integer.parseInt(trimmedYear);
             if (year < 1 || year > 4) {
-                throw new ParseException("Year of study must be between 1 and 4.");
+                throw new ParseException(MESSAGE_INVALID_YOS);
             }
             return year;
-        } catch (NumberFormatException e) {
-            throw new ParseException("Year of study must be a valid integer.");
+        } catch (NumberFormatException nfe) {
+            throw new ParseException(MESSAGE_INVALID_YOS);
         }
     }
-
 
     /**
      * Parses a {@code String faculty} into a trimmed {@code String}.
@@ -129,7 +136,7 @@ public class ParserUtil {
         requireNonNull(faculty);
         String trimmedFaculty = faculty.trim();
         if (trimmedFaculty.isEmpty()) {
-            throw new ParseException("Faculty cannot be empty.");
+            throw new ParseException(MESSAGE_INVALID_FACULTY);
         }
         return trimmedFaculty;
     }
@@ -151,6 +158,8 @@ public class ParserUtil {
 
     /**
      * Parses {@code Collection<String> tags} into a {@code Set<Tag>}.
+     *
+     * @throws ParseException if any tag in {@code tags} is invalid.
      */
     public static Set<Tag> parseTags(Collection<String> tags) throws ParseException {
         requireNonNull(tags);
@@ -160,5 +169,4 @@ public class ParserUtil {
         }
         return tagSet;
     }
-
 }
