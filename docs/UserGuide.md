@@ -227,13 +227,14 @@ Displays the current attendance list, showing who is present and absent.
 ### Switching between lists : `switch`
 
 Switches between different attendance lists, such as separate training days or event rosters.
+The starting list is named `addressbook'.
 
 **Format:**  
-`switch n/NAME_OF_LIST`
+`switch NAME_OF_LIST`
 
 **Examples:**
-* `switch n/Training_2025_10_20`
-* `switch n/MatchDay_1`
+* `switch Training_2025_10_20`
+* `switch MatchDay_1`
 
 After switching, all subsequent attendance and point operations apply to that list.
 
@@ -244,10 +245,10 @@ After switching, all subsequent attendance and point operations apply to that li
 Removes an existing attendance list.
 
 **Format:**  
-`remove n/NAME_OF_LIST`
+`remove NAME_OF_LIST`
 
 **Examples:**
-* `remove n/Training_2025_10_20`
+* `remove Training_2025_10_20`
 
 ---
 
