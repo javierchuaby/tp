@@ -4,7 +4,9 @@
 
 !include ModelClassDiagram.puml
 !include LogicClassDiagram.puml
+!include StorageClassDiagram.puml
 
 ' Cross-slice relationships
+LogicManager --> Storage
 
 @enduml

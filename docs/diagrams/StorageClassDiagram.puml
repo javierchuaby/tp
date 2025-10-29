@@ -1,0 +1,84 @@
+@startuml
+
+' ===== Storage slice =====
+
+package "UserPrefs Storage" {
+Interface "<<interface>>\nUserPrefsStorage" as UserPrefsStorage {
+    +Path getUserPrefsFilePath()
+    +Optional<UserPrefs> readUserPrefs()
+    +void saveUserPrefs(ReadOnlyUserPrefs userPrefs)
+}
+Class JsonUserPrefsStorage {
+    -Path filePath
+    +JsonUserPrefsStorage(Path filePath)
+}
+}
+
+Interface "<<interface>>\nStorage" as Storage {
+    +Path getUserPrefsFilePath()
+    +Optional<UserPrefs> readUserPrefs()
+    +void saveUserPrefs(ReadOnlyUserPrefs userPrefs)
+    +Path getClubTrackFilePath()
+    +Optional<ReadOnlyClubTrack> readClubTrack()
+    +void saveClubTrack(ReadOnlyClubTrack clubTrack)
+}
+
+Class StorageManager {
+    -UserPrefsStorage userPrefsStorage
+    -ClubTrackStorage clubTrackStorage
+    +StorageManager(UserPrefsStorage userPrefsStorage, ClubTrackStorage clubTrackStorage)
+}
+
+package "ClubTrack Storage" {
+Interface "<<interface>>\nClubTrackStorage" as ClubTrackStorage {
+    +Path getClubTrackFilePath()
+    +Optional<ReadOnlyClubTrack> readClubTrack()
+    +Optional<ReadOnlyClubTrack> readClubTrack(Path filePath)
+    +void saveClubTrack(ReadOnlyClubTrack clubTrack)
+    +void saveClubTrack(ReadOnlyClubTrack clubTrack, Path filePath)
+}
+Class JsonClubTrackStorage {
+    -Path filePath
+    +JsonClubTrackStorage(Path filePath)
+}
+Class JsonSerializableClubTrack {
+    +List<JsonAdaptedPerson> persons
+    +JsonSerializableClubTrack()
+    +JsonSerializableClubTrack(ReadOnlyClubTrack src)
+    +ClubTrack toModelType()
+}
+Class JsonAdaptedPerson {
+    -String name
+    -String phone
+    -String email
+    -String address
+    -List<JsonAdaptedTag> tags
+    +JsonAdaptedPerson(Person source)
+    +Person toModelType()
+}
+Class JsonAdaptedTag {
+    -String tagName
+    +JsonAdaptedTag(Tag source)
+    +Tag toModelType()
+}
+}
+
+' Inheritance relationships
+StorageManager .up.|> Storage
+JsonUserPrefsStorage .up.|> UserPrefsStorage
+JsonClubTrackStorage .up.|> ClubTrackStorage
+
+' Composition relationships
+StorageManager *-up-> "1" UserPrefsStorage
+StorageManager *-up-> "1" ClubTrackStorage
+
+' Interface inheritance
+Storage -left-|> UserPrefsStorage
+Storage -right-|> ClubTrackStorage
+
+' Dependencies and associations
+JsonClubTrackStorage ..> JsonSerializableClubTrack
+JsonSerializableClubTrack *-- JsonAdaptedPerson
+JsonAdaptedPerson *-- JsonAdaptedTag
+
+@enduml
