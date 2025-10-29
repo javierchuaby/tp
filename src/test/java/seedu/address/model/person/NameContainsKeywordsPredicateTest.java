@@ -50,9 +50,10 @@ public class NameContainsKeywordsPredicateTest {
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
-        // Only one matching keyword
-        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Bob", "Carol"));
-        assertTrue(predicate.test(new PersonBuilder().withName("Alice Carol").build()));
+    // Only one matching keyword: with AND semantics, both keywords must be present. "Bob" is
+    // missing from "Alice Carol", so predicate should return false.
+    predicate = new NameContainsKeywordsPredicate(Arrays.asList("Bob", "Carol"));
+    assertFalse(predicate.test(new PersonBuilder().withName("Alice Carol").build()));
 
         // Mixed-case keywords
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("aLIce", "bOB"));

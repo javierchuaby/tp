@@ -6,8 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.CARL;
-import static seedu.address.testutil.TypicalPersons.ELLE;
-import static seedu.address.testutil.TypicalPersons.FIONA;
+
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
@@ -66,12 +65,14 @@ public class FindCommandTest {
 
     @Test
     public void execute_multipleKeywords_multiplePersonsFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
-        NameContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
+        // With AND semantics, the previous multi-keyword search that expected three different
+        // people to match is no longer appropriate. Test a single-keyword search instead.
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        NameContainsKeywordsPredicate predicate = preparePredicate("Kurz");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredPersonList());
+        assertEquals(Arrays.asList(CARL), model.getFilteredPersonList());
     }
 
     @Test
