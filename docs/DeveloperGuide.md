@@ -143,7 +143,7 @@ Use case ends.
 
 ## Class diagram
 
-The following class diagram shows the main high-level components and relationships in the application (logic, model, storage, UI and core domain classes). The PlantUML source is available at `docs/diagrams/class_diagram.puml`.
+The following class diagram shows the main high-level components and relationships in the application (logic, model, storage, UI and core domain classes), available at `docs/diagrams/class_diagram.puml`.
 
 ![Class diagram](./diagrams/class_diagram.png)
 
@@ -156,6 +156,4 @@ To render the PNG locally (if you don't have the PNG yet), run:
 # render the diagram to PNG
 plantuml docs/diagrams/class_diagram.puml
 ```
-
-If you'd like, I can try to render and commit the PNG here — I attempted to run `plantuml` but it is not available in this environment. If you give me permission to install PlantUML (via Homebrew) or provide a plantuml.jar, I can render it and add the PNG to the repo for you.
 
