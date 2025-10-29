@@ -12,24 +12,24 @@ import java.util.logging.Logger;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.AddressBook;
+import seedu.address.model.ClubTrack;
 import seedu.address.model.Model;
-import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyClubTrack;
 import seedu.address.storage.Storage;
 
 /**
  * Helper/service class that encapsulates switching and removing address book list files.
  * Keeps file-level logic out of {@link LogicManager} to preserve single responsibility.
  */
-public class AddressBookListManager {
+public class ClubTrackListManager {
 
     public static final String FILE_OPS_ERROR_FORMAT = "Could not save data due to the following error: %s";
 
-    private static final Logger logger = LogsCenter.getLogger(AddressBookListManager.class);
+    private static final Logger logger = LogsCenter.getLogger(ClubTrackListManager.class);
 
     private final Storage storage;
 
-    public AddressBookListManager(Storage storage) {
+    public ClubTrackListManager(Storage storage) {
         this.storage = storage;
     }
 
@@ -43,23 +43,23 @@ public class AddressBookListManager {
 
         Path filePath = Paths.get("data", listName + ".json");
         try {
-            Optional<ReadOnlyAddressBook> data = storage.readAddressBook(filePath);
+            Optional<ReadOnlyClubTrack> data = storage.readClubTrack(filePath);
             if (data.isPresent()) {
-                model.setAddressBook(data.get());
+                model.setClubTrack(data.get());
             } else {
-                model.setAddressBook(new AddressBook());
-                storage.saveAddressBook(model.getAddressBook(), filePath);
+                model.setClubTrack(new ClubTrack());
+                storage.saveClubTrack(model.getClubTrack(), filePath);
             }
-            model.setAddressBookFilePath(filePath);
+            model.setClubTrackFilePath(filePath);
         } catch (DataLoadingException dle) {
             logger.warning("Failed to load list at " + filePath + ". Starting with empty list.");
-            model.setAddressBook(new AddressBook());
+            model.setClubTrack(new ClubTrack());
             try {
-                storage.saveAddressBook(model.getAddressBook(), filePath);
+                storage.saveClubTrack(model.getClubTrack(), filePath);
             } catch (IOException ioe) {
                 throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
             }
-            model.setAddressBookFilePath(filePath);
+            model.setClubTrackFilePath(filePath);
         } catch (IOException ioe) {
             throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
         }
@@ -77,22 +77,22 @@ public class AddressBookListManager {
         try {
             java.nio.file.Files.deleteIfExists(filePath);
             // If the removed list was the currently loaded one, revert to default
-            if (filePath.equals(model.getAddressBookFilePath())) {
+            if (filePath.equals(model.getClubTrackFilePath())) {
                 Path defaultPath = Paths.get("data", "addressbook.json");
                 try {
-                    Optional<ReadOnlyAddressBook> defaultData = storage.readAddressBook(defaultPath);
+                    Optional<ReadOnlyClubTrack> defaultData = storage.readClubTrack(defaultPath);
                     if (defaultData.isPresent()) {
-                        model.setAddressBook(defaultData.get());
+                        model.setClubTrack(defaultData.get());
                     } else {
-                        model.setAddressBook(new AddressBook());
-                        storage.saveAddressBook(model.getAddressBook(), defaultPath);
+                        model.setClubTrack(new ClubTrack());
+                        storage.saveClubTrack(model.getClubTrack(), defaultPath);
                     }
-                    model.setAddressBookFilePath(defaultPath);
+                    model.setClubTrackFilePath(defaultPath);
                 } catch (DataLoadingException dle) {
                     logger.warning("Default address book at " + defaultPath + " could not be loaded. "
                             + "Starting with an empty in-memory list without overwriting the file.");
-                    model.setAddressBook(new AddressBook());
-                    model.setAddressBookFilePath(defaultPath);
+                    model.setClubTrack(new ClubTrack());
+                    model.setClubTrackFilePath(defaultPath);
                 }
             }
         } catch (IOException ioe) {

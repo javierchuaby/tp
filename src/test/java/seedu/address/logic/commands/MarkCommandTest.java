@@ -34,7 +34,7 @@ public class MarkCommandTest {
 
         String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSON_SUCCESS, personToMark.getName());
 
-        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        ModelManager expectedModel = new ModelManager(model.getClubTrack(), new UserPrefs());
         Person markedPerson = new Person(
             personToMark.getName(),
             personToMark.getPhone(),
@@ -68,7 +68,7 @@ public class MarkCommandTest {
 
         String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSON_SUCCESS, personToMark.getName());
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getClubTrack(), new UserPrefs());
         Person markedPerson = new Person(
             personToMark.getName(),
             personToMark.getPhone(),
@@ -98,7 +98,7 @@ public class MarkCommandTest {
         String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSON_SUCCESS,
             personWithPoints.getName());
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getClubTrack(), new UserPrefs());
         Person markedPerson = new PersonBuilder(personWithPoints).withPresent(true).build();
         expectedModel.setPerson(personWithPoints, markedPerson);
 

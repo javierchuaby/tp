@@ -1,16 +1,27 @@
 @startuml
 
 ' ===== Logic slice: Commands + LogicManager =====
+
+interface Logic
+
 interface Model
 
 abstract class Command {
-  + execute(model : Model) : CommandResult
++ execute(model : Model) : CommandResult
 }
 
 class CommandResult {
-  + feedbackToUser : String
-  + showHelp : boolean
-  + exit : boolean
++ feedbackToUser : String
++ showHelp : boolean
++ exit : boolean
+}
+
+class LogicManager {
+- model : Model
+- storage : Storage
+- clubTrackParser : ClubTrackParser
++ execute(commandText : String) : CommandResult
++ getClubTrack() : ReadOnlyClubTrack
 }
 
 class AddCommand
@@ -19,6 +30,11 @@ class FindCommand
 class AttendanceCommand
 class AddPointsCommand
 class MinusPointsCommand
+class DeleteCommand
+class ListCommand
+class ClearCommand
+class ExitCommand
+class HelpCommand
 
 ' Command hierarchy
 Command <|-- AddCommand
@@ -27,23 +43,22 @@ Command <|-- FindCommand
 Command <|-- AttendanceCommand
 Command <|-- AddPointsCommand
 Command <|-- MinusPointsCommand
-
-' Logic manager
-class LogicManager {
-  - model : Model
-  - storage : Storage
-  - addressBookParser : AddressBookParser
-  + execute(commandText : String) : CommandResult
-}
+Command <|-- DeleteCommand
+Command <|-- ListCommand
+Command <|-- ClearCommand
+Command <|-- ExitCommand
+Command <|-- HelpCommand
 
 interface Storage
-class AddressBookParser
+class ClubTrackParser
 class NameContainsKeywordsPredicate
 
-' Dependencies
+' Relationships
+LogicManager ..|> Logic
 Command --> Model
-LogicManager --> AddressBookParser
+LogicManager --> ClubTrackParser
 LogicManager --> Storage
 LogicManager --> Model
 FindCommand --> NameContainsKeywordsPredicate
+
 @enduml

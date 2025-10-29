@@ -34,7 +34,7 @@ public class UnmarkCommandTest {
 
         String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS, personToUnmark.getName());
 
-        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        ModelManager expectedModel = new ModelManager(model.getClubTrack(), new UserPrefs());
         Person unmarkedPerson = new Person(
             personToUnmark.getName(),
             personToUnmark.getPhone(),
@@ -68,7 +68,7 @@ public class UnmarkCommandTest {
 
         String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS, personToUnmark.getName());
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getClubTrack(), new UserPrefs());
         Person unmarkedPerson = new Person(
             personToUnmark.getName(),
             personToUnmark.getPhone(),
@@ -98,7 +98,7 @@ public class UnmarkCommandTest {
         String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSON_SUCCESS,
             personWithPoints.getName());
 
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getClubTrack(), new UserPrefs());
         Person unmarkedPerson = new PersonBuilder(personWithPoints).withPresent(false).build();
         expectedModel.setPerson(personWithPoints, unmarkedPerson);
 

@@ -73,8 +73,8 @@ StorageManager *-up-> "1" UserPrefsStorage
 StorageManager *-up-> "1" ClubTrackStorage
 
 ' Interface inheritance
-Storage -left-|> UserPrefsStorage
-Storage -right-|> ClubTrackStorage
+Storage --|> UserPrefsStorage
+Storage --|> ClubTrackStorage
 
 ' Dependencies and associations
 JsonClubTrackStorage ..> JsonSerializableClubTrack

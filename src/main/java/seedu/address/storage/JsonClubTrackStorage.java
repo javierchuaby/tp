@@ -12,7 +12,7 @@ import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.commons.util.FileUtil;
 import seedu.address.commons.util.JsonUtil;
-import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyClubTrack;
 
 /**
  * A class to access AddressBook data stored as a json file on the hard disk.
@@ -27,22 +27,22 @@ public class JsonClubTrackStorage implements ClubTrackStorage {
         this.filePath = filePath;
     }
 
-    public Path getAddressBookFilePath() {
+    public Path getClubTrackFilePath() {
         return filePath;
     }
 
     @Override
-    public Optional<ReadOnlyAddressBook> readAddressBook() throws DataLoadingException {
-        return readAddressBook(filePath);
+    public Optional<ReadOnlyClubTrack> readClubTrack() throws DataLoadingException {
+        return readClubTrack(filePath);
     }
 
     /**
-     * Similar to {@link #readAddressBook()}.
+     * Similar to {@link #readClubTrack()}.
      *
      * @param filePath location of the data. Cannot be null.
      * @throws DataLoadingException if loading the data from storage failed.
      */
-    public Optional<ReadOnlyAddressBook> readAddressBook(Path filePath) throws DataLoadingException {
+    public Optional<ReadOnlyClubTrack> readClubTrack(Path filePath) throws DataLoadingException {
         requireNonNull(filePath);
 
         Optional<JsonSerializableClubTrack> jsonAddressBook = JsonUtil.readJsonFile(
@@ -60,16 +60,16 @@ public class JsonClubTrackStorage implements ClubTrackStorage {
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
-        saveAddressBook(addressBook, filePath);
+    public void saveClubTrack(ReadOnlyClubTrack addressBook) throws IOException {
+        saveClubTrack(addressBook, filePath);
     }
 
     /**
-     * Similar to {@link #saveAddressBook(ReadOnlyAddressBook)}.
+     * Similar to {@link #saveClubTrack(ReadOnlyClubTrack)}.
      *
      * @param filePath location of the data. Cannot be null.
      */
-    public void saveAddressBook(ReadOnlyAddressBook addressBook, Path filePath) throws IOException {
+    public void saveClubTrack(ReadOnlyClubTrack addressBook, Path filePath) throws IOException {
         requireNonNull(addressBook);
         requireNonNull(filePath);
 

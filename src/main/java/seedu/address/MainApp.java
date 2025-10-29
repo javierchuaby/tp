@@ -15,10 +15,10 @@ import seedu.address.commons.util.ConfigUtil;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.Logic;
 import seedu.address.logic.LogicManager;
-import seedu.address.model.AddressBook;
+import seedu.address.model.ClubTrack;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
-import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyClubTrack;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
@@ -57,7 +57,7 @@ public class MainApp extends Application {
 
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
-        ClubTrackStorage clubTrackStorage = new JsonClubTrackStorage(userPrefs.getAddressBookFilePath());
+        ClubTrackStorage clubTrackStorage = new JsonClubTrackStorage(userPrefs.getClubTrackFilePath());
         storage = new StorageManager(clubTrackStorage, userPrefsStorage);
 
         model = initModelManager(storage, userPrefs);
@@ -72,21 +72,21 @@ public class MainApp extends Application {
      * or an empty address book will be used instead if errors occur when reading {@code storage}'s address book.
      */
     private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
-        logger.info("Using data file : " + storage.getAddressBookFilePath());
+        logger.info("Using data file : " + storage.getClubTrackFilePath());
 
-        Optional<ReadOnlyAddressBook> addressBookOptional;
-        ReadOnlyAddressBook initialData;
+        Optional<ReadOnlyClubTrack> addressBookOptional;
+        ReadOnlyClubTrack initialData;
         try {
-            addressBookOptional = storage.readAddressBook();
+            addressBookOptional = storage.readClubTrack();
             if (!addressBookOptional.isPresent()) {
-                logger.info("Creating a new data file " + storage.getAddressBookFilePath()
+                logger.info("Creating a new data file " + storage.getClubTrackFilePath()
                         + " populated with a sample AddressBook.");
             }
             initialData = addressBookOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
         } catch (DataLoadingException e) {
-            logger.warning("Data file at " + storage.getAddressBookFilePath() + " could not be loaded."
+            logger.warning("Data file at " + storage.getClubTrackFilePath() + " could not be loaded."
                     + " Will be starting with an empty AddressBook.");
-            initialData = new AddressBook();
+            initialData = new ClubTrack();
         }
 
         return new ModelManager(initialData, userPrefs);

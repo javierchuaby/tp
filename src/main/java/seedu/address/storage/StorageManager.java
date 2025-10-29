@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.exceptions.DataLoadingException;
-import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyClubTrack;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 
@@ -49,30 +49,30 @@ public class StorageManager implements Storage {
     // ================ AddressBook methods ==============================
 
     @Override
-    public Path getAddressBookFilePath() {
-        return clubTrackStorage.getAddressBookFilePath();
+    public Path getClubTrackFilePath() {
+        return clubTrackStorage.getClubTrackFilePath();
     }
 
     @Override
-    public Optional<ReadOnlyAddressBook> readAddressBook() throws DataLoadingException {
-        return readAddressBook(clubTrackStorage.getAddressBookFilePath());
+    public Optional<ReadOnlyClubTrack> readClubTrack() throws DataLoadingException {
+        return readClubTrack(clubTrackStorage.getClubTrackFilePath());
     }
 
     @Override
-    public Optional<ReadOnlyAddressBook> readAddressBook(Path filePath) throws DataLoadingException {
+    public Optional<ReadOnlyClubTrack> readClubTrack(Path filePath) throws DataLoadingException {
         logger.fine("Attempting to read data from file: " + filePath);
-        return clubTrackStorage.readAddressBook(filePath);
+        return clubTrackStorage.readClubTrack(filePath);
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
-        saveAddressBook(addressBook, clubTrackStorage.getAddressBookFilePath());
+    public void saveClubTrack(ReadOnlyClubTrack addressBook) throws IOException {
+        saveClubTrack(addressBook, clubTrackStorage.getClubTrackFilePath());
     }
 
     @Override
-    public void saveAddressBook(ReadOnlyAddressBook addressBook, Path filePath) throws IOException {
+    public void saveClubTrack(ReadOnlyClubTrack addressBook, Path filePath) throws IOException {
         logger.fine("Attempting to write to data file: " + filePath);
-        clubTrackStorage.saveAddressBook(addressBook, filePath);
+        clubTrackStorage.saveClubTrack(addressBook, filePath);
     }
 
 }
