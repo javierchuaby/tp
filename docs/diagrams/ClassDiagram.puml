@@ -7,5 +7,6 @@
 !include UiClassDiagram.puml
 
 ' Cross-slice relationships
+LogicManager --> Storage
 
 @enduml
