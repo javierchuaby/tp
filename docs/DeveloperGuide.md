@@ -154,6 +154,6 @@ To render the PNG locally (if you don't have the PNG yet), run:
 # brew install plantuml
 
 # render the diagram to PNG
-plantuml docs/diagrams/class_diagram.puml
+plantuml docs/diagrams/ClassDiagram.puml
 ```
 
