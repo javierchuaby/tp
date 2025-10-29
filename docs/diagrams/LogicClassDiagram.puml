@@ -1,47 +1,49 @@
 @startuml
-!include style.puml
-skinparam arrowThickness 1.1
-skinparam arrowColor LOGIC_COLOR_T4
-skinparam classBackgroundColor LOGIC_COLOR
 
-package Logic as LogicPackage {
+' ===== Logic slice: Commands + LogicManager =====
+interface Model
 
-package "Parser Classes" as ParserClasses{
-}
-Class XYZCommand
-Class CommandResult
-Class "{abstract}\nCommand" as Command
-
-
-Class "<<interface>>\nLogic" as Logic
-Class LogicManager
+abstract class Command {
+  + execute(model : Model) : CommandResult
 }
 
-package Model {
-Class HiddenModel #FFFFFF
+class CommandResult {
+  + feedbackToUser : String
+  + showHelp : boolean
+  + exit : boolean
 }
 
-package Storage {
+class AddCommand
+class EditCommand
+class FindCommand
+class AttendanceCommand
+class AddPointsCommand
+class MinusPointsCommand
+
+' Command hierarchy
+Command <|-- AddCommand
+Command <|-- EditCommand
+Command <|-- FindCommand
+Command <|-- AttendanceCommand
+Command <|-- AddPointsCommand
+Command <|-- MinusPointsCommand
+
+' Logic manager
+class LogicManager {
+  - model : Model
+  - storage : Storage
+  - addressBookParser : AddressBookParser
+  + execute(commandText : String) : CommandResult
 }
 
-Class HiddenOutside #FFFFFF
-HiddenOutside ..> Logic
+interface Storage
+class AddressBookParser
+class NameContainsKeywordsPredicate
 
-LogicManager .right.|> Logic
-LogicManager -right->"1" ParserClasses
-ParserClasses ..> XYZCommand : <<create>>
-
-XYZCommand -up-|> Command
-LogicManager .left.> Command : <<call>>
-
-LogicManager --> Model
+' Dependencies
+Command --> Model
+LogicManager --> AddressBookParser
 LogicManager --> Storage
-Storage --[hidden] Model
-Command .[hidden]up.> Storage
-Command .right.> Model
-note right of XYZCommand: XYZCommand = AddCommand, \nFindCommand, etc
-
-Logic ..> CommandResult
-LogicManager .down.> CommandResult
-Command .up.> CommandResult : <<create>>
+LogicManager --> Model
+FindCommand --> NameContainsKeywordsPredicate
 @enduml
