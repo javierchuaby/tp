@@ -1,27 +1,47 @@
 @startuml
 
 ' ===== Model slice =====
-class AddressBook {
-  - persons : UniquePersonList
-  + getPersonList()
+
+interface Model
+
+class ModelManager {
+- clubTrack : ClubTrack
+- userPrefs : UserPrefs
+- filteredPersons : FilteredList<Person>
++ getClubTrack() : ReadOnlyClubTrack
++ setClubTrack(ReadOnlyClubTrack clubTrack)
+}
+
+class ClubTrack {
+- persons : UniquePersonList
++ getPersonList() : ObservableList<Person>
++ addPerson(Person p)
++ removePerson(Person target)
 }
 
 class UniquePersonList {
-  - internalList : List<Person>
-  + add(p : Person)
-  + remove(p : Person)
+- internalList : List<Person>
++ add(p : Person)
++ remove(p : Person)
++ setPersons(UniquePersonList replacement)
 }
 
 class Person {
-  - name : Name
-  - phone : Phone
-  - email : Email
-  - yearOfStudy : int
-  - faculty : String
-  - address : Address
-  - tags : Set<Tag>
-  - isPresent : boolean
-  - points : Points
+- name : Name
+- phone : Phone
+- email : Email
+- yearOfStudy : int
+- faculty : String
+- address : Address
+- tags : Set<Tag>
+- isPresent : boolean
+- points : Points
+}
+
+class UserPrefs {
+- guiSettings : GuiSettings
+- clubTrackFilePath : Path
++ getClubTrackFilePath() : Path
 }
 
 ' Value objects
@@ -32,8 +52,18 @@ class Address
 class Tag
 class Points
 
-' Composition
-AddressBook *-- UniquePersonList
+' Interfaces
+interface ReadOnlyClubTrack
+interface ReadOnlyUserPrefs
+
+' Relationships
+ModelManager ..|> Model
+ClubTrack ..|> ReadOnlyClubTrack
+UserPrefs ..|> ReadOnlyUserPrefs
+
+ModelManager *-- ClubTrack
+ModelManager *-- UserPrefs
+ClubTrack *-- UniquePersonList
 UniquePersonList *-- Person
 Person *-- Name
 Person *-- Phone
@@ -41,4 +71,5 @@ Person *-- Email
 Person *-- Address
 Person *-- Points
 Person o-- Tag
+
 @enduml

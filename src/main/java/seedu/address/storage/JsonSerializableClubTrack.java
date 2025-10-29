@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.model.AddressBook;
-import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ClubTrack;
+import seedu.address.model.ReadOnlyClubTrack;
 import seedu.address.model.person.Person;
 
 /**
@@ -36,7 +36,7 @@ class JsonSerializableClubTrack {
      *
      * @param source future changes to this will not affect the created {@code JsonSerializableAddressBook}.
      */
-    public JsonSerializableClubTrack(ReadOnlyAddressBook source) {
+    public JsonSerializableClubTrack(ReadOnlyClubTrack source) {
         persons.addAll(source.getPersonList().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList()));
     }
 
@@ -45,16 +45,16 @@ class JsonSerializableClubTrack {
      *
      * @throws IllegalValueException if there were any data constraints violated.
      */
-    public AddressBook toModelType() throws IllegalValueException {
-        AddressBook addressBook = new AddressBook();
+    public ClubTrack toModelType() throws IllegalValueException {
+        ClubTrack clubTrack = new ClubTrack();
         for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
             Person person = jsonAdaptedPerson.toModelType();
-            if (addressBook.hasPerson(person)) {
+            if (clubTrack.hasPerson(person)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_PERSONS);
             }
-            addressBook.addPerson(person);
+            clubTrack.addPerson(person);
         }
-        return addressBook;
+        return clubTrack;
     }
 
 }

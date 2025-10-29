@@ -25,7 +25,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
-import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.ReadOnlyClubTrack;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 import seedu.address.storage.JsonClubTrackStorage;
@@ -102,8 +102,8 @@ public class LogicManagerTest {
         // Compare the important components rather than relying on ModelManager.equals.
         ModelManager expectedModelManager = (ModelManager) expectedModel;
         ModelManager actualModelManager = (ModelManager) model;
-        assertEquals(expectedModelManager.getAddressBook().getPersonList(),
-                actualModelManager.getAddressBook().getPersonList());
+        assertEquals(expectedModelManager.getClubTrack().getPersonList(),
+                actualModelManager.getClubTrack().getPersonList());
         assertEquals(expectedModel.getFilteredPersonList(), model.getFilteredPersonList());
         assertEquals(expectedModelManager.getUserPrefs(), actualModelManager.getUserPrefs());
     }
@@ -133,7 +133,7 @@ public class LogicManagerTest {
      */
     private void assertCommandFailure(String inputCommand, Class<? extends Throwable> expectedException,
             String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getClubTrack(), new UserPrefs());
         assertCommandFailure(inputCommand, expectedException, expectedMessage, expectedModel);
     }
 
@@ -151,8 +151,8 @@ public class LogicManagerTest {
         // Ensure model components remain unchanged after failure
         ModelManager expectedModelManager = (ModelManager) expectedModel;
         ModelManager actualModelManager = (ModelManager) model;
-        assertEquals(expectedModelManager.getAddressBook().getPersonList(),
-                actualModelManager.getAddressBook().getPersonList());
+        assertEquals(expectedModelManager.getClubTrack().getPersonList(),
+                actualModelManager.getClubTrack().getPersonList());
         assertEquals(expectedModel.getFilteredPersonList(), model.getFilteredPersonList());
         assertEquals(expectedModelManager.getUserPrefs(), actualModelManager.getUserPrefs());
     }
@@ -169,7 +169,7 @@ public class LogicManagerTest {
         // Inject LogicManager with an AddressBookStorage that throws the IOException e when saving
         JsonClubTrackStorage addressBookStorage = new JsonClubTrackStorage(prefPath) {
             @Override
-            public void saveAddressBook(ReadOnlyAddressBook addressBook, Path filePath) throws IOException {
+            public void saveClubTrack(ReadOnlyClubTrack addressBook, Path filePath) throws IOException {
                 throw e;
             }
         };
@@ -180,7 +180,7 @@ public class LogicManagerTest {
 
         logic = new LogicManager(model, storage);
 
-        // Triggers the saveAddressBook method by executing an add command
+        // Triggers the saveClubTrack method by executing an add command
         String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
         // Build expected person using parser defaults for optional fields (yearOfStudy and faculty).

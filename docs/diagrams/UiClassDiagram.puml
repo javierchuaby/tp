@@ -1,61 +1,59 @@
 @startuml
 
-!include style.puml
-skinparam linetype ortho
-
 ' ===== UI slice =====
 
 interface Ui {
-  + start(primaryStage : Stage)
++ start(primaryStage : Stage)
 }
 
-abstract class "UiPart<T>" as UiPart {
-  + getRoot() : T
+abstract class UiPart<T> {
++ getRoot() : T
 }
 
 class UiManager {
-  - logic : Logic
-  - mainWindow : MainWindow
-  + start(primaryStage : Stage)
+- logic : Logic
+- mainWindow : MainWindow
++ start(primaryStage : Stage)
++ getClubTrack() : ReadOnlyClubTrack
 }
 
 class MainWindow {
-  - primaryStage : Stage
-  - logic : Logic
-  - personListPanel : PersonListPanel
-  - resultDisplay : ResultDisplay
-  - helpWindow : HelpWindow
-  + fillInnerParts()
-  + show()
+- primaryStage : Stage
+- logic : Logic
+- personListPanel : PersonListPanel
+- resultDisplay : ResultDisplay
+- helpWindow : HelpWindow
++ fillInnerParts()
++ show()
 }
 
 class PersonListPanel {
-  + PersonListPanel(personList : ObservableList<Person>)
++ PersonListPanel(personList : ObservableList<Person>)
 }
 
 class PersonCard {
-  + PersonCard(person : Person, displayedIndex : int)
++ PersonCard(person : Person, displayedIndex : int)
 }
 
 class CommandBox {
-  + CommandBox(executor : CommandExecutor)
++ CommandBox(executor : CommandExecutor)
 }
 
 class ResultDisplay {
-  + setFeedbackToUser(text : String)
++ setFeedbackToUser(text : String)
 }
 
 class StatusBarFooter {
-  + StatusBarFooter(saveLocation : Path)
++ StatusBarFooter(saveLocation : Path)
 }
 
 class HelpWindow {
-  + show()
-  + hide()
-  + focus()
++ show()
++ hide()
++ focus()
 }
 
-' Inheritance / implementation
+' Inheritance/implementation
 UiManager ..|> Ui
 UiPart <|-- MainWindow
 UiPart <|-- PersonListPanel
