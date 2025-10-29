@@ -4,6 +4,7 @@
 
 !include ModelClassDiagram.puml
 !include LogicClassDiagram.puml
+!include UiClassDiagram.puml
 
 ' Cross-slice relationships
 
