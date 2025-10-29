@@ -1,0 +1,153 @@
+@startuml
+
+' Interfaces
+interface Logic
+interface Model
+interface Storage
+interface Ui
+
+' Core application
+class MainApp {
+    - config : Config
+    - storage : StorageManager
+    - model : ModelManager
+    - logic : LogicManager
+    - ui : UiManager
+    + init()
+    + start(Stage)
+    + stop()
+}
+
+' Logic layer
+class LogicManager {
+    - model : Model
+    - storage : Storage
+    - addressBookParser : AddressBookParser
+    + execute(commandText : String) : CommandResult
+}
+Logic <|.. LogicManager
+
+class AddressBookParser {
+    + parseCommand(userInput : String) : Command
+}
+
+' Model layer
+class ModelManager {
+    - addressBook : AddressBook
+    - userPrefs : UserPrefs
+    - filteredPersons : FilteredList<Person>
+    + addPerson(p : Person)
+    + deletePerson(p : Person)
+    + updateFilteredPersonList(predicate : Predicate<Person>)
+}
+Model <|.. ModelManager
+
+class AddressBook {
+    - persons : UniquePersonList
+    + getPersonList()
+}
+
+class UniquePersonList {
+    - internalList : List<Person>
+    + add(p : Person)
+    + remove(p : Person)
+}
+
+' Domain entity: Person
+class Person {
+    - name : Name
+    - phone : Phone
+    - email : Email
+    - yearOfStudy : int
+    - faculty : String
+    - address : Address
+    - tags : Set<Tag>
+    - isPresent : boolean
+    - points : Points
+}
+
+' Value objects
+class Name
+class Phone
+class Email
+class Address
+class Tag
+class Points
+class UserPrefs
+
+' Storage
+class StorageManager {
+    - addressBookStorage : AddressBookStorage
+    - userPrefsStorage : UserPrefsStorage
+    + readAddressBook()
+    + saveAddressBook()
+}
+Storage <|.. StorageManager
+
+' UI
+class UiManager {
+    - mainWindow : MainWindow
+    + start(Stage)
+}
+Ui <|.. UiManager
+
+class MainWindow
+class CommandBox
+class PersonListPanel
+class PersonCard
+class ResultDisplay
+class StatusBarFooter
+
+' Commands & parser relationships
+abstract class Command {
+    + execute(model : Model) : CommandResult
+}
+class FindCommand
+class AddCommand
+class EditCommand
+class AddPointsCommand
+class MinusPointsCommand
+
+Command <|-- FindCommand
+Command <|-- AddCommand
+Command <|-- EditCommand
+Command <|-- AddPointsCommand
+Command <|-- MinusPointsCommand
+
+' Relationships
+' Composition: AddressBook *-- UniquePersonList (person list cannot exist without addressbook)
+AddressBook *-- UniquePersonList
+' Composition: UniquePersonList *-- Person (persons are contained in unique list)
+UniquePersonList *-- Person
+' Composition: Person *-- Name / Phone / Email / Address / Points (value objects strongly tied)
+Person *-- Name
+Person *-- Phone
+Person *-- Email
+Person *-- Address
+Person *-- Points
+' Aggregation: Person o-- Tag (tags can exist independently)
+Person o-- Tag
+' ModelManager o-- AddressBook (model contains an AddressBook but addressbook can exist independently)
+ModelManager o-- AddressBook
+' Dependencies
+LogicManager --> AddressBookParser
+LogicManager --> StorageManager
+LogicManager --> ModelManager
+UiManager --> LogicManager
+AddressBookParser ..> Command
+Command --> Model
+FindCommand --> NameContainsKeywordsPredicate
+
+' Implementation/Interfaces
+ModelManager <|.. Model
+LogicManager <|.. Logic
+StorageManager <|.. Storage
+UiManager <|.. Ui
+
+' UI composition
+MainWindow *-- CommandBox
+MainWindow *-- ResultDisplay
+MainWindow *-- PersonListPanel
+MainWindow *-- StatusBarFooter
+PersonListPanel *-- PersonCard
+@enduml
