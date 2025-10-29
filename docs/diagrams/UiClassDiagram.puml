@@ -1,0 +1,77 @@
+@startuml
+
+!include style.puml
+skinparam linetype ortho
+
+' ===== UI slice =====
+
+interface Ui {
+  + start(primaryStage : Stage)
+}
+
+abstract class "UiPart<T>" as UiPart {
+  + getRoot() : T
+}
+
+class UiManager {
+  - logic : Logic
+  - mainWindow : MainWindow
+  + start(primaryStage : Stage)
+}
+
+class MainWindow {
+  - primaryStage : Stage
+  - logic : Logic
+  - personListPanel : PersonListPanel
+  - resultDisplay : ResultDisplay
+  - helpWindow : HelpWindow
+  + fillInnerParts()
+  + show()
+}
+
+class PersonListPanel {
+  + PersonListPanel(personList : ObservableList<Person>)
+}
+
+class PersonCard {
+  + PersonCard(person : Person, displayedIndex : int)
+}
+
+class CommandBox {
+  + CommandBox(executor : CommandExecutor)
+}
+
+class ResultDisplay {
+  + setFeedbackToUser(text : String)
+}
+
+class StatusBarFooter {
+  + StatusBarFooter(saveLocation : Path)
+}
+
+class HelpWindow {
+  + show()
+  + hide()
+  + focus()
+}
+
+' Inheritance / implementation
+UiManager ..|> Ui
+UiPart <|-- MainWindow
+UiPart <|-- PersonListPanel
+UiPart <|-- PersonCard
+UiPart <|-- CommandBox
+UiPart <|-- ResultDisplay
+UiPart <|-- StatusBarFooter
+UiPart <|-- HelpWindow
+
+' Composition/containment
+UiManager *-- MainWindow
+MainWindow *-- CommandBox
+MainWindow *-- ResultDisplay
+MainWindow *-- PersonListPanel
+MainWindow *-- StatusBarFooter
+MainWindow *-- HelpWindow
+PersonListPanel *-- PersonCard
+
+@enduml
