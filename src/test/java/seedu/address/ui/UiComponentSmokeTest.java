@@ -26,6 +26,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+
 /**
  * Smoke test to verify UI components instantiate and load FXML without error.
  * Covers: CommandBox, HelpWindow, PersonCard, ResultDisplay, StatusBarFooter,
@@ -36,7 +37,9 @@ public class UiComponentSmokeTest {
 
     @BeforeAll
     public static void setUpClass() {
+        // Initialize JavaFX toolkit
         new JFXPanel();
+
         testPerson = new Person(
                 new Name("Test One"),
                 new Phone("99999999"),
@@ -137,11 +140,13 @@ public class UiComponentSmokeTest {
         @Override
         public CommandResult execute(String commandText)
                 throws CommandException, ParseException {
+            // Minimal stub: return a harmless result
             return new CommandResult("ok");
         }
 
         @Override
         public ReadOnlyClubTrack getAddressBook() {
+            // Provide a minimal ReadOnlyClubTrack that exposes the persons list
             return () -> persons;
         }
 
