@@ -1,11 +1,11 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_POINTS;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.MinusPointsCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_POINTS;
 
 /**
  * Parses input arguments and creates a new MinusPointsCommand object
@@ -15,6 +15,7 @@ public class MinusPointsCommandParser implements Parser<MinusPointsCommand> {
     /**
      * Parses the given {@code String} of arguments in the context of the MinusPointsCommand
      * and returns a MinusPointsCommand object for execution.
+     *
      * @throws ParseException if the user input does not conform the expected format
      */
     public MinusPointsCommand parse(String args) throws ParseException {
