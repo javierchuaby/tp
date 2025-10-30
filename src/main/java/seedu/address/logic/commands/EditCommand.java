@@ -82,7 +82,7 @@ public class EditCommand extends Command {
 
         // If phone is being changed, ensure no other person already uses the same phone number
         if (editPersonDescriptor.getPhone().isPresent()) {
-            for (Person existing : model.getAddressBook().getPersonList()) {
+            for (Person existing : model.getClubTrack().getPersonList()) {
                 if (!existing.equals(personToEdit) && existing.getPhone().equals(editedPerson.getPhone())) {
                     throw new CommandException(MESSAGE_DUPLICATE_PERSON);
                 }
@@ -105,9 +105,7 @@ public class EditCommand extends Command {
     private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor) {
         assert personToEdit != null;
 
-        Name updatedName = editPersonDescriptor.getName()
-                .map(n -> new Name(toTitleCase(n.toString())))
-                .orElse(personToEdit.getName());
+        Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         int updatedYearOfStudy = editPersonDescriptor.getYearOfStudy().orElse(personToEdit.getYearOfStudy());
@@ -115,8 +113,9 @@ public class EditCommand extends Command {
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedYearOfStudy, updatedFaculty, updatedAddress,
-                updatedTags);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedYearOfStudy,
+            updatedFaculty, updatedAddress, updatedTags,
+            personToEdit.isPresent(), personToEdit.getPoints());
     }
 
     /**
