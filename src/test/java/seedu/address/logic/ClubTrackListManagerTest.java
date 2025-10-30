@@ -29,7 +29,8 @@ import seedu.address.storage.Storage;
  */
 public class ClubTrackListManagerTest {
 
-    private static final Path DEFAULT_PATH = Paths.get("data", "addressbook.json");
+    // update test expectation to match app's default data file name
+    private static final Path DEFAULT_PATH = Paths.get("data", "clubtrack.json");
 
     private ClubTrackListManager listManager;
     private FakeStorage storage;

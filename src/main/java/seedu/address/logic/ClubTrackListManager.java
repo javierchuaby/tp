@@ -78,7 +78,8 @@ public class ClubTrackListManager {
             java.nio.file.Files.deleteIfExists(filePath);
             // If the removed list was the currently loaded one, revert to default
             if (filePath.equals(model.getClubTrackFilePath())) {
-                Path defaultPath = Paths.get("data", "addressbook.json");
+                // default path updated to clubtrack.json to reflect app name
+                Path defaultPath = Paths.get("data", "clubtrack.json");
                 try {
                     Optional<ReadOnlyClubTrack> defaultData = storage.readClubTrack(defaultPath);
                     if (defaultData.isPresent()) {
@@ -89,7 +90,7 @@ public class ClubTrackListManager {
                     }
                     model.setClubTrackFilePath(defaultPath);
                 } catch (DataLoadingException dle) {
-                    logger.warning("Default address book at " + defaultPath + " could not be loaded. "
+                    logger.warning("Default clubtrack at " + defaultPath + " could not be loaded. "
                             + "Starting with an empty in-memory list without overwriting the file.");
                     model.setClubTrack(new ClubTrack());
                     model.setClubTrackFilePath(defaultPath);
@@ -100,4 +101,3 @@ public class ClubTrackListManager {
         }
     }
 }
-

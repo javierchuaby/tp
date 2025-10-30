@@ -14,7 +14,8 @@ import seedu.address.commons.core.GuiSettings;
 public class UserPrefs implements ReadOnlyUserPrefs {
 
     private GuiSettings guiSettings = new GuiSettings();
-    private Path addressBookFilePath = Paths.get("data" , "addressbook.json");
+    // default data file name changed from addressbook.json to clubtrack.json
+    private Path addressBookFilePath = Paths.get("data" , "clubtrack.json");
 
     /**
      * Creates a {@code UserPrefs} with default values.
