@@ -52,6 +52,7 @@ public class EditCommand extends Command {
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
 
+
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
 
@@ -79,6 +80,15 @@ public class EditCommand extends Command {
         Person personToEdit = lastShownList.get(index.getZeroBased());
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
+        // If phone is being changed, ensure no other person already uses the same phone number
+        if (editPersonDescriptor.getPhone().isPresent()) {
+            for (Person existing : model.getClubTrack().getPersonList()) {
+                if (!existing.equals(personToEdit) && existing.getPhone().equals(editedPerson.getPhone())) {
+                    throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+                }
+            }
+        }
+
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
@@ -103,8 +113,35 @@ public class EditCommand extends Command {
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedYearOfStudy, updatedFaculty, updatedAddress,
-                updatedTags);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedYearOfStudy,
+            updatedFaculty, updatedAddress, updatedTags,
+            personToEdit.isPresent(), personToEdit.getPoints());
+    }
+
+    /**
+     * Converts a string to title case: first letter of each word capitalized, other letters lower-cased.
+     * Words are split on whitespace.
+     */
+    private static String toTitleCase(String input) {
+        String trimmed = input == null ? "" : input.trim();
+        if (trimmed.isEmpty()) {
+            return trimmed;
+        }
+        String[] parts = trimmed.toLowerCase().split("\\s+");
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < parts.length; i++) {
+            String word = parts[i];
+            if (word.isEmpty()) {
+                continue;
+            }
+            char first = Character.toUpperCase(word.charAt(0));
+            String rest = word.length() > 1 ? word.substring(1) : "";
+            if (result.length() > 0) {
+                result.append(' ');
+            }
+            result.append(first).append(rest);
+        }
+        return result.toString();
     }
 
     @Override

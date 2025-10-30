@@ -40,7 +40,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ### Jason Lee
 
-<img src="docs/images/jasonleexc.png" width="200px">
+<img src="images/jasonleexc.png" width="200px">
 
 [[github](http://github.com/jasonleexc)]
 [[portfolio](team/johndoe.md)]

@@ -20,7 +20,7 @@ public class SwitchCommandTest {
         Model expectedModel = new ModelManager();
 
         String listName = "friends";
-        expectedModel.setAddressBookFilePath(Paths.get("data", listName + ".json"));
+        expectedModel.setClubTrackFilePath(Paths.get("data", listName + ".json"));
 
         assertCommandSuccess(new SwitchCommand(listName), model,
                 String.format(SwitchCommand.MESSAGE_SUCCESS, listName), expectedModel);
