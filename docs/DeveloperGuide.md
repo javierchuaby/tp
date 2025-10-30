@@ -9,7 +9,7 @@
 * Is reasonably comfortable using CLI apps
 * Has a need to manage club membership data, attendance records, financial tracking, and member duties
 
-**Value proposition**: Manage club members, mark attendance, assign tags, track finances, and manage duty rosters more efficiently than traditional spreadsheet-based solutions through a fast CLI interface[1]
+**Value proposition**: Manage club members, mark attendance, assign tags, track finances, and manage duty rosters more efficiently than traditional spreadsheet-based solutions through a fast CLI interface
 
 ### User stories
 
