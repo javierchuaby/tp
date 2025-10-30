@@ -145,7 +145,7 @@ Use case ends.
 
 The following class diagram shows the main high-level components and relationships in the application. It has been updated to reflect the new features beyond the original AB3:
 
-![Class diagram](./diagrams/ClassDiagram.png)
+![Main Class Diagram](./diagrams/MainClassDiagram.png)
 
 **Key Extensions from AB3:**
 - `Person` class now includes `yearOfStudy`, `faculty`, `isPresent`, and `points` fields
@@ -159,5 +159,5 @@ To render the PNG locally, run:
 # brew install plantuml
 
 # render the diagram to PNG
-plantuml docs/diagrams/ClassDiagram.puml
+plantuml docs/diagrams/MainClassDiagram.puml
 ```

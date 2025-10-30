@@ -1,0 +1,52 @@
+@startuml
+
+title ClubTrack - Command Parsing Overview
+
+class ClubTrackParser {
+  + parseCommand(userInput) : Command
+  - parseAddCommand(args) : AddCommand
+  - parseEditCommand(args) : EditCommand
+  - parseDeleteCommand(args) : DeleteCommand
+}
+
+class ArgumentTokenizer {
+  + tokenize(argsString, prefixes...) : ArgumentMultimap
+}
+
+class ArgumentMultimap {
+  + getValue(prefix) : Optional<String>
+  + getAllValues(prefix) : List<String>
+  + getPreamble() : String
+}
+
+abstract class Command {
+  + execute(model) : CommandResult
+}
+
+class Prefix {
+  + getPrefix() : String
+}
+
+class ParserUtil {
+  + parseIndex(oneBasedIndex) : Index
+  + parseName(name) : Name
+  + parsePhone(phone) : Phone
+  + parseEmail(email) : Email
+}
+
+' Key relationships showing the parsing flow
+ClubTrackParser --> ArgumentTokenizer : uses for parsing
+ClubTrackParser --> ParserUtil : uses for validation
+ArgumentTokenizer --> ArgumentMultimap : creates
+ClubTrackParser --> Command : produces
+ArgumentMultimap --> Prefix : uses
+
+note right of ClubTrackParser : Main entry point that\nparses user input into\nappropriate Command objects\nwith comprehensive error handling
+
+note bottom of ArgumentTokenizer : Splits user input into\nprefix-value pairs\n(e.g., "n/John p/98765432")
+
+note right of ParserUtil : Validates and converts\nstring inputs to appropriate\nvalue objects
+
+note bottom of ArgumentMultimap : Stores tokenized arguments\nwith support for multiple\nvalues per prefix
+
+@enduml

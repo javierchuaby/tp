@@ -1,0 +1,119 @@
+@startuml
+
+title ClubTrack - Model Layer
+
+' Core interfaces
+interface Model {
+  + getClubTrack() : ReadOnlyClubTrack
+  + getFilteredPersonList() : ObservableList<Person>
+  + updateFilteredPersonList(predicate)
+  + hasPerson(person) : boolean
+  + addPerson(person)
+  + deletePerson(target)
+  + setPerson(target, editedPerson)
+}
+
+interface ReadOnlyClubTrack {
+  + getPersonList() : ObservableList<Person>
+}
+
+interface ReadOnlyUserPrefs {
+  + getClubTrackFilePath() : Path
+}
+
+' Main model classes
+class ModelManager {
+  + getClubTrack() : ReadOnlyClubTrack
+  + getFilteredPersonList() : ObservableList<Person>
+  + updateFilteredPersonList(predicate)
+  + hasPerson(person) : boolean
+  + addPerson(person)
+  + deletePerson(target)
+  + setPerson(target, editedPerson)
+}
+
+class ClubTrack {
+  + getPersonList() : ObservableList<Person>
+  + addPerson(person)
+  + removePerson(target)
+  + setPerson(target, editedPerson)
+  + hasPerson(person) : boolean
+}
+
+class Person {
+  + getName() : Name
+  + getPhone() : Phone
+  + getEmail() : Email
+  + getAddress() : Address
+  + getTags() : Set<Tag>
+  + getPoints() : Points
+  + isPresent() : boolean
+  + markPresent()
+  + markAbsent()
+  + isSamePerson(otherPerson) : boolean
+}
+
+class UserPrefs {
+  + getClubTrackFilePath() : Path
+  + setClubTrackFilePath(path)
+  + getGuiSettings() : GuiSettings
+}
+
+' Value objects
+class Name {
+  + fullName : String
+  + toString() : String
+}
+
+class Phone {
+  + value : String
+  + toString() : String
+}
+
+class Email {
+  + value : String
+  + toString() : String
+}
+
+class Address {
+  + value : String
+  + toString() : String
+}
+
+class Tag {
+  + tagName : String
+  + toString() : String
+}
+
+class Points {
+  + value : int
+  + toString() : String
+}
+
+class GuiSettings {
+  + getWindowWidth() : double
+  + getWindowHeight() : double
+}
+
+' Key relationships
+ModelManager ..|> Model
+ClubTrack ..|> ReadOnlyClubTrack
+UserPrefs ..|> ReadOnlyUserPrefs
+
+ModelManager "1" *-- "1" ClubTrack : manages
+ModelManager "1" *-- "1" UserPrefs : stores preferences
+ClubTrack "1" *-- "*" Person : contains
+UserPrefs "1" *-- "1" GuiSettings : contains
+
+Person *-- Name
+Person *-- Phone
+Person *-- Email
+Person *-- Address
+Person *-- Points
+Person "1" o-- "*" Tag : tagged with
+
+note right of Person : Core entity representing\na club member with\nattendance and points tracking
+
+note right of ModelManager : Facade for the Model layer\nProvides filtered views\nof club data
+
+@enduml

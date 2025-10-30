@@ -1,0 +1,54 @@
+@startuml
+
+title ClubTrack - Main Architecture Overview
+
+package "UI Layer" <<Rectangle>> {
+  interface Ui
+  class UiManager {
+    + start(primaryStage)
+    + stop()
+  }
+}
+
+package "Logic Layer" <<Rectangle>> {
+  interface Logic
+  class LogicManager {
+    + execute(commandText) : CommandResult
+    + getClubTrack() : ReadOnlyClubTrack
+  }
+}
+
+package "Model Layer" <<Rectangle>> {
+  interface Model
+  class ModelManager {
+    + getClubTrack() : ReadOnlyClubTrack
+    + getFilteredPersonList() : ObservableList<Person>
+  }
+}
+
+package "Storage Layer" <<Rectangle>> {
+  interface Storage
+  class StorageManager {
+    + readClubTrack() : Optional<ClubTrack>
+    + saveClubTrack(clubTrack)
+  }
+}
+
+' High-level architectural relationships only
+UiManager ..|> Ui
+LogicManager ..|> Logic
+ModelManager ..|> Model
+StorageManager ..|> Storage
+
+' Inter-layer dependencies
+UiManager --> LogicManager : uses
+LogicManager --> ModelManager : operates on
+LogicManager --> StorageManager : saves data
+ModelManager --> StorageManager : notifies changes
+
+note top of "UI Layer" : Handles user interface\nand command input
+note top of "Logic Layer" : Processes commands\nand business logic
+note top of "Model Layer" : Manages application\ndata and business rules
+note top of "Storage Layer" : Handles data\npersistence
+
+@enduml
