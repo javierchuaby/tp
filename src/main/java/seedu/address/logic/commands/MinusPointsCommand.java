@@ -25,8 +25,8 @@ public class MinusPointsCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
         + ": Subtracts points from the member identified by the index number.\n"
-        + "Parameters: INDEX (must be a positive integer) POINTS (must be a positive integer)\n"
-        + "Example: " + COMMAND_WORD + " 1 3";
+        + "Parameters: INDEX (must be a positive integer) pts/VALUE (must be a positive integer)\n"
+        + "Example: " + COMMAND_WORD + " 1 pts/3";
 
     public static final String MESSAGE_SUCCESS = "Subtracted %2$d points from %1$s. New total: %3$d points.";
 
@@ -64,6 +64,11 @@ public class MinusPointsCommand extends Command {
 
         Person personToUpdate = lastShownList.get(targetIndex.getZeroBased());
         Set<Tag> preservedTags = personToUpdate.getTags();
+
+        int current = personToUpdate.getPoints().getValue();
+        if (current - pointsToSubtract < 0) {
+            throw new CommandException("Unable to subtract below 0 points");
+        }
 
         Points newPoints = personToUpdate.getPoints().subtract(pointsToSubtract);
 

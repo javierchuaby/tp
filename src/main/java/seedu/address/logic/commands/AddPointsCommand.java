@@ -25,8 +25,8 @@ public class AddPointsCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
         + ": Adds points to the member identified by the index number.\n"
-        + "Parameters: INDEX (must be a positive integer) POINTS (must be a positive integer)\n"
-        + "Example: " + COMMAND_WORD + " 1 5";
+        + "Parameters: INDEX (must be a positive integer) pts/VALUE (must be a positive integer)\n"
+        + "Example: " + COMMAND_WORD + " 1 pts/5";
 
     public static final String MESSAGE_SUCCESS = "Added %2$d points to %1$s. New total: %3$d points.";
 
