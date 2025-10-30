@@ -1,32 +1,32 @@
 ---
+
 layout: page
 title: User Guide
----
+-----------------
 
 ClubTrack is a **desktop app for managing club members and attendance, optimized for use via a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI).
 
 ## Target User Profile
 
 ClubTrack is designed for **university student club executive committee (exco) members** who need to:
-- Manage large member databases (50-200 members)
-- Track attendance across multiple events and sessions
-- Assign roles and responsibilities to members
-- Monitor member participation through points systems
+
+* Manage large member databases (50–200 members)
+* Track attendance across multiple events and sessions
+* Assign roles and responsibilities to members
+* Monitor member participation through points systems
 
 **Ideal users are:**
-- Comfortable with command-line interfaces
-- Need to perform member management tasks quickly
-- Prefer keyboard input over mouse clicking
-- Manage active clubs with regular events and meetings
+
+* Comfortable with command-line interfaces
+* Need to perform member management tasks quickly
+* Prefer keyboard input over mouse clicking
+* Manage active clubs with regular events and meetings
 
 ## Value Proposition
 
-ClubTrack enables club executives to **manage members, track attendance, and assign points up to 3x faster** than traditional spreadsheet-based solutions through an intuitive command-line interface optimized for power users.
+ClubTrack enables club executives to **manage members, track attendance, and assign points up to 3× faster** than traditional spreadsheet-based solutions through an intuitive command-line interface optimized for power users.
 
-* Table of Contents
-  {:toc}
-
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Quick start
 
@@ -35,11 +35,13 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
    ClubTrack requires **Java 17** to run.
 
    To check your version, open a terminal and type:
-   ```
+
+   ```bash
    java -version
    ```
 
    If you do not have Java 17 installed, please download it here:
+
     * [Windows Installation Guide](https://se-education.org/guides/tutorials/javaInstallationWindows.html)
     * [Mac Installation Guide](https://se-education.org/guides/tutorials/javaInstallationMac.html)
     * [Linux Installation Guide](https://se-education.org/guides/tutorials/javaInstallationLinux.html)
@@ -54,57 +56,59 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
 
 4. **Open your terminal and navigate to that folder**
 
-   For example:
-   ```
-   cd home/documents/clubtrack
+   ```bash
+   cd /path/to/your/folder
    ```
 
 5. **Run the app**
 
-   Once you are in the correct folder, run:
-   ```
+   ```bash
    java -jar ClubTrack.jar
    ```
-   A GUI similar to the one below should appear in a few seconds. Note how the app contains some sample data.  
-   ![Ui](images/Ui-ClubTrack.png)
+
+   A GUI similar to the one below should appear in a few seconds. The app starts with sample data.
+   ![Ui](images/Ui-ClubTrack-v1.6.png)
 
 6. **Try your first command**
 
-   Type a command in the command box and press Enter to execute it.  
-   For example, typing **`help`** and pressing Enter will open the help window.
+   Type a command in the command box and press Enter to execute it.
+   For example, typing **`help`** will open the help window.
 
    Some example commands you can try:
-    * `list` : Lists all members.
-    * `add n/John Doe p/98765432 e/johnd@example.com y/2 f/SOC a/John street, block 123, #01-01` : Adds a member named John Doe.
+
+    * `list` : Lists all members in the current list.
+    * `add n/John Doe p/98123456 e/johnd@example.com y/2 f/SOC a/John street, block 123, #01-01` : Adds a member named John Doe.
     * `present 1` : Marks the first member as present.
-    * `absent 1` : Marks the first member as absent.
-    * `clear` : Deletes all members.
+    * `switch Training_2025_10_20` : Switches to (or creates) a list for that event.
+    * `clear` : Deletes all members **in the current list**.
     * `exit` : Exits the app.
 
 7. Refer to the [Features](#features) below for details of each command.
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Features
 
 <div markdown="block" class="alert alert-info">
 
-**:information_source: Notes about the command format:**<br>
+**:information_source: Notes about the command format:**
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
+* Words in `UPPER_CASE` are the parameters to be supplied by the user.
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
 
-* Items in square brackets are optional.<br>
+* Items in square brackets are optional.
   e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/Treasurer` or as `n/John Doe`.
 
-* Items with `…`​ after them can be used multiple times including zero times.<br>
+* Items with `…` after them can be used multiple times including zero times.
   e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/Treasurer`, `t/Treasurer t/Logistics` etc.
 
-* Parameters can be in any order.<br>
+* Parameters can be in any order.
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
+* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+
+* **List names** used in `switch` and `remove` are plain text strings. Underscores and dashes are allowed, e.g. `Training_2025_10_20`.
 
 </div>
 
@@ -114,7 +118,7 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
 
 Shows a message explaining how to access the help page.
 
-Format: `help`
+**Format:** `help`
 
 ---
 
@@ -122,25 +126,27 @@ Format: `help`
 
 Adds a member to ClubTrack.
 
-**Format:**  
-`add n/NAME p/PHONE_NUMBER e/EMAIL y/YEAR_OF_STUDY f/FACULTY a/ADDRESS [t/TAG]…​`
+**Format:**
+`add n/NAME p/PHONE e/EMAIL y/YEAR_OF_STUDY f/FACULTY a/ADDRESS [t/TAG]…`
+
+**Phone constraint:** phone numbers must be **Singapore mobile numbers** — **exactly 8 digits, starting with 8 or 9** (e.g. `98123456`, `83123456`).
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**  
 A member can have any number of tags (including 0), e.g. their role or committee.
 </div>
 
 **Examples:**
-* `add n/John Doe p/98765432 e/johnd@example.com y/3 f/SOC a/John street, block 123, #01-01`
-* `add n/Betsy Crowe p/98761234  e/betsycrowe@example.com y/2 f/CDE a/Newgate Prison  t/Logistics t/Treasurer`
-* `add n/John Cena p/91823498  e/johncena@example.com y/1 f/FASS a/your mom's house t/teacher t/Colleague`
-* `add n/tommy shelby p/89763647 e/tommyshelby@example.com y/1 f/FOS a/The Garrison`
+
+* `add n/John Doe p/98123456 e/johnd@example.com y/3 f/SOC a/John street, block 123, #01-01`
+* `add n/Betsy Crowe p/83123456 e/betsycrowe@example.com y/2 f/CDE a/Newgate Prison t/Treasurer t/Logistics`
+
 ---
 
 ### Listing all members : `list`
 
-Shows a list of all members in ClubTrack.
+Shows a list of all members **in the current list**.
 
-Format: `list`
+**Format:** `list`
 
 ---
 
@@ -148,73 +154,85 @@ Format: `list`
 
 Edits an existing member.
 
-**Format:**  
-`edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
+**Format:**
+`edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [y/YEAR] [f/FACULTY] [a/ADDRESS] [t/TAG]…`
 
-* Edits the member at the specified `INDEX`. The index refers to the index number shown in the displayed member list.  
-  The index **must be a positive integer** 1, 2, 3, …​
+* Edits the member at the specified `INDEX`. The index refers to the index number shown in the displayed member list.
+  The index **must be a positive integer** 1, 2, 3, …
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing tags, the existing tags of the member will be replaced.
 * You can remove all tags by typing `t/` without specifying any tags after it.
 
 **Examples:**
+
 * `edit 1 p/91234567 e/johndoe@example.com`
 * `edit 2 n/Betsy Crower t/`
 
 ---
 
-### Locating members by name : `find`
+### Locating members by keyword : `find`
 
-Finds members whose names contain any of the given keywords.
+Finds members whose **non-tag fields** contain **any** of the given keywords.
 
 **Format:**  
 `find KEYWORD [MORE_KEYWORDS]`
 
-* The search is case-insensitive. e.g. `hans` will match `Hans`.
-* The order of the keywords does not matter.
-* Only full words will be matched (e.g. `Han` will not match `Hans`).
-* Members matching at least one keyword will be returned (i.e. OR search).
+**What it searches:**
+- name
+- phone
+- email
+- address
+- faculty
+- year of study (as text, e.g. “Y1”, “1”, “Year 1”)
+
+**Rules:**
+
+- Match is **case-insensitive** (`john` matches `John`)
+- Match is **substring-based** (`alex` matches `Alexander`, `alex@example.com`)
+- Order of keywords **does not** matter
+- A member is returned if **any** of these fields contains **any** of the keywords (logical **OR**)
+- **Tags are not searched here** — use [`search`](#searching-members-by-tag-prefix--search) for tag-based filtering.
 
 **Examples:**
-* `find John`
-* `find Alex David`
 
----
+- `find john`
+- `find soc`
+- `find 9876`
+- `find malaysia year 2`
 
-### Searching by name and tags : `search`
+### Searching members by tag prefix : `search`
 
-Filters the displayed list by **name** and/or **tags**.
+Finds members whose **tags start with** the given prefix(es).
+Use this when your club has tag conventions like `exco-*`, `dance-*`, `logi-*`.
 
-**Format:**  
-`search [n/NAME_QUERY] [t/TAG]… [any/]`
+**Format:**
+`search t/TAG_PREFIX…`
 
-* `n/NAME_QUERY` — case-insensitive token-prefix match on the member’s name.  
-  (e.g., `n/char oli` matches “Charlotte Oliveira”.)
-* `t/TAG` — repeatable; filters by tags.  
-  Default logic is **AND** (must contain all listed tags).
-* `any/` — optional flag; changes tag logic to **OR** (contains *any* of the listed tags).
-* At least one of `n/` or `t/` must be supplied.
+**Rules:**
+
+* Match is **case-insensitive**
+* Match is **prefix-based**: `t/log` matches `logi`, `logistics`, `log-2025`
+* You can give **multiple** prefixes; member is returned if it matches **any** prefix (logical **OR**)
+* At least **one** `t/` must be supplied
 
 **Examples:**
-* `search n/char`
-* `search t/Treasurer t/Logistics`
-* `search n/david t/Family`
-* `search t/Dance t/Logistics any/`
+
+* `search t/exco` → matches `exco`, `exco-head`, `exco-programme`
+* `search t/dan t/perf` → matches members tagged `dance`, `dance-lead`, `performance`, `performer`
+* `search t/comm` → matches `committee`, `comm-head`, `comm-logi`
 
 ---
 
 ### Marking attendance : `present`
 
-Marks the specified member as present.
+Marks the specified member as present **in the current list**.
 
-**Format:**  
+**Format:**
 `present INDEX`
 
-* Marks the member at the specified `INDEX` in the displayed list.
-* Useful for marking attendance during training or meetings.
-
 **Examples:**
+
 * `present 1`
 * `present 4`
 
@@ -222,12 +240,13 @@ Marks the specified member as present.
 
 ### Unmarking attendance : `absent`
 
-Unmarks the specified member, setting them as absent.
+Unmarks the specified member, setting them as absent **in the current list**.
 
-**Format:**  
+**Format:**
 `absent INDEX`
 
 **Examples:**
+
 * `absent 1`
 * `absent 3`
 
@@ -235,37 +254,40 @@ Unmarks the specified member, setting them as absent.
 
 ### Viewing attendance : `attendance`
 
-Displays the current attendance list, showing who is present and absent.
+Displays the current attendance list, showing who is present and absent **for the current list**.
 
-**Format:**  
+**Format:**
 `attendance`
 
 ---
 
 ### Switching between lists : `switch`
 
-Switches between different attendance lists, such as separate training days or event rosters.
-The starting list is named `clubtrack`.
+Switches between different member/attendance lists, such as separate event rosters.
+If the specified list does **not** exist, ClubTrack **creates a new empty list** with that name.
+The app starts on the default list named `clubtrack`.
 
-**Format:**  
+**Format:**
 `switch NAME_OF_LIST`
 
 **Examples:**
-* `switch Training_2025_10_20`
-* `switch MatchDay_1`
 
-After switching, all subsequent attendance and point operations apply to that list.
+* `switch Training_2025_10_20`
+* `switch MatchDay-1`
+
+After switching, **all subsequent commands** (`add`, `present`, `clear`, `list`, `delete`, `points`, etc.) apply **only to the current list**.
 
 ---
 
 ### Removing a list : `remove`
 
-Removes an existing attendance list.
+Removes an existing list from ClubTrack.
 
-**Format:**  
+**Format:**
 `remove NAME_OF_LIST`
 
-**Examples:**
+**Example:**
+
 * `remove Training_2025_10_20`
 
 ---
@@ -274,13 +296,14 @@ Removes an existing attendance list.
 
 Adds a specified number of points to a member.
 
-**Format:**  
+**Format:**
 `addpoints INDEX pts/VALUE`
 
 * Points can represent participation, merit, or performance.
 * The integer VALUE can be positive or negative.
 
 **Examples:**
+
 * `addpoints 2 pts/5`
 * `addpoints 1 pts/10`
 
@@ -290,12 +313,27 @@ Adds a specified number of points to a member.
 
 Removes a specified number of points from a member.
 
-**Format:**  
+**Format:**
 `minuspoints INDEX pts/VALUE`
 
 **Examples:**
+
 * `minuspoints 1 pts/3`
 * `minuspoints 4 pts/10`
+
+---
+
+### Viewing member points : `points`
+
+Shows the **current points** of a specified member in the current list.
+
+**Format:**
+`points INDEX`
+
+**Examples:**
+
+* `points 1`
+* `points 3`
 
 ---
 
@@ -303,15 +341,11 @@ Removes a specified number of points from a member.
 
 Adds a tag to the specified member.
 
-**Format:**  
+**Format:**
 `tag INDEX TAG`
 
-* Adds the specified `TAG` to the member at the specified `INDEX`.
-* The index refers to the index number shown in the displayed member list.
-* The index **must be a positive integer** 1, 2, 3, …​
-* If the tag already exists, the command will still succeed (no duplicate tags).
-
 **Examples:**
+
 * `tag 1 Treasurer`
 * `tag 2 Committee`
 
@@ -321,51 +355,35 @@ Adds a tag to the specified member.
 
 Removes a tag from the specified member.
 
-**Format:**  
+**Format:**
 `untag INDEX TAG`
 
-* Removes the specified `TAG` from the member at the specified `INDEX`.
-* If the tag doesn't exist, the command will still succeed.
-
 **Examples:**
+
 * `untag 1 Treasurer`
 * `untag 2 Committee`
 
 ---
 
-### Viewing member points : `points`
-
-Shows the current points of a specified member.
-
-**Format:**  
-`points INDEX`
-
-* Shows the points of the member at the specified `INDEX`.
-
-**Examples:**
-* `points 1`
-* `points 3`
-
----
-
 ### Deleting a member : `delete`
 
-Deletes the specified member.
+Deletes the specified member **from the current list**.
 
-**Format:**  
+**Format:**
 `delete INDEX`
 
 **Examples:**
+
 * `delete 3`
 * `find John` followed by `delete 1`
 
 ---
 
-### Clearing all entries : `clear`
+### Clearing all entries in the current list : `clear`
 
-Clears all entries from ClubTrack.
+Clears **all members in the current list**. Other lists are not affected.
 
-**Format:**  
+**Format:**
 `clear`
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**  
@@ -378,67 +396,70 @@ This action cannot be undone.
 
 Exits the ClubTrack application.
 
-**Format:**  
+**Format:**
 `exit`
 
 ---
 
 ### Saving the data
 
-ClubTrack data are saved automatically after any command that changes the data.  
+ClubTrack data are saved automatically after any command that changes the data.
 There is no need to save manually.
 
 ---
 
-### Editing the data file
+### Editing the data files
 
-ClubTrack data are stored automatically as a JSON file at:  
-`[JAR file location]/data/clubtrack.json`
+ClubTrack stores **each list in its own JSON file** inside the `data/` folder (next to the `.jar`).
 
-Advanced users may edit this file directly.
+- The default list is saved as:  
+  `data/default.json`
+- When you run `switch Training_2025_10_20`, ClubTrack creates/uses:  
+  `data/Training_2025_10_20.json`
+- Every list name maps 1-to-1 to a JSON file with the **same name**.
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**  
-If you modify the file incorrectly, ClubTrack will discard all data and start fresh at the next run.  
-Always back up your data before manual edits.
-</div>
+Advanced users may edit these JSON files directly.
 
---------------------------------------------------------------------------------------------------------------------
+> **Caution:**
+> - Make sure the JSON stays valid (correct braces, field names, commas).
+> - If a file is edited incorrectly, ClubTrack may reset that list or refuse to load it.
+> - Do **not** rename the JSON files manually unless you also use the same name in the `switch` command.
+
+---
 
 ## FAQ
 
-**Q:** How do I transfer my data to another computer?  
+**Q:** How do I transfer my data to another computer?
 **A:** Install the app on the other computer and replace the empty data file it creates with your existing ClubTrack data file.
 
-**Q:** I entered the wrong command. Will it break my data?  
+**Q:** I entered the wrong command. Will it break my data?
 **A:** No. Invalid commands are safely ignored, and an error message will appear.
 
-**Q:** The app does not open.  
+**Q:** The app does not open.
 **A:** Ensure you are using Java 17 or above. If issues persist, download the latest `.jar` file and try again.
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Command summary
 
-| **Action** | **Format, Examples** |
-|-------------|----------------------|
-| **Add Member** | `add n/NAME p/PHONE e/EMAIL y/YEAR f/FACULTY a/ADDRESS [t/TAG]…`<br> e.g., `add n/John Doe p/98765432 e/john@example.com y/2 f/SOC a/Blk 12 Hillview t/Captain` |
-| **Edit Member** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [y/YEAR] [f/FACULTY] [a/ADDRESS] [t/TAG]…`<br> e.g., `edit 2 n/Betsy Crowe t/Treasurer` |
-| **Delete Member** | `delete INDEX`<br> e.g., `delete 3` |
-| **List Members** | `list` |
-| **Find Member** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find John David` |
-| **Search (Name & Tags)** | `search [n/NAME_QUERY] [t/TAG]… [any/]`<br> e.g., `search t/Logistics any/` |
-| **Mark Attendance** | `present INDEX`<br> e.g., `present 1` |
-| **Unmark Attendance** | `absent INDEX`<br> e.g., `absent 2` |
-| **View Attendance** | `attendance` |
-| **Switch Lists** | `switch n/NAME_OF_LIST`<br> e.g., `switch n/Training_2025_10_20` |
-| **Remove List** | `remove n/NAME_OF_LIST`<br> e.g., `remove n/Training_2025_10_20` |
-| **Add Points** | `addpoints INDEX pts/VALUE`<br> e.g., `addpoints 1 pts/5` |
-| **Delete Points** | `minuspoints INDEX pts/VALUE`<br> e.g., `minuspoints 2 pts/5` |
-| **Add Tag** | `tag INDEX TAG`<br> e.g., `tag 1 Treasurer` |
-| **Remove Tag** | `untag INDEX TAG`<br> e.g., `untag 1 Treasurer` |
-| **View Points** | `points INDEX`<br> e.g., `points 1` |
-| **Clear All** | `clear` |
-| **Help** | `help` |
-| **Exit** | `exit` |
-
---------------------------------------------------------------------------------------------------------------------
+| **Action**               | **Format, Examples**                                                                                                                                       |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Add Member**           | `add n/NAME p/PHONE e/EMAIL y/YEAR f/FACULTY a/ADDRESS [t/TAG]…` e.g. `add n/John Doe p/98123456 e/john@example.com y/2 f/SOC a/Blk 12 Hillview t/Captain` |
+| **Edit Member**          | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [y/YEAR] [f/FACULTY] [a/ADDRESS] [t/TAG]…` e.g. `edit 2 n/Betsy Crowe t/Treasurer`                                |
+| **Delete Member**        | `delete INDEX` e.g. `delete 3`                                                                                                                             |
+| **List Members**         | `list`                                                                                                                                                     |
+| **Find Member**          | `find KEYWORD [MORE_KEYWORDS]` e.g. `find John David`                                                                                                      |
+| **Search (Name & Tags)** | `search [n/NAME_QUERY] [t/TAG]… [any/]` e.g. `search t/Logistics any/`                                                                                     |
+| **Mark Attendance**      | `present INDEX`                                                                                                                                            |
+| **Unmark Attendance**    | `absent INDEX`                                                                                                                                             |
+| **View Attendance**      | `attendance`                                                                                                                                               |
+| **Switch Lists**         | `switch NAME_OF_LIST` e.g. `switch Training_2025_10_20`                                                                                                    |
+| **Remove List**          | `remove NAME_OF_LIST` e.g. `remove Training_2025_10_20`                                                                                                    |
+| **Add Points**           | `addpoints INDEX pts/VALUE` e.g. `addpoints 1 pts/5`                                                                                                       |
+| **Minus Points**         | `minuspoints INDEX pts/VALUE` e.g. `minuspoints 2 pts/5`                                                                                                   |
+| **View Points**          | `points INDEX` e.g. `points 1`                                                                                                                             |
+| **Add Tag**              | `tag INDEX TAG` e.g. `tag 1 Treasurer`                                                                                                                     |
+| **Remove Tag**           | `untag INDEX TAG` e.g. `untag 1 Treasurer`                                                                                                                 |
+| **Clear Current List**   | `clear`                                                                                                                                                    |
+| **Help**                 | `help`                                                                                                                                                     |
+| **Exit**                 | `exit`                                                                                                                                                     |
