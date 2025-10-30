@@ -41,7 +41,7 @@ public class TagsPredicateTest {
     }
 
     @Test
-    public void equals_hashCode_behaviour() {
+    public void equalsAndHashCode_behavesCorrectly() {
         TagsPredicate a = new TagsPredicate(List.of("one", "two"), false);
         TagsPredicate b = new TagsPredicate(List.of("one", "two"), false);
         TagsPredicate c = new TagsPredicate(Set.of("one"), true);

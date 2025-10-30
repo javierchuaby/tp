@@ -74,12 +74,17 @@ public class ClubTrackListManager {
         requireNonNull(model);
 
         Path filePath = Paths.get("data", listName + ".json");
+
+        // Prevent removal of the default data file; this file must always exist.
+        Path defaultPath = Paths.get("data", "default.json");
+        if (filePath.equals(defaultPath)) {
+            throw new CommandException("Cannot remove the default list 'default.json'.");
+        }
+
         try {
             java.nio.file.Files.deleteIfExists(filePath);
             // If the removed list was the currently loaded one, revert to default
             if (filePath.equals(model.getClubTrackFilePath())) {
-                // default path updated to clubtrack.json to reflect app name
-                Path defaultPath = Paths.get("data", "clubtrack.json");
                 try {
                     Optional<ReadOnlyClubTrack> defaultData = storage.readClubTrack(defaultPath);
                     if (defaultData.isPresent()) {
