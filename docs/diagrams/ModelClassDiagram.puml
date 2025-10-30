@@ -9,8 +9,9 @@ class ModelManager {
 - userPrefs : UserPrefs
 - filteredPersons : FilteredList<Person>
 + getClubTrack() : ReadOnlyClubTrack
-+ setClubTrack(ReadOnlyClubTrack clubTrack)
-}
++ setClubTrack(clubTrack: ReadOnlyClubTrack) : void
++ getFilteredPersonList() : ObservableList<Person>
++ updateFilteredPersonList(predicate: Predicate<Person>) : void}
 
 class ClubTrack {
 - persons : UniquePersonList
@@ -21,8 +22,8 @@ class ClubTrack {
 
 class UniquePersonList {
 - internalList : List<Person>
-+ add(p : Person)
-+ remove(p : Person)
++ add(p: Person)
++ remove(p: Person)
 + setPersons(UniquePersonList replacement)
 }
 
@@ -36,6 +37,12 @@ class Person {
 - tags : Set<Tag>
 - isPresent : boolean
 - points : Points
++ getName() : Name
++ getPhone() : Phone
++ getEmail() : Email
++ isSamePerson(otherPerson: Person) : boolean
++ markPresent() : void
++ markAbsent() : void
 }
 
 class UserPrefs {
@@ -61,10 +68,10 @@ ModelManager ..|> Model
 ClubTrack ..|> ReadOnlyClubTrack
 UserPrefs ..|> ReadOnlyUserPrefs
 
-ModelManager *-- ClubTrack
-ModelManager *-- UserPrefs
-ClubTrack *-- UniquePersonList
-UniquePersonList *-- Person
+ModelManager "1" *-- "1" ClubTrack
+ModelManager "1" *-- "1" UserPrefs
+ClubTrack "1" *-- "1" UniquePersonList
+UniquePersonList "1" *-- "*" Person
 Person *-- Name
 Person *-- Phone
 Person *-- Email

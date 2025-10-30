@@ -55,6 +55,7 @@ public class SearchCommand extends Command {
      * @param predicate Predicate to filter the displayed member list. Must not be {@code null}.
      */
     public SearchCommand(Predicate<Person> predicate) {
+        requireNonNull(predicate);
         this.predicate = requireNonNull(predicate);
     }
 
@@ -66,6 +67,7 @@ public class SearchCommand extends Command {
      */
     @Override
     public CommandResult execute(Model model) {
+        assert predicate != null : "Predicate should not be null";
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
         int count = model.getFilteredPersonList().size();

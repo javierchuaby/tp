@@ -40,6 +40,7 @@ public class AddPointsCommand extends Command {
      * @param pointsToAdd Number of points to add (must be positive).
      */
     public AddPointsCommand(Index targetIndex, int pointsToAdd) {
+        requireNonNull(targetIndex);
         this.targetIndex = targetIndex;
         this.pointsToAdd = pointsToAdd;
     }
@@ -55,12 +56,15 @@ public class AddPointsCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
+        assert targetIndex != null : "Target index should not be null";
+        assert lastShownList != null : "Person list should not be null";
 
         if (targetIndex.getZeroBased() >= lastShownList.size() || targetIndex.getZeroBased() < 0) {
             throw new CommandException(Messages.MESSAGE_INVALID_MEMBER_DISPLAYED_INDEX);
         }
 
         Person personToUpdate = lastShownList.get(targetIndex.getZeroBased());
+        assert personToUpdate != null : "Person to update should not be null";
         Set<Tag> preservedTags = personToUpdate.getTags();
 
         int currentPoints = personToUpdate.getPoints().getValue();
