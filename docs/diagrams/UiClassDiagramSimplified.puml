@@ -1,0 +1,92 @@
+@startuml
+
+title ClubTrack - UI Layer
+
+interface Ui {
+  + start(primaryStage)
+  + stop()
+}
+
+abstract class UiPart<T> {
+  + getRoot() : T
+  # setAccelerators()
+}
+
+class UiManager {
+  + start(primaryStage)
+  + stop()
+  + fillInnerParts()
+}
+
+class MainWindow {
+  + show()
+  + hide()
+  + fillInnerParts()
+  + executeCommand(commandText) : CommandResult
+  - handleHelp()
+  - handleExit()
+}
+
+class CommandBox {
+  + CommandBox(commandExecutor)
+  - handleCommandEntered()
+}
+
+class ResultDisplay {
+  + setFeedbackToUser(feedbackToUser)
+}
+
+class PersonListPanel {
+  + PersonListPanel(personList)
+}
+
+class PersonCard {
+  + PersonCard(person, displayedIndex)
+}
+
+class StatusBarFooter {
+  + StatusBarFooter(saveLocation)
+  + setSaveLocation(saveLocation)
+}
+
+class HelpWindow {
+  + show()
+  + focus()
+  + hide()
+  + isShowing() : boolean
+}
+
+interface CommandExecutor {
+  + execute(commandText) : CommandResult
+}
+
+' Key relationships
+UiManager ..|> Ui
+MainWindow ..|> CommandExecutor
+
+UiPart <|-- MainWindow
+UiPart <|-- CommandBox
+UiPart <|-- ResultDisplay
+UiPart <|-- PersonListPanel
+UiPart <|-- PersonCard
+UiPart <|-- StatusBarFooter
+UiPart <|-- HelpWindow
+
+' Composition relationships
+UiManager "1" *-- "1" MainWindow : manages
+MainWindow "1" *-- "1" CommandBox : contains
+MainWindow "1" *-- "1" ResultDisplay : contains
+MainWindow "1" *-- "1" PersonListPanel : contains
+MainWindow "1" *-- "1" StatusBarFooter : contains
+MainWindow "1" *-- "0..1" HelpWindow : shows
+PersonListPanel "1" *-- "*" PersonCard : displays
+
+note right of MainWindow : Central UI coordinator\nHandles user interactions\nand command execution\nwith keyboard shortcuts
+
+note bottom of PersonCard : Displays individual\nmember information\nin the list view with\nattendance indicators
+
+note right of UiManager : Main entry point for UI\nManages JavaFX application\nlifecycle
+
+note left of CommandExecutor : Interface for command\nexecution, implemented\nby MainWindow
+
+@enduml
