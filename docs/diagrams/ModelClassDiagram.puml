@@ -1,54 +1,82 @@
 @startuml
-!include style.puml
-skinparam arrowThickness 1.1
-skinparam arrowColor MODEL_COLOR
-skinparam classBackgroundColor MODEL_COLOR
 
-Package Model as ModelPackage <<Rectangle>>{
-Class "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
-Class "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
-Class "<<interface>>\nModel" as Model
-Class AddressBook
-Class ModelManager
-Class UserPrefs
+' ===== Model slice =====
 
-Class UniquePersonList
-Class Person
-Class Address
-Class Email
-Class Name
-Class Phone
-Class Tag
+interface Model
 
-Class I #FFFFFF
+class ModelManager {
+- clubTrack : ClubTrack
+- userPrefs : UserPrefs
+- filteredPersons : FilteredList<Person>
++ getClubTrack() : ReadOnlyClubTrack
++ setClubTrack(clubTrack: ReadOnlyClubTrack) : void
++ getFilteredPersonList() : ObservableList<Person>
++ updateFilteredPersonList(predicate: Predicate<Person>) : void}
+
+class ClubTrack {
+- persons : UniquePersonList
++ getPersonList() : ObservableList<Person>
++ addPerson(Person p)
++ removePerson(Person target)
 }
 
-Class HiddenOutside #FFFFFF
-HiddenOutside ..> Model
+class UniquePersonList {
+- internalList : List<Person>
++ add(p: Person)
++ remove(p: Person)
++ setPersons(UniquePersonList replacement)
+}
 
-AddressBook .up.|> ReadOnlyAddressBook
+class Person {
+- name : Name
+- phone : Phone
+- email : Email
+- yearOfStudy : int
+- faculty : String
+- address : Address
+- tags : Set<Tag>
+- isPresent : boolean
+- points : Points
++ getName() : Name
++ getPhone() : Phone
++ getEmail() : Email
++ isSamePerson(otherPerson: Person) : boolean
++ markPresent() : void
++ markAbsent() : void
+}
 
-ModelManager .up.|> Model
-Model .right.> ReadOnlyUserPrefs
-Model .left.> ReadOnlyAddressBook
-ModelManager -left-> "1" AddressBook
-ModelManager -right-> "1" UserPrefs
-UserPrefs .up.|> ReadOnlyUserPrefs
+class UserPrefs {
+- guiSettings : GuiSettings
+- clubTrackFilePath : Path
++ getClubTrackFilePath() : Path
+}
 
-AddressBook *--> "1" UniquePersonList
-UniquePersonList --> "~* all" Person
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> Address
-Person *--> "*" Tag
+' Value objects
+class Name
+class Phone
+class Email
+class Address
+class Tag
+class Points
 
-Person -[hidden]up--> I
-UniquePersonList -[hidden]right-> I
+' Interfaces
+interface ReadOnlyClubTrack
+interface ReadOnlyUserPrefs
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+' Relationships
+ModelManager ..|> Model
+ClubTrack ..|> ReadOnlyClubTrack
+UserPrefs ..|> ReadOnlyUserPrefs
 
-ModelManager --> "~* filtered" Person
+ModelManager "1" *-- "1" ClubTrack
+ModelManager "1" *-- "1" UserPrefs
+ClubTrack "1" *-- "1" UniquePersonList
+UniquePersonList "1" *-- "*" Person
+Person *-- Name
+Person *-- Phone
+Person *-- Email
+Person *-- Address
+Person *-- Points
+Person o-- Tag
+
 @enduml

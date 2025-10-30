@@ -42,7 +42,7 @@
     "tags" : [ "friends" ]
   }, {
     "name" : "Elle Meyer",
-    "phone" : "9482224",
+    "phone" : "94822248",
     "email" : "werner@example.com",
     "yearOfStudy" : 2,
     "faculty" : "Faculty of Science",
@@ -52,7 +52,7 @@
     "tags" : [ ]
   }, {
     "name" : "Fiona Kunz",
-    "phone" : "9482427",
+    "phone" : "94824278",
     "email" : "lydia@example.com",
     "yearOfStudy" : 3,
     "faculty" : "Faculty of Arts & Social Sciences",
@@ -62,7 +62,7 @@
     "tags" : [ ]
   }, {
     "name" : "George Best",
-    "phone" : "9482442",
+    "phone" : "94824427",
     "email" : "anna@example.com",
     "yearOfStudy" : 4,
     "faculty" : "Faculty of Science",

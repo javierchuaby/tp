@@ -3,9 +3,11 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_FACULTY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_YEAROFSTUDY;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -23,19 +25,30 @@ public class AddCommand extends Command {
     public static final String COMMAND_WORD = "add";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a new member to the club membership list. "
-        + "Parameters: "
-        + PREFIX_NAME + "NAME "
-        + PREFIX_PHONE + "PHONE "
-        + PREFIX_EMAIL + "EMAIL "
-        + PREFIX_ADDRESS + "ADDRESS "
-        + "[" + PREFIX_TAG + "TAG]...\n"
-        + "Example: " + COMMAND_WORD + " "
-        + PREFIX_NAME + "Jason Lee "
-        + PREFIX_PHONE + "98765432 "
-        + PREFIX_EMAIL + "jason@example.com "
-        + PREFIX_ADDRESS + "Blk 123, #01-01 "
-        + PREFIX_TAG + "committee "
-        + PREFIX_TAG + "treasurer";
+            + "Parameters: "
+            + PREFIX_NAME + "NAME "
+            + PREFIX_PHONE + "PHONE "
+            + PREFIX_EMAIL + "EMAIL "
+            + PREFIX_ADDRESS + "ADDRESS "
+            + "[" + PREFIX_YEAROFSTUDY + "YEAR_OF_STUDY] "
+            + "[" + PREFIX_FACULTY + "FACULTY] "
+            + "[" + PREFIX_TAG + "TAG]...\n"
+            + "Examples:\n"
+            + "  " + COMMAND_WORD + " "
+            + PREFIX_NAME + "Jason Lee "
+            + PREFIX_PHONE + "98765432 "
+            + PREFIX_EMAIL + "jason@example.com "
+            + PREFIX_ADDRESS + "Blk 123, #01-01\n"
+            + "  " + COMMAND_WORD + " "
+            + PREFIX_NAME + "Alice Tan "
+            + PREFIX_PHONE + "91234567 "
+            + PREFIX_EMAIL + "alice@nus.edu.sg "
+            + PREFIX_ADDRESS + "Kent Ridge "
+            + PREFIX_YEAROFSTUDY + "2 "
+            + PREFIX_FACULTY + "School of Computing "
+            + PREFIX_TAG + "committee "
+            + PREFIX_TAG + "treasurer";
+
 
     public static final String MESSAGE_SUCCESS = "New member added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This member already exists in the club membership list";

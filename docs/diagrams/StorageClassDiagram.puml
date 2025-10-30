@@ -1,43 +1,84 @@
 @startuml
-!include style.puml
-skinparam arrowThickness 1.1
-skinparam arrowColor STORAGE_COLOR
-skinparam classBackgroundColor STORAGE_COLOR
 
-package Storage as StoragePackage {
+' ===== Storage slice =====
 
-package "UserPrefs Storage" #F4F6F6{
-Class "<<interface>>\nUserPrefsStorage" as UserPrefsStorage
-Class JsonUserPrefsStorage
+package "UserPrefs Storage" {
+Interface "<<interface>>\nUserPrefsStorage" as UserPrefsStorage {
+    +Path getUserPrefsFilePath()
+    +Optional<UserPrefs> readUserPrefs()
+    +void saveUserPrefs(ReadOnlyUserPrefs userPrefs)
+}
+Class JsonUserPrefsStorage {
+    -Path filePath
+    +JsonUserPrefsStorage(Path filePath)
+}
 }
 
-Class "<<interface>>\nStorage" as Storage
-Class StorageManager
-
-package "AddressBook Storage" #F4F6F6{
-Class "<<interface>>\nAddressBookStorage" as AddressBookStorage
-Class JsonAddressBookStorage
-Class JsonSerializableAddressBook
-Class JsonAdaptedPerson
-Class JsonAdaptedTag
+Interface "<<interface>>\nStorage" as Storage {
+    +Path getUserPrefsFilePath()
+    +Optional<UserPrefs> readUserPrefs()
+    +void saveUserPrefs(ReadOnlyUserPrefs userPrefs)
+    +Path getClubTrackFilePath()
+    +Optional<ReadOnlyClubTrack> readClubTrack()
+    +void saveClubTrack(ReadOnlyClubTrack clubTrack)
 }
 
+Class StorageManager {
+    -UserPrefsStorage userPrefsStorage
+    -ClubTrackStorage clubTrackStorage
+    +StorageManager(UserPrefsStorage userPrefsStorage, ClubTrackStorage clubTrackStorage)
 }
 
-Class HiddenOutside #FFFFFF
-HiddenOutside ..> Storage
+package "ClubTrack Storage" {
+Interface "<<interface>>\nClubTrackStorage" as ClubTrackStorage {
+    +Path getClubTrackFilePath()
+    +Optional<ReadOnlyClubTrack> readClubTrack()
+    +Optional<ReadOnlyClubTrack> readClubTrack(Path filePath)
+    +void saveClubTrack(ReadOnlyClubTrack clubTrack)
+    +void saveClubTrack(ReadOnlyClubTrack clubTrack, Path filePath)
+}
+Class JsonClubTrackStorage {
+    -Path filePath
+    +JsonClubTrackStorage(Path filePath)
+}
+Class JsonSerializableClubTrack {
+    +List<JsonAdaptedPerson> persons
+    +JsonSerializableClubTrack()
+    +JsonSerializableClubTrack(ReadOnlyClubTrack src)
+    +ClubTrack toModelType()
+}
+Class JsonAdaptedPerson {
+    -String name
+    -String phone
+    -String email
+    -String address
+    -List<JsonAdaptedTag> tags
+    +JsonAdaptedPerson(Person source)
+    +Person toModelType()
+}
+Class JsonAdaptedTag {
+    -String tagName
+    +JsonAdaptedTag(Tag source)
+    +Tag toModelType()
+}
+}
 
+' Inheritance relationships
 StorageManager .up.|> Storage
-StorageManager -up-> "1" UserPrefsStorage
-StorageManager -up-> "1" AddressBookStorage
-
-Storage -left-|> UserPrefsStorage
-Storage -right-|> AddressBookStorage
-
 JsonUserPrefsStorage .up.|> UserPrefsStorage
-JsonAddressBookStorage .up.|> AddressBookStorage
-JsonAddressBookStorage ..> JsonSerializableAddressBook
-JsonSerializableAddressBook --> "*" JsonAdaptedPerson
-JsonAdaptedPerson --> "*" JsonAdaptedTag
+JsonClubTrackStorage .up.|> ClubTrackStorage
+
+' Composition relationships
+StorageManager *-up-> "1" UserPrefsStorage
+StorageManager *-up-> "1" ClubTrackStorage
+
+' Interface inheritance
+Storage --|> UserPrefsStorage
+Storage --|> ClubTrackStorage
+
+' Dependencies and associations
+JsonClubTrackStorage ..> JsonSerializableClubTrack
+JsonSerializableClubTrack *-- JsonAdaptedPerson
+JsonAdaptedPerson *-- JsonAdaptedTag
 
 @enduml

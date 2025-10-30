@@ -3,8 +3,25 @@ layout: page
 title: User Guide
 ---
 
-ClubTrack is a **desktop app for managing club members and attendance, optimized for use via a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI).  
-Whether you’re a **CCA leader, team captain, or event coordinator**, ClubTrack helps you track your members, attendance, and points — with less clicking and more doing.
+ClubTrack is a **desktop app for managing club members and attendance, optimized for use via a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI).
+
+## Target User Profile
+
+ClubTrack is designed for **university student club executive committee (exco) members** who need to:
+- Manage large member databases (50-200 members)
+- Track attendance across multiple events and sessions
+- Assign roles and responsibilities to members
+- Monitor member participation through points systems
+
+**Ideal users are:**
+- Comfortable with command-line interfaces
+- Need to perform member management tasks quickly
+- Prefer keyboard input over mouse clicking
+- Manage active clubs with regular events and meetings
+
+## Value Proposition
+
+ClubTrack enables club executives to **manage members, track attendance, and assign points up to 3x faster** than traditional spreadsheet-based solutions through an intuitive command-line interface optimized for power users.
 
 * Table of Contents
   {:toc}
@@ -49,7 +66,7 @@ Whether you’re a **CCA leader, team captain, or event coordinator**, ClubTrack
    java -jar ClubTrack.jar
    ```
    A GUI similar to the one below should appear in a few seconds. Note how the app contains some sample data.  
-   ![Ui](images/Ui-ClubTrack-Updated.png)
+   ![Ui](images/Ui-ClubTrack.png)
 
 6. **Try your first command**
 
@@ -280,6 +297,55 @@ Removes a specified number of points from a member.
 
 ---
 
+### Adding tags to a member : `tag`
+
+Adds a tag to the specified member.
+
+**Format:**  
+`tag INDEX TAG`
+
+* Adds the specified `TAG` to the member at the specified `INDEX`.
+* The index refers to the index number shown in the displayed member list.
+* The index **must be a positive integer** 1, 2, 3, …​
+* If the tag already exists, the command will still succeed (no duplicate tags).
+
+**Examples:**
+* `tag 1 Treasurer`
+* `tag 2 Committee`
+
+---
+
+### Removing tags from a member : `untag`
+
+Removes a tag from the specified member.
+
+**Format:**  
+`untag INDEX TAG`
+
+* Removes the specified `TAG` from the member at the specified `INDEX`.
+* If the tag doesn't exist, the command will still succeed.
+
+**Examples:**
+* `untag 1 Treasurer`
+* `untag 2 Committee`
+
+---
+
+### Viewing member points : `points`
+
+Shows the current points of a specified member.
+
+**Format:**  
+`points INDEX`
+
+* Shows the points of the member at the specified `INDEX`.
+
+**Examples:**
+* `points 1`
+* `points 3`
+
+---
+
 ### Deleting a member : `delete`
 
 Deletes the specified member.
@@ -354,7 +420,7 @@ Always back up your data before manual edits.
 | **Action** | **Format, Examples** |
 |-------------|----------------------|
 | **Add Member** | `add n/NAME p/PHONE e/EMAIL y/YEAR f/FACULTY a/ADDRESS [t/TAG]…`<br> e.g., `add n/John Doe p/98765432 e/john@example.com y/2 f/SOC a/Blk 12 Hillview t/Captain` |
-| **Edit Member** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…`<br> e.g., `edit 2 n/Betsy Crowe t/Treasurer` |
+| **Edit Member** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [y/YEAR] [f/FACULTY] [a/ADDRESS] [t/TAG]…`<br> e.g., `edit 2 n/Betsy Crowe t/Treasurer` |
 | **Delete Member** | `delete INDEX`<br> e.g., `delete 3` |
 | **List Members** | `list` |
 | **Find Member** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find John David` |
@@ -366,6 +432,9 @@ Always back up your data before manual edits.
 | **Remove List** | `remove n/NAME_OF_LIST`<br> e.g., `remove n/Training_2025_10_20` |
 | **Add Points** | `addpoints INDEX pts/VALUE`<br> e.g., `addpoints 1 pts/5` |
 | **Delete Points** | `minuspoints INDEX pts/VALUE`<br> e.g., `minuspoints 2 pts/5` |
+| **Add Tag** | `tag INDEX TAG`<br> e.g., `tag 1 Treasurer` |
+| **Remove Tag** | `untag INDEX TAG`<br> e.g., `untag 1 Treasurer` |
+| **View Points** | `points INDEX`<br> e.g., `points 1` |
 | **Clear All** | `clear` |
 | **Help** | `help` |
 | **Exit** | `exit` |
