@@ -2,12 +2,17 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.testutil.TypicalPersons.ALICE;
+import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.core.index.Index;
+import seedu.address.model.Model;
+import seedu.address.model.ModelManager;
+import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
@@ -64,5 +69,17 @@ public class PersonIntegrationTest {
         // Test points subtraction
         Points subtractedPoints = person.getPoints().subtract(30);
         assertEquals(20, subtractedPoints.getValue());
+    }
+
+    @Test
+    public void addPoints_validPerson_success() throws Exception {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Person person = model.getFilteredPersonList().get(0);
+
+        AddPointsCommand command = new AddPointsCommand(Index.fromOneBased(1), 5);
+        command.execute(model);
+
+        assertEquals(person.getPoints().getValue() + 5,
+            model.getFilteredPersonList().get(0).getPoints().getValue());
     }
 }
