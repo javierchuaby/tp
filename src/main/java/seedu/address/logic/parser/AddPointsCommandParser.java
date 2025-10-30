@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_POINTS;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddPointsCommand;
@@ -20,30 +21,24 @@ public class AddPointsCommandParser implements Parser<AddPointsCommand> {
      */
     public AddPointsCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        String trimmedArgs = args.trim();
-
-        if (trimmedArgs.isEmpty()) {
-            throw new ParseException(
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPointsCommand.MESSAGE_USAGE));
-        }
-
-        String[] splitArgs = trimmedArgs.split("\\s+");
-
-        if (splitArgs.length != 2) {
-            throw new ParseException(
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPointsCommand.MESSAGE_USAGE));
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_POINTS);
+        String preamble = argMultimap.getPreamble().trim();
+        if (preamble.isEmpty() || !argMultimap.getValue(PREFIX_POINTS).isPresent()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPointsCommand.MESSAGE_USAGE));
         }
 
         try {
-            Index index = ParserUtil.parseIndex(splitArgs[0]);
-            int points = Integer.parseInt(splitArgs[1]);
+            Index index = ParserUtil.parseIndex(preamble);
+            String pointsStr = argMultimap.getValue(PREFIX_POINTS).get();
+
+            long parsedLong = Long.parseLong(pointsStr);
+            if (parsedLong > Integer.MAX_VALUE) {
+                throw new ParseException("Too many points, please use a smaller value.");
+            }
+            int points = (int) parsedLong;
 
             if (points <= 0) {
                 throw new ParseException("Points must be a positive integer");
-            }
-
-            if (points > Integer.MAX_VALUE / 2) {
-                throw new ParseException("Points value too large");
             }
 
             return new AddPointsCommand(index, points);
