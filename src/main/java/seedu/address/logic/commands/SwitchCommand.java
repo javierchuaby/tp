@@ -51,7 +51,7 @@ public class SwitchCommand extends Command {
         // we only update the model's preferred file path. LogicManager will perform the
         // actual load/save when it recognises this command.
         requireNonNull(model);
-        model.setAddressBookFilePath(getFilePath());
+        model.setClubTrackFilePath(getFilePath());
         return new CommandResult(String.format(MESSAGE_SUCCESS, listName));
     }
 

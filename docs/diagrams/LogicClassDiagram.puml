@@ -1,47 +1,65 @@
 @startuml
-!include style.puml
-skinparam arrowThickness 1.1
-skinparam arrowColor LOGIC_COLOR_T4
-skinparam classBackgroundColor LOGIC_COLOR
 
-package Logic as LogicPackage {
+' ===== Logic slice: Commands + LogicManager =====
 
-package "Parser Classes" as ParserClasses{
-}
-Class XYZCommand
-Class CommandResult
-Class "{abstract}\nCommand" as Command
+interface Logic
 
+interface Model
 
-Class "<<interface>>\nLogic" as Logic
-Class LogicManager
+abstract class Command {
++ execute(model : Model) : CommandResult
 }
 
-package Model {
-Class HiddenModel #FFFFFF
+class CommandResult {
++ feedbackToUser : String
++ showHelp : boolean
++ exit : boolean
 }
 
-package Storage {
+class LogicManager {
+- model : Model
+- storage : Storage
+- clubTrackParser : ClubTrackParser
++ execute(commandText : String) : CommandResult
++ getClubTrack() : ReadOnlyClubTrack
++ getClubTrackFilePath() : Path
 }
 
-Class HiddenOutside #FFFFFF
-HiddenOutside ..> Logic
+class AddCommand
+class EditCommand
+class FindCommand
+class AttendanceCommand
+class AddPointsCommand
+class MinusPointsCommand
+class DeleteCommand
+class ListCommand
+class ClearCommand
+class ExitCommand
+class HelpCommand
 
-LogicManager .right.|> Logic
-LogicManager -right->"1" ParserClasses
-ParserClasses ..> XYZCommand : <<create>>
+' Command hierarchy
+Command <|-- AddCommand
+Command <|-- EditCommand
+Command <|-- FindCommand
+Command <|-- AttendanceCommand
+Command <|-- AddPointsCommand
+Command <|-- MinusPointsCommand
+Command <|-- DeleteCommand
+Command <|-- ListCommand
+Command <|-- ClearCommand
+Command <|-- ExitCommand
+Command <|-- HelpCommand
 
-XYZCommand -up-|> Command
-LogicManager .left.> Command : <<call>>
+interface Storage
+class ClubTrackParser
+class NameContainsKeywordsPredicate
 
-LogicManager --> Model
+' Relationships
+LogicManager ..|> Logic
+Command --> Model
+LogicManager --> ClubTrackParser
 LogicManager --> Storage
-Storage --[hidden] Model
-Command .[hidden]up.> Storage
-Command .right.> Model
-note right of XYZCommand: XYZCommand = AddCommand, \nFindCommand, etc
+LogicManager --> Model
+FindCommand --> NameContainsKeywordsPredicate
 
-Logic ..> CommandResult
-LogicManager .down.> CommandResult
-Command .up.> CommandResult : <<create>>
 @enduml

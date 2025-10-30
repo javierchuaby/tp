@@ -4,7 +4,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.model.AddressBook;
+import seedu.address.model.ClubTrack;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -15,12 +15,23 @@ public class AttendanceCommandTest {
 
     @Test
     public void execute_attendanceCommand_listsPresentPersons() {
-        Model model = new ModelManager(new AddressBook(), new UserPrefs());
-        Model expectedModel = new ModelManager(new AddressBook(), new UserPrefs());
+        Model model = new ModelManager(new ClubTrack(), new UserPrefs());
+        Model expectedModel = new ModelManager(new ClubTrack(), new UserPrefs());
 
-        // Add persons with different attendance
-        Person presentPerson = new PersonBuilder().withName("Alice").withPresent(true).build();
-        Person absentPerson = new PersonBuilder().withName("Bob").withPresent(false).build();
+        Person presentPerson = new PersonBuilder()
+                .withName("Alice")
+                .withPhone("90000001")
+                .withEmail("alice@example.com")
+                .withPresent(true)
+                .build();
+
+        Person absentPerson = new PersonBuilder()
+                .withName("Bob")
+                .withPhone("90000002")
+                .withEmail("bob@example.com")
+                .withPresent(false)
+                .build();
+
         model.addPerson(presentPerson);
         model.addPerson(absentPerson);
         expectedModel.addPerson(presentPerson);

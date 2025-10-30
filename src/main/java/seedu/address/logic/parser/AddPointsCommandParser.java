@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import seedu.address.commons.core.index.Index;
@@ -18,11 +19,19 @@ public class AddPointsCommandParser implements Parser<AddPointsCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public AddPointsCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_POINTS);
-        // Expect preamble to be the index
-        String preamble = argMultimap.getPreamble().trim();
-        if (preamble.isEmpty() || !argMultimap.getValue(PREFIX_POINTS).isPresent()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPointsCommand.MESSAGE_USAGE));
+        requireNonNull(args);
+        String trimmedArgs = args.trim();
+
+        if (trimmedArgs.isEmpty()) {
+            throw new ParseException(
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPointsCommand.MESSAGE_USAGE));
+        }
+
+        String[] splitArgs = trimmedArgs.split("\\s+");
+
+        if (splitArgs.length != 2) {
+            throw new ParseException(
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPointsCommand.MESSAGE_USAGE));
         }
 
         try {
@@ -38,6 +47,10 @@ public class AddPointsCommandParser implements Parser<AddPointsCommand> {
 
             if (points <= 0) {
                 throw new ParseException("Points must be a positive integer");
+            }
+
+            if (points > Integer.MAX_VALUE / 2) {
+                throw new ParseException("Points value too large");
             }
 
             return new AddPointsCommand(index, points);

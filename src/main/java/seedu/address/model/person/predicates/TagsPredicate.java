@@ -8,11 +8,12 @@ import java.util.stream.Collectors;
 import seedu.address.model.person.Person;
 
 /**
- * Tests whether a {@link Person} matches a required set of tag names.
+ * Tests whether a {@link Person} matches a required set of tag name prefixes.
  *
- * <p>Matching is <b>case-insensitive</b>. By default, a person must contain
- * <em>all</em> requested tags (logical AND). If {@code any} is {@code true},
- * a person matches if they contain <em>any</em> of the requested tags (logical OR).
+ * <p>Matching is <b>case-insensitive</b> and uses <b>prefix</b> matching on tag names.
+ * By default, a person must contain <em>at least one tag</em> that starts with each
+ * requested prefix (logical AND). If {@code any} is {@code true}, a person matches if
+ * they contain <em>any</em> tag that starts with at least one of the requested prefixes (logical OR).
  * If the requested tag set is empty, this predicate returns {@code true}
  * (i.e., it does not filter anything).</p>
  *
@@ -30,7 +31,7 @@ import seedu.address.model.person.Person;
  */
 public final class TagsPredicate implements Predicate<Person> {
 
-    /** Lower-cased names of tags that must be present (all or any depending on {@link #any}). */
+    /** Lower-cased tag prefixes that must match (all or any depending on {@link #any}). */
     private final Set<String> needed;
 
     /** If {@code true}, match any of the tags (OR); otherwise require all (AND). */
@@ -63,12 +64,19 @@ public final class TagsPredicate implements Predicate<Person> {
         if (needed.isEmpty()) {
             return true;
         }
-        Set<String> has = person.getTags().stream()
+        Set<String> personTagsLower = person.getTags().stream()
                 .map(t -> t.tagName.toLowerCase())
                 .collect(Collectors.toSet());
-        return any
-                ? needed.stream().anyMatch(has::contains)
-                : has.containsAll(needed);
+
+        if (any) {
+            // OR: any prefix must match at least one tag
+            return needed.stream().anyMatch(prefix ->
+                    personTagsLower.stream().anyMatch(tag -> tag.startsWith(prefix)));
+        }
+
+        // AND: every prefix must match at least one tag
+        return needed.stream().allMatch(prefix ->
+                personTagsLower.stream().anyMatch(tag -> tag.startsWith(prefix)));
     }
 
     /**

@@ -122,12 +122,14 @@ public class Person {
         return points;
     }
 
-    /** Weaker identity: same name. */
+    /** Identity: same email OR same phone (names can duplicate). */
     public boolean isSamePerson(Person otherPerson) {
         if (otherPerson == this) {
             return true;
         }
-        return otherPerson != null && otherPerson.getName().equals(getName());
+        return otherPerson != null
+                && (otherPerson.getEmail().equals(getEmail())
+                || otherPerson.getPhone().equals(getPhone()));
     }
 
     @Override
@@ -167,6 +169,7 @@ public class Person {
                 .add("address", address)
                 .add("tags", tags)
                 .add("isPresent", isPresent)
+                .add("points", points)
                 .toString();
     }
 

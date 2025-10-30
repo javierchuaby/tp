@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
@@ -88,5 +89,25 @@ public class MinusPointsCommand extends Command {
             personToUpdate.getName(),
             pointsToSubtract,
             newPoints.getValue()));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof MinusPointsCommand)) {
+            return false;
+        }
+
+        MinusPointsCommand otherCommand = (MinusPointsCommand) other;
+        return targetIndex.equals(otherCommand.targetIndex)
+            && pointsToSubtract == otherCommand.pointsToSubtract;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(targetIndex, pointsToSubtract);
     }
 }

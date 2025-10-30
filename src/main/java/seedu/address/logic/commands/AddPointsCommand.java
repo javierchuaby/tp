@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
@@ -39,6 +40,7 @@ public class AddPointsCommand extends Command {
      * @param pointsToAdd Number of points to add (must be positive).
      */
     public AddPointsCommand(Index targetIndex, int pointsToAdd) {
+        requireNonNull(targetIndex);
         this.targetIndex = targetIndex;
         this.pointsToAdd = pointsToAdd;
     }
@@ -54,15 +56,28 @@ public class AddPointsCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
+        assert targetIndex != null : "Target index should not be null";
+        assert lastShownList != null : "Person list should not be null";
 
-        if (targetIndex.getZeroBased() >= lastShownList.size()) {
+        if (targetIndex.getZeroBased() >= lastShownList.size() || targetIndex.getZeroBased() < 0) {
             throw new CommandException(Messages.MESSAGE_INVALID_MEMBER_DISPLAYED_INDEX);
         }
 
         Person personToUpdate = lastShownList.get(targetIndex.getZeroBased());
+        assert personToUpdate != null : "Person to update should not be null";
         Set<Tag> preservedTags = personToUpdate.getTags();
 
-        Points newPoints = new Points(personToUpdate.getPoints().getValue() + pointsToAdd);
+        int currentPoints = personToUpdate.getPoints().getValue();
+        if (pointsToAdd > 0 && currentPoints > Integer.MAX_VALUE - pointsToAdd) {
+            throw new CommandException("Adding " + pointsToAdd + " points would cause overflow. "
+                + "Current points: " + currentPoints + ", Maximum allowed: " + Integer.MAX_VALUE);
+        }
+        if (pointsToAdd < 0 && currentPoints < Integer.MIN_VALUE - pointsToAdd) {
+            throw new CommandException("Subtracting points would cause underflow. "
+                + "Current points: " + currentPoints + ", Minimum allowed: " + Integer.MIN_VALUE);
+        }
+
+        Points newPoints = new Points(currentPoints + pointsToAdd);
 
         Person updatedPerson = new Person(
             personToUpdate.getName(),
@@ -81,5 +96,25 @@ public class AddPointsCommand extends Command {
             personToUpdate.getName(),
             pointsToAdd,
             newPoints.getValue()));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof AddPointsCommand)) {
+            return false;
+        }
+
+        AddPointsCommand otherCommand = (AddPointsCommand) other;
+        return targetIndex.equals(otherCommand.targetIndex)
+            && pointsToAdd == otherCommand.pointsToAdd;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(targetIndex, pointsToAdd);
     }
 }
