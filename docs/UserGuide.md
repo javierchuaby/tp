@@ -171,45 +171,56 @@ Edits an existing member.
 
 ---
 
-### Locating members by name : `find`
+### Locating members by keyword : `find`
 
-Finds members whose names contain any of the given keywords.
+Finds members whose **non-tag fields** contain **any** of the given keywords.
 
-**Format:**
+**Format:**  
 `find KEYWORD [MORE_KEYWORDS]`
 
-* The search is case-insensitive. e.g. `hans` will match `Hans`.
-* The order of the keywords does not matter.
-* Only full words will be matched (e.g. `Han` will not match `Hans`).
-* Members matching at least one keyword will be returned (i.e. OR search).
+**What it searches:**
+- name
+- phone
+- email
+- address
+- faculty
+- year of study (as text, e.g. “Y1”, “1”, “Year 1”)
+
+**Rules:**
+
+- Match is **case-insensitive** (`john` matches `John`)
+- Match is **substring-based** (`alex` matches `Alexander`, `alex@example.com`)
+- Order of keywords **does not** matter
+- A member is returned if **any** of these fields contains **any** of the keywords (logical **OR**)
+- **Tags are not searched here** — use [`search`](#searching-members-by-tag-prefix--search) for tag-based filtering.
 
 **Examples:**
 
-* `find John`
-* `find Alex David`
+- `find john`
+- `find soc`
+- `find 9876`
+- `find malaysia year 2`
 
----
+### Searching members by tag prefix : `search`
 
-### Searching by name and tags : `search`
-
-Filters the displayed list by **name** and/or **tags**.
+Finds members whose **tags start with** the given prefix(es).
+Use this when your club has tag conventions like `exco-*`, `dance-*`, `logi-*`.
 
 **Format:**
-`search [n/NAME_QUERY] [t/TAG]… [any/]`
+`search t/TAG_PREFIX…`
 
-* `n/NAME_QUERY` — case-insensitive token-prefix match on the member’s name.
-  (e.g., `n/char oli` matches “Charlotte Oliveira”.)
-* `t/TAG` — repeatable; filters by tags.
-  Default logic is **AND** (must contain all listed tags).
-* `any/` — optional flag; changes tag logic to **OR** (contains *any* of the listed tags).
-* At least one of `n/` or `t/` must be supplied.
+**Rules:**
+
+* Match is **case-insensitive**
+* Match is **prefix-based**: `t/log` matches `logi`, `logistics`, `log-2025`
+* You can give **multiple** prefixes; member is returned if it matches **any** prefix (logical **OR**)
+* At least **one** `t/` must be supplied
 
 **Examples:**
 
-* `search n/char`
-* `search t/Treasurer t/Logistics`
-* `search n/david t/Family`
-* `search t/Dance t/Logistics any/`
+* `search t/exco` → matches `exco`, `exco-head`, `exco-programme`
+* `search t/dan t/perf` → matches members tagged `dance`, `dance-lead`, `performance`, `performer`
+* `search t/comm` → matches `committee`, `comm-head`, `comm-logi`
 
 ---
 
