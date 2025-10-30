@@ -141,13 +141,11 @@ Use case ends.
 * **Active Member**: A club member who regularly attends events and participates in club activities
 * **Financial Record**: Transaction logs including membership fees, expenses, and other monetary activities
 
-## Architecture
-
 ### Class diagram
 
 The following class diagram shows the main high-level components and relationships in the application. It has been updated to reflect the new features beyond the original AB3:
 
-![Class diagram](./diagrams/class_diagram.png)
+![Class diagram](./diagrams/ClassDiagram.png)
 
 **Key Extensions from AB3:**
 - `Person` class now includes `yearOfStudy`, `faculty`, `isPresent`, and `points` fields
