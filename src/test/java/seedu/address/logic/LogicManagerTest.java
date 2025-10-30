@@ -5,8 +5,12 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDE
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.FACULTY_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_FACULTY_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_YEAROFSTUDY_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.YEAROFSTUDY_DESC_AMY;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.AMY;
 
@@ -166,6 +170,8 @@ public class LogicManagerTest {
     private void assertCommandFailureForExceptionFromStorage(IOException e, String expectedMessage) {
         Path prefPath = temporaryFolder.resolve("ExceptionUserPrefs.json");
 
+        // AddressBook storage that always throws the provided IOException on save
+        JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(prefPath) {
         // Inject LogicManager with an AddressBookStorage that throws the IOException e when saving
         JsonClubTrackStorage addressBookStorage = new JsonClubTrackStorage(prefPath) {
             @Override
@@ -180,6 +186,18 @@ public class LogicManagerTest {
 
         logic = new LogicManager(model, storage);
 
+        // Trigger saveAddressBook() via a valid add command (y/ and f/ now compulsory)
+        String addCommand = AddCommand.COMMAND_WORD + " "
+                + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + " "
+                + YEAROFSTUDY_DESC_AMY + " " + FACULTY_DESC_AMY;
+
+        // Build the expected model using the same YOS/Faculty values used in the command
+        Person expectedPerson = new PersonBuilder(AMY)
+                .withYearOfStudy(Integer.parseInt(String.valueOf(VALID_YEAROFSTUDY_AMY)))
+                .withFaculty(VALID_FACULTY_AMY)
+                .withTags() // match the command (no tags in the add command above)
+                .build();
+
         // Triggers the saveClubTrack method by executing an add command
         String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
@@ -188,6 +206,7 @@ public class LogicManagerTest {
                 .withFaculty("School of Computing").withTags().build();
         ModelManager expectedModel = new ModelManager();
         expectedModel.addPerson(expectedPerson);
+
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
     }
 }
