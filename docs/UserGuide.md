@@ -77,7 +77,7 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
    Some example commands you can try:
 
     * `list` : Lists all members in the current list.
-    * `add n/John Doe p/98123456 e/johnd@example.com y/2 f/SOC a/John street, block 123, #01-01` : Adds a member named John Doe.
+    * `add n/John Doe p/98123456 e/johnd@example.com a/John street y/2 f/SOC` : Adds a member named John Doe.
     * `present 1` : Marks the first member as present.
     * `switch Training_2025_10_20` : Switches to (or creates) a list for that event.
     * `clear` : Deletes all members **in the current list**.
@@ -127,7 +127,7 @@ Shows a message explaining how to access the help page.
 Adds a member to ClubTrack.
 
 **Format:**
-`add n/NAME p/PHONE e/EMAIL y/YEAR_OF_STUDY f/FACULTY a/ADDRESS [t/TAG]…`
+`add n/NAME p/PHONE e/EMAIL a/ADDRESS y/YEAR_OF_STUDY f/FACULTY [t/TAG]…`
 
 **Phone constraint:** phone numbers must be **Singapore mobile numbers** — **exactly 8 digits, starting with 8 or 9** (e.g. `98123456`, `83123456`).
 
@@ -137,8 +137,8 @@ A member can have any number of tags (including 0), e.g. their role or committee
 
 **Examples:**
 
-* `add n/John Doe p/98123456 e/johnd@example.com y/3 f/SOC a/John street, block 123, #01-01`
-* `add n/Betsy Crowe p/83123456 e/betsycrowe@example.com y/2 f/CDE a/Newgate Prison t/Treasurer t/Logistics`
+* `add n/John Doe p/98123456 e/johnd@example.com a/John street y/3 f/SOC`
+* `add n/Betsy Crowe p/83123456 e/betsycrowe@example.com a/Newgate Prison y/2 f/CDE  t/Treasurer t/Logistics`
 
 ---
 
@@ -155,7 +155,7 @@ Shows a list of all members **in the current list**.
 Edits an existing member.
 
 **Format:**
-`edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [y/YEAR] [f/FACULTY] [a/ADDRESS] [t/TAG]…`
+`edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [y/YEAR] [f/FACULTY] [t/TAG]…`
 
 * Edits the member at the specified `INDEX`. The index refers to the index number shown in the displayed member list.
   The index **must be a positive integer** 1, 2, 3, …
@@ -444,7 +444,7 @@ Advanced users may edit these JSON files directly.
 
 | **Action**               | **Format, Examples**                                                                                                                                       |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Add Member**           | `add n/NAME p/PHONE e/EMAIL y/YEAR f/FACULTY a/ADDRESS [t/TAG]…` e.g. `add n/John Doe p/98123456 e/john@example.com y/2 f/SOC a/Blk 12 Hillview t/Captain` |
+| **Add Member**           | `add n/NAME p/PHONE e/EMAIL a/ADDRESS y/YEAR f/FACULTY [t/TAG]…` e.g. `add n/John Doe p/98123456 e/john@example.com a/Blk 12 Hillview y/2 f/SOC t/Captain` |
 | **Edit Member**          | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [y/YEAR] [f/FACULTY] [a/ADDRESS] [t/TAG]…` e.g. `edit 2 n/Betsy Crowe t/Treasurer`                                |
 | **Delete Member**        | `delete INDEX` e.g. `delete 3`                                                                                                                             |
 | **List Members**         | `list`                                                                                                                                                     |
