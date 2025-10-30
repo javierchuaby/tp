@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.JFXPanel;
 import javafx.stage.Stage;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.Logic;
@@ -35,17 +35,16 @@ import seedu.address.model.person.Phone;
  */
 public class UiComponentSmokeTest {
     private static Person testPerson;
+    private static final AtomicBoolean FX_STARTED = new AtomicBoolean(false);
 
     @BeforeAll
-    static void skipOnCi() {
+    public static void setUpClass() throws Exception {
+        // Skip the entire class on CI before any JavaFX/toolkit work.
         Assumptions.assumeFalse("true".equals(System.getenv("GITHUB_ACTIONS")),
                 "Skipping UI smoke tests on CI (GITHUB_ACTIONS=true)");
-    }
 
-    @BeforeAll
-    public static void setUpClass() {
-        // Initialize JavaFX toolkit
-        new JFXPanel();
+        // Start JavaFX toolkit without JFXPanel.
+        startJavaFx();
 
         testPerson = new Person(
                 new Name("Test One"),
@@ -56,14 +55,31 @@ public class UiComponentSmokeTest {
                 new HashSet<>());
     }
 
-    // <<< Edited method to skip on UnsupportedOperationException >>>
+    private static void startJavaFx() throws InterruptedException {
+        if (FX_STARTED.get()) {
+            return;
+        }
+        // Platform.startup may only be called once; IllegalStateException means already started.
+        CountDownLatch latch = new CountDownLatch(1);
+        try {
+            Platform.startup(() -> {
+                FX_STARTED.set(true);
+                latch.countDown();
+            });
+        } catch (IllegalStateException alreadyStarted) {
+            FX_STARTED.set(true);
+            latch.countDown();
+        }
+        latch.await();
+    }
+
     private void doWithJavaFx(Runnable action) throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
             try {
                 action.run();
             } catch (UnsupportedOperationException ex) {
-                // Abort (skip) rather than fail—useful for stubs/not-yet-implemented ops on CI
+                // Abort (skip) rather than fail—useful for stubs/not-yet-implemented ops on CI-like envs
                 Assumptions.assumeTrue(false, "Skipped due to UnsupportedOperationException: " + ex.getMessage());
             } finally {
                 latch.countDown();
@@ -187,6 +203,7 @@ public class UiComponentSmokeTest {
         @Override
         public void setGuiSettings(GuiSettings guiSettings) {
             // no-op for stub
+            // Intentionally left blank
         }
     }
 }
