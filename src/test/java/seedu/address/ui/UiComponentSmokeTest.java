@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.concurrent.CountDownLatch;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -34,6 +35,12 @@ import seedu.address.model.person.Phone;
  */
 public class UiComponentSmokeTest {
     private static Person testPerson;
+
+    @BeforeAll
+    static void skipOnCi() {
+        Assumptions.assumeFalse("true".equals(System.getenv("GITHUB_ACTIONS")),
+                "Skipping UI smoke tests on CI (GITHUB_ACTIONS=true)");
+    }
 
     @BeforeAll
     public static void setUpClass() {
@@ -176,3 +183,4 @@ public class UiComponentSmokeTest {
         }
     }
 }
+
