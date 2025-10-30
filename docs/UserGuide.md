@@ -67,7 +67,7 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
    ```
 
    A GUI similar to the one below should appear in a few seconds. The app starts with sample data.
-   ![Ui](images/Ui-ClubTrack.png)
+   ![Ui](images/Ui-ClubTrack-v1.6.png)
 
 6. **Try your first command**
 
