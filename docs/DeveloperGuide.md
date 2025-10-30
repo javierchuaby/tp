@@ -35,7 +35,7 @@ The entry point is `MainApp`. On startup it:
 4. Creates the logic
 5. Hands control to the UI
 
-![Architecture Diagram](diagrams/ArchitectureDiagram.png)
+![Architecture Diagram](images/ArchitectureDiagram.png)
 
 ### 2.1 Key Architectural Extension
 
