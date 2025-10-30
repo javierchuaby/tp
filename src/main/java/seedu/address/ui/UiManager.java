@@ -36,9 +36,21 @@ public class UiManager implements Ui {
     public void start(Stage primaryStage) {
         logger.info("Starting UI...");
 
-        //Set the application icon.
-        primaryStage.getIcons().add(getImage(ICON_APPLICATION));
+        configurePrimaryStage(primaryStage);
+        initializeMainWindow(primaryStage);
+    }
 
+    /**
+     * Configures the primary stage with icon.
+     */
+    private void configurePrimaryStage(Stage primaryStage) {
+        primaryStage.getIcons().add(getImage(ICON_APPLICATION));
+    }
+
+    /**
+     * Initializes and shows the main window.
+     */
+    private void initializeMainWindow(Stage primaryStage) {
         try {
             mainWindow = new MainWindow(primaryStage, logic);
             mainWindow.show(); //This should be called before creating other UI parts
@@ -65,14 +77,29 @@ public class UiManager implements Ui {
      */
     private static void showAlertDialogAndWait(Stage owner, AlertType type, String title, String headerText,
                                                String contentText) {
+        final Alert alert = createAlert(type, title, headerText, contentText);
+        configureAlert(alert, owner);
+        alert.showAndWait();
+    }
+
+    /**
+     * Creates an alert with the given parameters.
+     */
+    private static Alert createAlert(AlertType type, String title, String headerText, String contentText) {
         final Alert alert = new Alert(type);
-        alert.getDialogPane().getStylesheets().add("view/DarkTheme.css");
-        alert.initOwner(owner);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
+        return alert;
+    }
+
+    /**
+     * Configures the alert dialog pane with styles and owner.
+     */
+    private static void configureAlert(Alert alert, Stage owner) {
+        alert.getDialogPane().getStylesheets().add("view/DarkTheme.css");
+        alert.initOwner(owner);
         alert.getDialogPane().setId(ALERT_DIALOG_PANE_FIELD_ID);
-        alert.showAndWait();
     }
 
     /**
@@ -80,8 +107,22 @@ public class UiManager implements Ui {
      * and exits the application after the user has closed the alert dialog.
      */
     private void showFatalErrorDialogAndShutdown(String title, Throwable e) {
-        logger.severe(title + " " + e.getMessage() + StringUtil.getDetails(e));
+        logError(title, e);
         showAlertDialogAndWait(Alert.AlertType.ERROR, title, e.getMessage(), e.toString());
+        shutdownApplication();
+    }
+
+    /**
+     * Logs the error with details.
+     */
+    private void logError(String title, Throwable e) {
+        logger.severe(title + " " + e.getMessage() + StringUtil.getDetails(e));
+    }
+
+    /**
+     * Shuts down the application.
+     */
+    private void shutdownApplication() {
         Platform.exit();
         System.exit(1);
     }

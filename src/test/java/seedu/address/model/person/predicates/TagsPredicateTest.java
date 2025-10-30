@@ -1,15 +1,15 @@
 package seedu.address.model.person.predicates;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.testutil.PersonBuilder;
-
-import java.util.List;
-import java.util.Set;
 
 public class TagsPredicateTest {
 
@@ -41,7 +41,7 @@ public class TagsPredicateTest {
     }
 
     @Test
-    public void equals_and_hashCode_behaviour() {
+    public void equals_hashCode_behaviour() {
         TagsPredicate a = new TagsPredicate(List.of("one", "two"), false);
         TagsPredicate b = new TagsPredicate(List.of("one", "two"), false);
         TagsPredicate c = new TagsPredicate(Set.of("one"), true);

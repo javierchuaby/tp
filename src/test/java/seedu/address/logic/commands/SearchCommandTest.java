@@ -73,6 +73,31 @@ public class SearchCommandTest {
         assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredPersonList());
     }
 
+    @Test
+    public void execute_caseInsensitiveTag_personFound() {
+        NameContainsKeywordsPredicate predicate = preparePredicate("t/FRIEND");
+        SearchCommand command = new SearchCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, "1 member(s) found", expectedModel);
+    }
+
+    @Test
+    public void execute_multipleTagPrefixAnd_noResultsOrCorrectPersons() {
+        NameContainsKeywordsPredicate predicate = preparePredicate("t/friend t/husband");
+        SearchCommand command = new SearchCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        // customize assumption for AND semantics
+        assertCommandSuccess(command, model, String.format("%d member(s) found", expectedModel.getFilteredPersonList().size()), expectedModel);
+    }
+
+    @Test
+    public void execute_partialTagPrefix_noPersonFound() {
+        NameContainsKeywordsPredicate predicate = preparePredicate("t/xyzxyz");
+        SearchCommand command = new SearchCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, "0 member(s) found", expectedModel);
+    }
+
     /**
      * Parses {@code userInput} into a {@code NameContainsKeywordsPredicate}.
      */

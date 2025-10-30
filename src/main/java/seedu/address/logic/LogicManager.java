@@ -108,6 +108,11 @@ public class LogicManager implements Logic {
     }
 
     @Override
+    public Path getClubTrackFilePath() {
+        return model.getClubTrackFilePath();
+    }
+
+    @Override
     public GuiSettings getGuiSettings() {
         return model.getGuiSettings();
     }

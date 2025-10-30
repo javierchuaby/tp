@@ -1,20 +1,20 @@
 package seedu.address.model.person.predicates;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
-import java.util.List;
-
 public class NamePrefixPredicateTest {
 
     @Test
-    public void constructor_nullOrBlankQuery_tokensEmpty_matchesAll() {
+    public void constructor_nullOrBlankQuery_matchesAll() {
         NamePrefixPredicate pNull = new NamePrefixPredicate((String) null);
         NamePrefixPredicate pBlank = new NamePrefixPredicate("   ");
         Person person = new PersonBuilder().withName("Alice Bob").build();
@@ -41,7 +41,7 @@ public class NamePrefixPredicateTest {
     }
 
     @Test
-    public void equals_and_hashCode_behaviour() {
+    public void equals_hashCode_behaviour() {
         NamePrefixPredicate a = new NamePrefixPredicate("Alice Bob");
         NamePrefixPredicate b = new NamePrefixPredicate(List.of("alice", "bob"));
         NamePrefixPredicate c = new NamePrefixPredicate("Different");
