@@ -4,302 +4,520 @@
 
 This Developer Guide describes the architecture, design, and implementation details of **ClubTrack**, a desktop app for university club executives to manage members, track attendance, and award participation points quickly via a CLI-first workflow.
 
-ClubTrack is adapted from AB3 but extended with:
+ClubTrack is adapted from **AddressBook Level 3 (AB3)** but extended with:
 
 * compulsory `yearOfStudy` and `faculty` for members,
 * attendance and points tracking,
-* switchable “member lists” (e.g. per event) backed by separate JSON files,
-* richer search over tags,
-* updated UI (`PersonCard`) to display points and academic info.
+* **switchable member lists** (each backed by its own JSON file),
+* clearer separation between `find` (name-only, substring) and `search` (tag-prefix),
+* updated UI (`PersonCard`) to display points and academic info,
+* tighter validation on phone numbers (SG mobile: 8 digits, start with 8 or 9),
+* updated tests to match the new constraints.
 
-This guide assumes you are familiar with Java 17, JavaFX, Gradle, and the AB3 architecture.
+This guide assumes you are familiar with **Java 17**, **JavaFX**, **Gradle**, and the **AB3 architecture**.
 
 ---
 
 ## 2. Architecture
 
-The overall architecture follows the standard 4-layered AB3 style:
+ClubTrack follows the classic AB3 4-layer architecture:
 
-* **UI**: displays data to the user and captures user input.
-* **Logic**: parses and executes user commands.
-* **Model**: holds in-memory data (members, filtered list, current list name).
-* **Storage**: reads/writes data to JSON files on disk.
+1. **UI** – shows data and accepts commands.
+2. **Logic** – parses and executes commands.
+3. **Model** – holds in-memory data and exposes filtered lists to UI.
+4. **Storage** – reads/writes JSON files to disk.
 
-The main class is `MainApp`, which:
+The entry point is `MainApp`. On startup it:
 
-1. Initializes config and storage,
-2. Creates the `Model`,
-3. Creates the `Logic`,
-4. Starts the `Ui`.
+1. Loads config / user prefs
+2. Initialises storage
+3. Creates the model
+4. Creates the logic
+5. Hands control to the UI
 
-![Architecture Diagram](images/ArchitectureDiagram.png)
+![Architecture Diagram](diagrams/ArchitectureDiagram.png)
 
-**Key extension:** the Storage layer can now **load/save different JSON files** depending on the *active list name* (switched via the `switch` command). The default file is `default.json` under `data/`.
+### 2.1 Key Architectural Extension
+
+In AB3, storage always pointed to **one** file (`addressbook.json`).
+In ClubTrack, storage can point to **different files** depending on the **active list name**. The default file is:
+
+```text
+data/default.json
+```
+
+Whenever the user runs:
+
+```text
+switch Training_2025_10_20
+```
+
+the app starts reading/writing:
+
+```text
+data/Training_2025_10_20.json
+```
+
+All mutating commands (add, edit, present, clear, addpoints, etc.) save to **the file of the currently active list**.
 
 ---
 
 ## 3. UI Component
 
-The UI is built with JavaFX and FXML, similar to AB3.
+The UI layer is JavaFX-based and largely follows AB3.
 
-**Key classes:**
+**Main classes:**
 
-* `UiManager` – entry point for UI.
-* `MainWindow` – main app window that contains the command box, result display, and member list panel.
-* `PersonListPanel` – shows the list of members corresponding to the *current* list selected.
-* `PersonCard` – displays:
+* `UiManager` – entry point to the UI
+* `MainWindow` – top-level container; holds the command box, result display, status bar, and member list
+* `PersonListPanel` – shows the current list of members **for the active file**
+* `PersonCard` – shows:
 
-  * name, phone, email
+  * name
+  * year of study (e.g. `Y2`)
+  * faculty (e.g. `School of Computing`)
+  * phone
   * address
-  * **year of study** (e.g. `Y2`)
-  * **faculty** (e.g. `School of Computing`)
-  * **points** (shown as `Points: X`)
-  * tags
+  * email
+  * **Points: X**
+  * tags (as chips)
 
-![UI Component](diagrams/UiClassDiagram.png)
+![UI Class Diagram](diagrams/UiClassDiagram.png)
 
-The UI listens to changes in the `FilteredList<Person>` exposed by the Model. When `switch` changes the active list and the Model reloads that list, the UI is automatically refreshed.
+**Why this change?**
+Because we made `y/` and `f/` compulsory at the parser level, the UI can safely render them without guessing defaults. Points are shown explicitly to help exco track participation.
+
+Whenever the model reloads a different list (due to `switch`), the observable list changes and the UI automatically refreshes.
 
 ---
 
 ## 4. Logic Component
 
-The **Logic** component:
+The Logic component is responsible for:
 
-1. Receives a raw command string from the UI,
-2. Uses `AddressBookParser` to parse it,
-3. Instantiates the corresponding `Command`,
-4. Executes it on the `Model`,
-5. Returns a `CommandResult` to the UI.
+1. Receiving the raw command string from the UI,
+2. Parsing it using `AddressBookParser`,
+3. Creating the corresponding `Command`,
+4. Executing it on the `Model`,
+5. Saving through `Storage` if the command mutates data,
+6. Returning a `CommandResult`.
 
-![Logic Component](diagrams/LogicClassDiagram.png)
+![Logic Class Diagram](diagrams/LogicClassDiagram.png)
 
-**Important classes:**
+**Key classes:**
 
-* `LogicManager` – main entry point for logic.
-* `AddressBookParser` – dispatches to individual command parsers.
-* `Command` – base abstract class.
+* `Logic` (interface)
+* `LogicManager` (concrete)
+* `AddressBookParser`
+* `Command` (abstract)
 * Concrete commands:
 
   * `AddCommand`
   * `EditCommand`
-  * `PresentCommand` / `AbsentCommand` / `AttendanceCommand`
-  * `SearchCommand` (tag/prefix-based)
-  * `FindCommand` (name-only, substring)
-  * **`SwitchCommand`** (new)
+  * `PresentCommand`, `AbsentCommand`, `AttendanceCommand`
+  * `FindCommand` (**now: name-only, substring**)
+  * `SearchCommand` (**now: tag-prefix filtering**)
+  * `SwitchCommand` (**new**)
   * `PointsCommand`, `AddPointsCommand`, `MinusPointsCommand`
+  * `ClearCommand` (clears **current** list only)
 
-On successful commands that mutate data, `LogicManager` tells `Storage` to save **the current list** to its corresponding JSON file.
+**Important change:**
+After **every** successful mutating command, `LogicManager` asks `Storage` to save **to the JSON file of the current active list name**.
 
 ---
 
 ## 5. Model Component
 
-The **Model** holds application state:
+The Model layer keeps application state and provides observable lists to the UI.
 
-* `AddressBook` (current list of members)
-* `FilteredList<Person>` (for display)
-* *Active list name* (e.g. `"default"`, `"Training_2025_10_20"`)
-* `UserPrefs`
+![Model Class Diagram](diagrams/ModelClassDiagram.png)
 
-![Model Component](diagrams/ModelClassDiagram.png)
+**Main responsibilities:**
+
+* hold the current `AddressBook` (for the active list),
+* expose `FilteredList<Person>` for UI,
+* remember the **active list name** (e.g. `default`, `Training_2025_10_20`),
+* hold user preferences.
 
 ### 5.1 Person model
 
-`Person` was extended from AB3 to support club-specific fields:
+We extended AB3’s `Person` to include club-specific and attendance fields:
 
-* `Name name`
-* `Phone phone` (now: **must be 8 digits and start with 8 or 9**)
-* `Email email`
-* `int yearOfStudy`
-* `String faculty`
-* `Address address`
-* `Set<Tag> tags`
-* `boolean isPresent`
-* `Points points`
+```text
+Person
+ ├─ name : Name
+ ├─ phone : Phone           // 8 digits, start with 8 or 9
+ ├─ email : Email
+ ├─ yearOfStudy : int       // 1..4
+ ├─ faculty : String        // non-empty
+ ├─ address : Address
+ ├─ tags : Set<Tag>
+ ├─ isPresent : boolean     // for attendance
+ └─ points : Points         // value object
+```
 
-`Points` is a value object that is **immutable** and supports `addPoint()`, `subtractPoint()`, and `getValue()`.
+We also changed **identity**:
 
-**Identity semantics:**
-We updated `Person#isSamePerson` to **not** use name anymore (to allow duplicate names). Identity is now determined by **email or phone** – if either matches, it is considered the same person. This prevents accidental duplicates by contact, but allows two “John Tan” entries.
+* **Before (AB3):** name-based
+* **Now:** **same person = same email OR same phone**
+
+  * lets us store multiple people with the same name
+  * still guards against accidental duplicates using contact info
 
 ---
 
 ## 6. Storage Component
 
-The Storage layer reads and writes data in JSON.
+The Storage layer reads/writes JSON using the usual AB3 JSON storage classes, but with an extra concept: **active list name = file name**.
 
-![Storage Component](diagrams/StorageClassDiagram.png)
+![Storage Class Diagram](diagrams/StorageClassDiagram.png)
 
-**What changed:**
+**Behaviour:**
 
-* Previously, AB3 always stored in `addressbook.json`.
-* **Now**, ClubTrack stores in `data/<activeListName>.json`.
+* On startup, we try to read:
 
-  * On startup: load `data/default.json` (if missing, create a new one).
-  * After `switch Training_2025_10_20`: subsequent saves go to `data/Training_2025_10_20.json`.
-  * `clear` clears only the **current** list, then saves back to the **current** file.
+  ```text
+  data/default.json
+  ```
 
-This aligns with the new user-facing behaviour: “switching lists” = “working with a different file”.
+  If it does not exist, we create it with a sample ClubTrack.
+
+* When user runs:
+
+  ```text
+  switch CCA_Showcase
+  ```
+
+  we from then on read/write:
+
+  ```text
+  data/CCA_Showcase.json
+  ```
+
+* `clear` only clears the **currently loaded** address book, and then saves it back to **the same file**.
+
+This design keeps lists isolated. Each event/training/day can have its own file, but the rest of the architecture is unchanged.
 
 ---
 
-## 7. Implementation Details
+## 7. Feature Implementation
 
 ### 7.1 `switch` feature
 
-**Purpose:** allow exco to maintain multiple *contexts* (event rosters, performance nights, special training sessions) without mixing them into one huge list.
+**Goal:** let exco maintain multiple independent member/attendance lists (e.g. Week 1 training, production night, ad-hoc event) without mixing data.
 
-**User command:**
+**Command format:**
 
 ```text
 switch LIST_NAME
 ```
 
-**Behaviour:**
+**Flow:**
 
-1. Logic parses the `LIST_NAME`.
-2. Model is asked to “activate” that list.
-3. Storage tries to load `data/LIST_NAME.json`.
+1. `LogicManager` parses `LIST_NAME`
+2. `Model` is told to “activate” that list
+3. `Storage` tries to load `data/LIST_NAME.json`
 
-  * If it exists → load into Model.
-  * If it does not exist → create a new empty address book and use that file moving forward.
-4. UI refreshes to show members from that list.
+  * if present → load
+  * if missing → create new empty address book, save as `data/LIST_NAME.json`
+4. UI refreshes because the model’s observable list changed
 
 **Activity diagram:**
 
 ![Switch Activity Diagram](diagrams/SwitchActivityDiagram.png)
 
-**Key design points:**
+**Design considerations:**
 
-* We keep the “current list name” in the Model (or a model-like component), so that every mutating command knows which file to save to.
-* We reuse the same `AddressBook` structure; only the backing file changes.
-* `clear` now clears only that active file.
+* We store the active list name somewhere model-ish, so that **all** mutating commands (add, edit, present, points, clear) can save to the right file.
+* We **reused** the same JSON structure from AB3 to minimise changes.
+* This fits nicely with the CS2103T rule “clear should not silently clear all other files”.
 
 ---
 
-### 7.2 `find` vs `search`
+### 7.2 `add` command (updated)
 
-We intentionally separated concerns:
+**Old (AB3):** name, phone, email, address were compulsory; others optional.
+**New (ClubTrack):** we now make **year of study** (`y/`) and **faculty** (`f/`) compulsory.
 
-#### 7.2.1 `find`
-
-* **New behaviour**: find only matches **names**.
-* It performs **substring / contains** matching on the name.
-* Does **not** look at tags, faculty, or year anymore.
-* This keeps `find` simple and predictable for the user.
-
-**Example:**
+**New format:**
 
 ```text
-find john
-find alex david
+add n/NAME p/PHONE e/EMAIL y/YEAR_OF_STUDY f/FACULTY a/ADDRESS [t/TAG]...
 ```
 
-Matches `John`, `Johnathan`, `Alex David`.
+**Validation:**
 
-#### 7.2.2 `search`
+* `p/PHONE` → 8 digits, starts with 8 or 9
+* `y/` → integer 1–4
+* `f/` → non-empty
+* all single-valued prefixes must not be repeated
 
-* Designed for **structured filtering**, especially tags.
-* New behaviour: search by **tag prefix**.
-* Command:
+**Why?**
+Because the UI now always shows `Yx - Faculty`, so the model must **guarantee** those fields exist.
+
+---
+
+### 7.3 `find` vs `search`
+
+We deliberately split them to reduce PE bugs.
+
+#### 7.3.1 `find`
+
+* **Purpose:** quick lookup by name only
+* **Behaviour:** case-insensitive **contains** on name
+* **Does NOT** search tags, faculty, year, or address
+* **Examples:**
+
+  ```text
+  find john
+  find alex david
+  ```
+
+  matches `John`, `Johnathan`, `Alex David`.
+
+#### 7.3.2 `search`
+
+* **Purpose:** structured filtering, especially tag-based
+* **Behaviour:** tag **prefix** matching
+* **Example:**
 
   ```text
   search t/com
   ```
 
-  will match tags like `committee`, `community`, `comms`, as long as the tag **starts with** the given prefix.
-* You can also combine name and tag filters if needed.
+  matches people tagged `committee`, `comms`, `community`.
 
-This split keeps the UX clear: **“find is for names, search is for tags.”**
-
----
-
-### 7.3 `add` command changes
-
-We made the following changes to `AddCommandParser`:
-
-1. **Year of Study (`y/`) and Faculty (`f/`) are now compulsory.**
-2. We **no longer default** to `Y1` + `School of Computing` inside the parser.
-3. We validate:
-
-  * `y/` must be an integer 1–4 (parser throws otherwise),
-  * `f/` must be non-empty,
-  * `p/` must be a valid Singapore mobile number (8 digits, starts with 8 or 9).
-
-This ensures that the UI can safely display `Y2, School of Computing` without guessing.
-
-**Example:**
-
-```text
-add n/John Doe p/91234567 e/johnd@example.com y/2 f/School of Computing a/Blk 123, #01-01 t/committee
-```
+This makes UG + DG consistent: **“find ≠ search”.**
 
 ---
 
-## 8. Developer Notes on Tests
+### 7.4 Points features
 
-Because we tightened validation on **phone**, many existing AB3-style tests that used short or fake numbers will fail. To fix:
+We added a lightweight points system for participation:
 
-* Update test constants in `CommandTestUtil`:
+* `addpoints INDEX pts/VALUE` – add VALUE to member’s points
+* `minuspoints INDEX pts/VALUE` – subtract VALUE
+* `points INDEX` – **show** member’s current points (does not edit)
+
+This is model-only, so UI just renders `Points: X`.
+
+---
+
+## 8. Testing and Test Updates
+
+Because we tightened phone + made y/f compulsory, several AB3 tests needed updating.
+
+**What we changed:**
+
+1. **Test constants**
 
   * `VALID_PHONE_AMY = "88888888"`
   * `VALID_PHONE_BOB = "99999999"`
-* Update `TypicalPersons` to use valid 8-digit numbers starting with 8 or 9.
-* Update parser tests to include `y/` and `f/` since add now requires them.
+  * Any other phone in test fixtures must be 8 digits starting with 8/9.
 
-This keeps tests consistent with the more realistic constraints we introduced.
+2. **Parser tests**
+
+  * `AddCommandParserTest` must now include `y/` and `f/` in *all* valid examples.
+  * Duplicate-prefix tests must list `y/` and `f/` in the expected error where relevant.
+
+3. **Storage-related tests**
+
+  * In tests where we trigger an `add` to force a save (e.g. in `LogicManagerTest`), the input must now contain **all compulsory prefixes**:
+
+    ```text
+    add n/Amy p/88888888 e/amy@example.com y/1 f/School of Computing a/Blk 123
+    ```
+
+4. **Typical persons**
+
+  * `TypicalPersons` → change phones to valid SG numbers.
 
 ---
 
 ## 9. Editing the data file
 
-ClubTrack data are stored automatically as **JSON** files under:
+ClubTrack stores data in:
 
 ```text
 [JAR location]/data/<listName>.json
 ```
 
-* The default list is stored in:
+* Default list:
 
   ```text
-  [JAR location]/data/default.json
+  data/default.json
   ```
-
-* When you run:
+* After `switch clubtrack` (or any other name):
 
   ```text
-  switch Training_2025_10_20
+  data/clubtrack.json
   ```
 
-  ClubTrack will load/save at:
+Advanced users may edit these JSON files manually.
 
-  ```text
-  [JAR location]/data/Training_2025_10_20.json
-  ```
-
-Advanced users may edit these files directly.
-
-> ⚠️ **Caution:** Invalid JSON or mismatched field names will cause ClubTrack to start with an empty list for that file. Always back up before editing.
+> ⚠️ **Caution:** If the JSON is malformed or fields are missing, ClubTrack will start that list empty the next time it is loaded. Always back up your `data/` folder first.
 
 ---
 
-## 10. Non-Functional Requirements (NFRs)
+## 10. Non-Functional Requirements
 
-1. Runs on any mainstream OS with Java 17+.
-2. Should handle up to 200 members per list without noticeable lag.
-3. Saves after **every** mutating command.
-4. Works offline.
-5. CLI-first and keyboard-friendly.
+1. Runs on any mainstream OS with Java 17 or above.
+2. Should support up to **200 members per list** without noticeable latency.
+3. Data is saved after **every** mutating command.
+4. Should work fully **offline**.
+5. Default data file is **`data/default.json`**.
+6. Switching lists must not affect the data of other lists.
+7. UI should remain responsive while loading a different list.
 
 ---
 
 ## 11. Glossary
 
-* **Active list**: the currently selected member list (e.g. `default`, `Training_2025_10_20`) – determines which JSON file is read/written.
-* **Points**: an integer score attached to a member, used for participation.
-* **Tag prefix search**: a search where `t/com` matches tags starting with `com...`.
+* **Active list** – the currently selected member list (one JSON file).
+* **Tag prefix** – partial tag string used for `search`, e.g. `t/com` → `committee`.
+* **Attendance** – a boolean flag (`isPresent`) stored inside `Person`.
+* **Points** – integer counter for participation.
+* **Exco** – executive committee member.
 
 ---
 
-That’s the full DG section you can drop into your `DeveloperGuide.md` and it will reference your existing images in `diagrams/`.
+## 12. Acknowledgements
+
+* Project structure, Gradle setup, JSON storage utilities, and some diagrams are **adapted from** the official **AddressBook Level 3 (AB3)** project by the CS2103T teaching team.
+* Some command patterns (parser + command + command test) follow AB3’s recommended structure.
+* Original AB3 documentation: credit to CS2103T teaching team.
+
+---
+
+## Appendix A – Instructions for Manual Testing
+
+### A.1 Launch and shutdown
+
+1. Ensure you have Java 17.
+2. Run `java -jar ClubTrack.jar`.
+3. Verify that a `data/default.json` file is created (if it didn’t exist).
+4. Close the window → app should exit cleanly.
+
+### A.2 Adding a member
+
+1. Test command:
+
+   ```text
+   add n/Amy Bee p/88888888 e/amy@example.com y/2 f/School of Computing a/Blk 123
+   ```
+
+2. Expected: new card appears with:
+
+  * name “Amy Bee”
+  * `Y2 - School of Computing`
+  * phone `88888888`
+  * `Points: 0`
+
+3. Error case:
+
+   ```text
+   add n/Bob p/123 e/bob@example.com y/2 f/SOC a/Tampines
+   ```
+
+   Expected: error about phone constraints.
+
+### A.3 Switching lists
+
+1. Run:
+
+   ```text
+   switch Training_2025_10_20
+   ```
+
+2. Expected:
+
+  * status message says list switched / created
+  * list view becomes empty (for a new list)
+
+3. Add someone here:
+
+   ```text
+   add n/John p/91234567 e/john@example.com y/1 f/SoC a/UTown
+   ```
+
+4. Switch back:
+
+   ```text
+   switch default
+   ```
+
+   Expected: you see the original list.
+   Switch again to `Training_2025_10_20` → John is still there.
+
+### A.4 Searching
+
+1. Add a person with tag `Logistics` and one with tag `LogiCore`.
+
+2. Run:
+
+   ```text
+   search t/log
+   ```
+
+   Expected: both appear (prefix match).
+
+3. Run:
+
+   ```text
+   find log
+   ```
+
+   Expected: **does not** return them unless “log” appears in their **name**.
+
+### A.5 Clearing current list
+
+1. Switch to a test list:
+
+   ```text
+   switch TestList
+   add n/Test p/91234567 e/test@example.com y/1 f/SoC a/Biz
+   clear
+   ```
+2. Expected: current list becomes empty; other lists are **not** affected.
+
+---
+
+## Appendix B – Effort
+
+**Team size:** 5
+
+1. **What was harder than AB3?**
+
+  * Supporting **multiple JSON files** (one per list) without changing too much of AB3’s storage code.
+  * Making `y/` and `f/` compulsory → required a wave of changes in parser tests, typical persons, and logic tests.
+  * Tightening phone validation → broke many upstream tests.
+
+2. **What we reused:**
+
+  * AB3 command–parser–storage structure
+  * AB3 diagram style and sectioning
+  * AB3 test patterns
+
+3. **What we added:**
+
+  * `SwitchCommand` + model/state to remember active list name
+  * UI changes to display year/faculty/points
+  * Tag-prefix search
+
+---
+
+## Appendix C – Planned Enhancements
+
+**Team size:** 5
+
+1. **List existing lists**
+   Rationale: since we now create JSON files on demand, users should be able to run something like `lists` to see available roster files.
+
+2. **Per-event attendance history**
+   Rationale: currently attendance is a simple boolean. We plan to support per-session logs (date → present/absent).
+
+3. **Role-based tags**
+   Rationale: Some tags are “roles” (President, Secretary). We can display them differently in the UI.
+
+4. **Import from CSV**
+   Rationale: many clubs keep members in Google Sheets. A CSV import would reduce data entry.
