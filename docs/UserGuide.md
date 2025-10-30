@@ -131,8 +131,9 @@ A member can have any number of tags (including 0), e.g. their role or committee
 
 **Examples:**
 * `add n/John Doe p/98765432 e/johnd@example.com y/3 f/SOC a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/Treasurer e/betsycrowe@example.com y/2 f/CDE a/Newgate Prison p/1234567 t/Logistics`
-
+* `add n/Betsy Crowe p/98761234  e/betsycrowe@example.com y/2 f/CDE a/Newgate Prison  t/Logistics t/Treasurer`
+* `add n/John Cena p/91823498  e/johncena@example.com y/1 f/FASS a/your mom's house t/teacher t/Colleague`
+* `add n/tommy shelby p/89763647 e/tommyshelby@example.com y/1 f/FOS a/The Garrison`
 ---
 
 ### Listing all members : `list`
