@@ -1,8 +1,6 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ANY;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.List;
@@ -11,7 +9,6 @@ import java.util.function.Predicate;
 import seedu.address.logic.commands.SearchCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.predicates.NamePrefixPredicate;
 import seedu.address.model.person.predicates.TagsPredicate;
 
 /**
@@ -19,7 +16,7 @@ import seedu.address.model.person.predicates.TagsPredicate;
  * <p>
  * Expected format:
  * <pre>
- *   search [n/NAME_QUERY] [t/TAG]... [any/]
+ *   search t/TAG_PREFIX [t/TAG_PREFIX]...
  * </pre>
  * Constraints:
  * <ul>
@@ -33,38 +30,24 @@ public class SearchCommandParser implements Parser<SearchCommand> {
 
     @Override
     public SearchCommand parse(String args) throws ParseException {
-        ArgumentMultimap map = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG, PREFIX_ANY);
+        ArgumentMultimap map = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
 
         // Disallow stray text before prefixes.
         if (!map.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SearchCommand.MESSAGE_USAGE));
         }
 
-        // Disallow duplicate name qualifiers.
-        map.verifyNoDuplicatePrefixesFor(PREFIX_NAME);
-
-        String nameQuery = map.getValue(PREFIX_NAME).orElse("").trim();
-
         List<String> tagValues = map.getAllValues(PREFIX_TAG).stream()
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .toList();
 
-        boolean anyTags = map.getValue(PREFIX_ANY).isPresent();
-
-        // Require at least one filter.
-        if (nameQuery.isEmpty() && tagValues.isEmpty()) {
+        // Require at least one tag prefix.
+        if (tagValues.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SearchCommand.MESSAGE_USAGE));
         }
 
-        // any/ only makes sense with at least one tag.
-        if (anyTags && tagValues.isEmpty()) {
-            throw new ParseException("any/ requires at least one t/TAG.");
-        }
-
-        Predicate<Person> predicate =
-                new NamePrefixPredicate(nameQuery)
-                        .and(new TagsPredicate(tagValues, anyTags));
+        Predicate<Person> predicate = new TagsPredicate(tagValues, false /* AND semantics */);
 
         return new SearchCommand(predicate);
     }

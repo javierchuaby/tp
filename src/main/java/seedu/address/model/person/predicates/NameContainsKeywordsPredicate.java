@@ -3,12 +3,12 @@ package seedu.address.model.person.predicates;
 import java.util.List;
 import java.util.function.Predicate;
 
-import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
 
 /**
- * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
+ * Tests that a {@code Person}'s fields (except tags) contain any of the given keywords, case-insensitively.
+ * Fields checked: name, phone, email, address, faculty, year of study.
  */
 public class NameContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
@@ -19,8 +19,25 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        return keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword));
+        String name = person.getName().fullName;
+        String phone = person.getPhone().toString();
+        String email = person.getEmail().toString();
+        String address = person.getAddress().toString();
+        String faculty = String.valueOf(person.getFaculty());
+        String year = String.valueOf(person.getYearOfStudy());
+
+        return keywords.stream().anyMatch(raw -> {
+            String kw = raw == null ? "" : raw.trim().toLowerCase();
+            if (kw.isEmpty()) {
+                return false;
+            }
+            return name.toLowerCase().contains(kw)
+                    || phone.toLowerCase().contains(kw)
+                    || email.toLowerCase().contains(kw)
+                    || address.toLowerCase().contains(kw)
+                    || faculty.toLowerCase().contains(kw)
+                    || year.toLowerCase().contains(kw);
+        });
     }
 
     @Override

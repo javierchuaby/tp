@@ -8,30 +8,24 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Filters and lists members in ClubTrack by name and/or tags.
+ * Filters and lists members in ClubTrack by tags only.
  * <p>
  * Command word: {@code search}
  * <p>
  * Usage:
  * <pre>
- *   search [n/NAME_QUERY] [t/TAG]... [any/]
+ *   search t/TAG_PREFIX [t/TAG_PREFIX]...
  * </pre>
  * Rules:
  * <ul>
- *   <li>{@code n/NAME_QUERY}: Case-insensitive, token-prefix match on the member's name
- *       (e.g., {@code n/char oli} matches “Charlotte Oliveira”).</li>
- *   <li>{@code t/TAG}: Repeatable; matches members containing the specified tag(s).
- *       By default, all listed tags must be present (logical AND).</li>
- *   <li>{@code any/}: Optional flag that changes tag matching from AND to OR
- *       (member must contain <em>any</em> of the given tags).</li>
- *   <li>At least one of {@code n/} or {@code t/} must be supplied.</li>
+ *   <li>{@code t/TAG_PREFIX}: Repeatable; case-insensitive prefix on tag names.
+ *       All provided prefixes must match at least one tag each (AND semantics).</li>
+ *   <li>Only {@code t/} is allowed for this command.</li>
  * </ul>
  * Examples:
  * <pre>
- *   search n/char
- *   search t/treasurer t/committee
- *   search n/david t/family
- *   search t/dance t/logistics any/
+ *   search t/tre
+ *   search t/tre t/com
  * </pre>
  */
 public class SearchCommand extends Command {
