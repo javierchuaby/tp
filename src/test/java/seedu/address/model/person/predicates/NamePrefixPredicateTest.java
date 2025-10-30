@@ -14,7 +14,7 @@ import seedu.address.testutil.PersonBuilder;
 public class NamePrefixPredicateTest {
 
     @Test
-    public void constructor_nullOrBlankQuery_matchesAll() {
+    public void constructor_nullOrBlank_matchesAll() {
         NamePrefixPredicate pNull = new NamePrefixPredicate((String) null);
         NamePrefixPredicate pBlank = new NamePrefixPredicate("   ");
         Person person = new PersonBuilder().withName("Alice Bob").build();
@@ -24,7 +24,7 @@ public class NamePrefixPredicateTest {
     }
 
     @Test
-    public void test_singleAndMultipleTokens_matchingBehavior() {
+    public void singleAndMultipleTokens_matchingBehavior() {
         Person person = new PersonBuilder().withName("Charlotte Oliveira").build();
 
         // single token prefix
@@ -41,7 +41,7 @@ public class NamePrefixPredicateTest {
     }
 
     @Test
-    public void equals_hashCode_behaviour() {
+    public void equalsAndHashCode_behavesCorrectly() {
         NamePrefixPredicate a = new NamePrefixPredicate("Alice Bob");
         NamePrefixPredicate b = new NamePrefixPredicate(List.of("alice", "bob"));
         NamePrefixPredicate c = new NamePrefixPredicate("Different");
