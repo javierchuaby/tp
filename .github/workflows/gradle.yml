@@ -39,17 +39,6 @@ jobs:
       - name: Build and check with Gradle
         run: ./gradlew test jacocoTestReport coverage
 
-      - name: Generate JaCoCo Report
-        run: ./gradlew test jacocoTestReport
-
-      - name: Deploy Coverage Report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/master'
-        with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: ./build/reports/jacoco/test/html
-            destination_dir: jacoco
-
       - name: Upload coverage reports to Codecov
         if: runner.os == 'Linux'
         uses: codecov/codecov-action@v4
