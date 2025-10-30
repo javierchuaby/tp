@@ -4,6 +4,7 @@
 
 !include ModelClassDiagram.puml
 !include LogicClassDiagram.puml
+!include ParserClassDiagram.puml
 !include StorageClassDiagram.puml
 !include UiClassDiagram.puml
 
