@@ -12,7 +12,8 @@ public class AddPointsCommandParserTest {
     public void parse_tooLargePoints_throwsParseException() {
         AddPointsCommandParser parser = new AddPointsCommandParser();
         // Test with points value that exceeds maximum allowed
-        assertThrows(ParseException.class, () -> parser.parse("1 p/999999999"));
+        // Use a value larger than Integer.MAX_VALUE to trigger overflow handling
+        assertThrows(ParseException.class, () -> parser.parse("1 pts/2147483648"));
     }
 
 }
