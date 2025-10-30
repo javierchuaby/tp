@@ -1,3 +1,9 @@
+---
+
+layout: page
+title: Developer Guide
+---
+
 ## 1. Introduction
 
 This Developer Guide describes the architecture, design, and implementation details of **ClubTrack**, a desktop app for university club executives to manage members, track attendance, and award participation points quickly via a CLI-first workflow.
