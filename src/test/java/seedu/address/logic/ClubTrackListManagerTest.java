@@ -30,7 +30,7 @@ import seedu.address.storage.Storage;
 public class ClubTrackListManagerTest {
 
     // update test expectation to match app's default data file name
-    private static final Path DEFAULT_PATH = Paths.get("data", "clubtrack.json");
+    private static final Path DEFAULT_PATH = Paths.get("data", "default.json");
 
     private ClubTrackListManager listManager;
     private FakeStorage storage;
@@ -108,6 +108,26 @@ public class ClubTrackListManagerTest {
         assertTrue(storage.wasSaved(DEFAULT_PATH));
         ReadOnlyClubTrack savedDefault = storage.getSaved(DEFAULT_PATH);
         assertEquals(model.getClubTrack(), savedDefault);
+    }
+
+    @Test
+    public void removeList_cannotRemoveDefault_throwsCommandException() throws Exception {
+        // Attempting to remove the default list should be prohibited
+        Path defaultPath = DEFAULT_PATH;
+        // Put default data in storage so everything is set up
+        ReadOnlyClubTrack defaultAb = SampleDataUtil.getSampleAddressBook();
+        storage.put(defaultPath, defaultAb);
+
+        model.setClubTrackFilePath(defaultPath);
+        model.setClubTrack(defaultAb);
+
+        try {
+            listManager.removeList("default", model);
+            // If no exception thrown, fail the test
+            org.junit.jupiter.api.Assertions.fail("Expected CommandException when removing default list");
+        } catch (seedu.address.logic.commands.exceptions.CommandException e) {
+            // expected
+        }
     }
 
     /*

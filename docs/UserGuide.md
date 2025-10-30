@@ -393,7 +393,7 @@ There is no need to save manually.
 ### Editing the data file
 
 ClubTrack data are stored automatically as a JSON file at:  
-`[JAR file location]/data/clubtrack.json`
+`[JAR file location]/data/default.json`
 
 Advanced users may edit this file directly.
 
