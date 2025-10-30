@@ -85,13 +85,17 @@ public class FindCommandTest {
         NameContainsKeywordsPredicate predicateUpper = preparePredicate("Y2");
         FindCommand commandUpper = new FindCommand(predicateUpper);
         expectedModel.updateFilteredPersonList(predicateUpper);
-        assertCommandSuccess(commandUpper, model, String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()), expectedModel);
+        assertCommandSuccess(commandUpper, model,
+                String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()),
+                expectedModel);
         expectedModel.updateFilteredPersonList(p -> true);
 
         NameContainsKeywordsPredicate predicateLower = preparePredicate("y2");
         FindCommand commandLower = new FindCommand(predicateLower);
         expectedModel.updateFilteredPersonList(predicateLower);
-        assertCommandSuccess(commandLower, model, String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()), expectedModel);
+        assertCommandSuccess(commandLower, model,
+                String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()),
+                expectedModel);
     }
 
     @Test
@@ -112,16 +116,20 @@ public class FindCommandTest {
 
     @Test
     public void execute_emailAndFacultySearch_personFound() {
-        NameContainsKeywordsPredicate emailPredicate = preparePredicate("bob@example.com");
+        NameContainsKeywordsPredicate emailPredicate = preparePredicate("alice@example.com");
         FindCommand emailCommand = new FindCommand(emailPredicate);
         expectedModel.updateFilteredPersonList(emailPredicate);
-        assertCommandSuccess(emailCommand, model, String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()), expectedModel);
+        assertCommandSuccess(emailCommand, model,
+                String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()),
+                expectedModel);
         expectedModel.updateFilteredPersonList(p -> true);
 
-        NameContainsKeywordsPredicate facultyPredicate = preparePredicate("Computing");
+        NameContainsKeywordsPredicate facultyPredicate = preparePredicate("School of Computing");
         FindCommand facultyCommand = new FindCommand(facultyPredicate);
         expectedModel.updateFilteredPersonList(facultyPredicate);
-        assertCommandSuccess(facultyCommand, model, String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()), expectedModel);
+        assertCommandSuccess(facultyCommand, model,
+                String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()),
+                expectedModel);
     }
 
     @Test
