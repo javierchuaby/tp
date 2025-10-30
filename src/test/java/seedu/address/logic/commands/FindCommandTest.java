@@ -54,7 +54,12 @@ public class FindCommandTest {
 
     @Test
     public void execute_zeroKeywords_noPersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        String expectedMessage = "No members found! Please recheck your input keywords.\n"
+            + "Examples:\n"
+            + "  find Alice\n"
+            + "  find Computing\n"
+            + "  find Y2\n"
+            + "  find bob@example.com";
         NameContainsKeywordsPredicate predicate = preparePredicate(" ");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -72,6 +77,59 @@ public class FindCommandTest {
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(CARL), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_caseInsensitiveYearOfStudyKeywords_personFound() {
+        // Assuming TypicalPersons contains at least 1 person with yearOfStudy==2
+        NameContainsKeywordsPredicate predicateUpper = preparePredicate("Y2");
+        FindCommand commandUpper = new FindCommand(predicateUpper);
+        expectedModel.updateFilteredPersonList(predicateUpper);
+        assertCommandSuccess(commandUpper, model,
+                String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()),
+                expectedModel);
+        expectedModel.updateFilteredPersonList(p -> true);
+
+        NameContainsKeywordsPredicate predicateLower = preparePredicate("y2");
+        FindCommand commandLower = new FindCommand(predicateLower);
+        expectedModel.updateFilteredPersonList(predicateLower);
+        assertCommandSuccess(commandLower, model,
+                String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()),
+                expectedModel);
+    }
+
+    @Test
+    public void execute_invalidSpelling_noPersonFoundWithMessage() {
+        String input = "YeaarTwo";
+        String expectedMessage = "No members found! Please recheck your input keywords.\n"
+            + "Examples:\n"
+            + "  find Alice\n"
+            + "  find Computing\n"
+            + "  find Y2\n"
+            + "  find bob@example.com";
+
+        NameContainsKeywordsPredicate predicate = preparePredicate(input);
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_emailAndFacultySearch_personFound() {
+        NameContainsKeywordsPredicate emailPredicate = preparePredicate("alice@example.com");
+        FindCommand emailCommand = new FindCommand(emailPredicate);
+        expectedModel.updateFilteredPersonList(emailPredicate);
+        assertCommandSuccess(emailCommand, model,
+                String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()),
+                expectedModel);
+        expectedModel.updateFilteredPersonList(p -> true);
+
+        NameContainsKeywordsPredicate facultyPredicate = preparePredicate("School of Computing");
+        FindCommand facultyCommand = new FindCommand(facultyPredicate);
+        expectedModel.updateFilteredPersonList(facultyPredicate);
+        assertCommandSuccess(facultyCommand, model,
+                String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size()),
+                expectedModel);
     }
 
     @Test

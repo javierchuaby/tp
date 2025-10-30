@@ -31,12 +31,19 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
             if (kw.isEmpty()) {
                 return false;
             }
+            // Match Y2, y2, Y3, y3, etc. to numeric years
+            boolean yearPrefixMatch = false;
+            if (kw.matches("y\\d+")) {
+                String numberPart = kw.substring(1);
+                yearPrefixMatch = numberPart.equals(year);
+            }
             return name.toLowerCase().contains(kw)
                     || phone.toLowerCase().contains(kw)
                     || email.toLowerCase().contains(kw)
                     || address.toLowerCase().contains(kw)
                     || faculty.toLowerCase().contains(kw)
-                    || year.toLowerCase().contains(kw);
+                    || year.toLowerCase().contains(kw)
+                    || yearPrefixMatch;
         });
     }
 

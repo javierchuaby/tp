@@ -91,43 +91,74 @@ public class MainWindow extends UiPart<Stage> {
      */
     private void setAccelerator(MenuItem menuItem, KeyCombination keyCombination) {
         menuItem.setAccelerator(keyCombination);
+        addTextInputControlEventFilter(menuItem, keyCombination);
+    }
 
-        /*
-         * TODO: the code below can be removed once the bug reported here
-         * https://bugs.openjdk.java.net/browse/JDK-8131666
-         * is fixed in later version of SDK.
-         *
-         * According to the bug report, TextInputControl (TextField, TextArea) will
-         * consume function-key events. Because CommandBox contains a TextField, and
-         * ResultDisplay contains a TextArea, thus some accelerators (e.g F1) will
-         * not work when the focus is in them because the key event is consumed by
-         * the TextInputControl(s).
-         *
-         * For now, we add following event filter to capture such key events and open
-         * help window purposely so to support accelerators even when focus is
-         * in CommandBox or ResultDisplay.
-         */
+    /**
+     * Adds an event filter to handle accelerators when focus is in TextInputControl.
+     * This is a workaround for JDK bug: https://bugs.openjdk.java.net/browse/JDK-8131666
+     */
+    private void addTextInputControlEventFilter(MenuItem menuItem, KeyCombination keyCombination) {
         getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getTarget() instanceof TextInputControl && keyCombination.match(event)) {
-                menuItem.getOnAction().handle(new ActionEvent());
-                event.consume();
+            if (isTextInputWithMatchingKey(event, keyCombination)) {
+                executeMenuItemAction(menuItem, event);
             }
         });
+    }
+
+    /**
+     * Checks if the event is from a TextInputControl and matches the key combination.
+     */
+    private boolean isTextInputWithMatchingKey(KeyEvent event, KeyCombination keyCombination) {
+        return event.getTarget() instanceof TextInputControl && keyCombination.match(event);
+    }
+
+    /**
+     * Executes the menu item action and consumes the event.
+     */
+    private void executeMenuItemAction(MenuItem menuItem, KeyEvent event) {
+        menuItem.getOnAction().handle(new ActionEvent());
+        event.consume();
     }
 
     /**
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
+        fillPersonListPanel();
+        fillResultDisplay();
+        fillStatusBarFooter();
+        fillCommandBox();
+    }
+
+    /**
+     * Initializes and fills the person list panel.
+     */
+    private void fillPersonListPanel() {
         personListPanel = new PersonListPanel(logic.getFilteredPersonList());
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+    }
 
+    /**
+     * Initializes and fills the result display.
+     */
+    private void fillResultDisplay() {
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
+    }
 
-        statusBarFooter = new StatusBarFooter(logic.getAddressBookFilePath());
+    /**
+     * Initializes and fills the status bar footer.
+     */
+    private void fillStatusBarFooter() {
+        statusBarFooter = new StatusBarFooter(logic.getClubTrackFilePath());
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
+    }
 
+    /**
+     * Initializes and fills the command box.
+     */
+    private void fillCommandBox() {
         CommandBox commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
     }
@@ -138,6 +169,13 @@ public class MainWindow extends UiPart<Stage> {
     private void setWindowDefaultSize(GuiSettings guiSettings) {
         primaryStage.setHeight(guiSettings.getWindowHeight());
         primaryStage.setWidth(guiSettings.getWindowWidth());
+        setWindowPosition(guiSettings);
+    }
+
+    /**
+     * Sets the window position based on guiSettings if coordinates are available.
+     */
+    private void setWindowPosition(GuiSettings guiSettings) {
         if (guiSettings.getWindowCoordinates() != null) {
             primaryStage.setX(guiSettings.getWindowCoordinates().getX());
             primaryStage.setY(guiSettings.getWindowCoordinates().getY());
@@ -149,11 +187,18 @@ public class MainWindow extends UiPart<Stage> {
      */
     @FXML
     public void handleHelp() {
-        if (!helpWindow.isShowing()) {
-            helpWindow.show();
-        } else {
+        if (isHelpWindowShowing()) {
             helpWindow.focus();
+        } else {
+            helpWindow.show();
         }
+    }
+
+    /**
+     * Checks if the help window is currently showing.
+     */
+    private boolean isHelpWindowShowing() {
+        return helpWindow.isShowing();
     }
 
     /**
@@ -194,28 +239,52 @@ public class MainWindow extends UiPart<Stage> {
      */
     private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
         try {
-            CommandResult commandResult = logic.execute(commandText);
-            logger.info("Result: " + commandResult.getFeedbackToUser());
-            resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
-
-            if (commandResult.isShowHelp()) {
-                handleHelp();
-            }
-
-            if (commandResult.isExit()) {
-                handleExit();
-            }
-
-            // Update the status bar to reflect the current data file path (may have changed due to switch/remove)
-            if (statusBarFooter != null) {
-                statusBarFooter.setSaveLocation(logic.getAddressBookFilePath());
-            }
-
+            CommandResult commandResult = executeCommandAndGetResult(commandText);
+            handleCommandResult(commandResult);
+            updateStatusBar();
             return commandResult;
         } catch (CommandException | ParseException e) {
-            logger.info("An error occurred while executing command: " + commandText);
-            resultDisplay.setFeedbackToUser(e.getMessage());
+            handleCommandError(commandText, e);
             throw e;
         }
+    }
+
+    /**
+     * Executes the command and returns the result.
+     */
+    private CommandResult executeCommandAndGetResult(String commandText) throws CommandException, ParseException {
+        CommandResult commandResult = logic.execute(commandText);
+        logger.info("Result: " + commandResult.getFeedbackToUser());
+        resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
+        return commandResult;
+    }
+
+    /**
+     * Handles the command result by showing help or exiting if needed.
+     */
+    private void handleCommandResult(CommandResult commandResult) {
+        if (commandResult.isShowHelp()) {
+            handleHelp();
+        }
+        if (commandResult.isExit()) {
+            handleExit();
+        }
+    }
+
+    /**
+     * Updates the status bar with the current file path.
+     */
+    private void updateStatusBar() {
+        if (statusBarFooter != null) {
+            statusBarFooter.setSaveLocation(logic.getClubTrackFilePath());
+        }
+    }
+
+    /**
+     * Handles command execution errors.
+     */
+    private void handleCommandError(String commandText, Exception e) {
+        logger.info("An error occurred while executing command: " + commandText);
+        resultDisplay.setFeedbackToUser(e.getMessage());
     }
 }

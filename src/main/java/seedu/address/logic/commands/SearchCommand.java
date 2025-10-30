@@ -34,16 +34,12 @@ public class SearchCommand extends Command {
     public static final String COMMAND_WORD = "search";
 
     /** Usage message shown when the input format is invalid. */
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Filters members by name and/or tags.\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Filters members by tags only.\n"
             + "Parameters:\n"
-            + "  [n/NAME_QUERY]   token-prefix match (case-insensitive)\n"
-            + "  [t/TAG]...       repeatable; AND by default; add any/ for OR\n"
-            + "  [any/]           optional; makes t/ behave as OR\n"
-            + "Examples:\n"
-            + "  search n/char\n"
-            + "  search t/treasurer t/committee\n"
-            + "  search n/david t/family\n"
-            + "  search t/dance t/logistics any/";
+            + " search t/ [tags]... (repeatable)\n"
+            + "Correct Examples:\n"
+            + "  search t/treasurer t/present\n"
+            + "  search t/dance t/logistics";
 
     private static final String MESSAGE_RESULT = "%d member(s) found";
 
