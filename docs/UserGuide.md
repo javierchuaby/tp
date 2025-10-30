@@ -2,7 +2,7 @@
 
 layout: page
 title: User Guide
------------------
+---
 
 ClubTrack is a **desktop app for managing club members and attendance, optimized for use via a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI).
 
