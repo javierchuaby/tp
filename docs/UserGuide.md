@@ -3,8 +3,25 @@ layout: page
 title: User Guide
 ---
 
-ClubTrack is a **desktop app for managing club members and attendance, optimized for use via a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI).  
-Whether you’re a **CCA leader, team captain, or event coordinator**, ClubTrack helps you track your members, attendance, and points — with less clicking and more doing.
+ClubTrack is a **desktop app for managing club members and attendance, optimized for use via a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI).
+
+## Target User Profile
+
+ClubTrack is designed for **university student club executive committee (exco) members** who need to:
+- Manage large member databases (50-200 members)
+- Track attendance across multiple events and sessions
+- Assign roles and responsibilities to members
+- Monitor member participation through points systems
+
+**Ideal users are:**
+- Comfortable with command-line interfaces
+- Need to perform member management tasks quickly
+- Prefer keyboard input over mouse clicking
+- Manage active clubs with regular events and meetings
+
+## Value Proposition
+
+ClubTrack enables club executives to **manage members, track attendance, and assign points up to 3x faster** than traditional spreadsheet-based solutions through an intuitive command-line interface optimized for power users.
 
 * Table of Contents
   {:toc}
@@ -49,7 +66,7 @@ Whether you’re a **CCA leader, team captain, or event coordinator**, ClubTrack
    java -jar ClubTrack.jar
    ```
    A GUI similar to the one below should appear in a few seconds. Note how the app contains some sample data.  
-   ![Ui](images/Ui-ClubTrack-Updated.png)
+   ![Ui](images/Ui-ClubTrack.png)
 
 6. **Try your first command**
 
