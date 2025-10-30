@@ -141,14 +141,21 @@ Use case ends.
 * **Active Member**: A club member who regularly attends events and participates in club activities
 * **Financial Record**: Transaction logs including membership fees, expenses, and other monetary activities
 
-## Class diagram
+## Architecture
 
-The following class diagram shows the main high-level components and relationships in the application (logic, model, storage, UI and core domain classes), available at `docs/diagrams/class_diagram.puml`.
+### Class diagram
+
+The following class diagram shows the main high-level components and relationships in the application. It has been updated to reflect the new features beyond the original AB3:
 
 ![Class diagram](./diagrams/class_diagram.png)
 
-To render the PNG locally (if you don't have the PNG yet), run:
+**Key Extensions from AB3:**
+- `Person` class now includes `yearOfStudy`, `faculty`, `isPresent`, and `points` fields
+- New `Points` value object for encapsulating point operations
+- Enhanced command set including `TagCommand`, `UntagCommand`, `SwitchCommand`, `AddPointsCommand`, `MinusPointsCommand`, and `PointsCommand`
+- `SearchCommand` replaces basic find functionality with advanced filtering
 
+To render the PNG locally, run:
 ```bash
 # install plantuml (macOS example using Homebrew) if you don't have it:
 # brew install plantuml
@@ -156,4 +163,3 @@ To render the PNG locally (if you don't have the PNG yet), run:
 # render the diagram to PNG
 plantuml docs/diagrams/ClassDiagram.puml
 ```
-
