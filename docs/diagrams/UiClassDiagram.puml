@@ -1,75 +1,61 @@
 @startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor UI_COLOR_T4
+skinparam classBackgroundColor UI_COLOR
 
-' ===== UI slice =====
-
-interface Ui {
-+ start(primaryStage : Stage)
+package UI <<Rectangle>>{
+Class "<<interface>>\nUi" as Ui
+Class "{abstract}\nUiPart" as UiPart
+Class UiManager
+Class MainWindow
+Class HelpWindow
+Class ResultDisplay
+Class PersonListPanel
+Class PersonCard
+Class StatusBarFooter
+Class CommandBox
 }
 
-abstract class UiPart<T> {
-+ getRoot() : T
+package Model <<Rectangle>> {
+Class HiddenModel #FFFFFF
 }
 
-class UiManager {
-- logic : Logic
-- mainWindow : MainWindow
-+ start(primaryStage : Stage)
-+ getClubTrack() : ReadOnlyClubTrack
+package Logic <<Rectangle>> {
+Class HiddenLogic #FFFFFF
 }
 
-class MainWindow {
-- primaryStage : Stage
-- logic : Logic
-- personListPanel : PersonListPanel
-- resultDisplay : ResultDisplay
-- helpWindow : HelpWindow
-+ fillInnerParts()
-+ show()
-}
+Class HiddenOutside #FFFFFF
+HiddenOutside ..> Ui
 
-class PersonListPanel {
-+ PersonListPanel(personList : ObservableList<Person>)
-}
+UiManager .left.|> Ui
+UiManager -down-> "1" MainWindow
+MainWindow *-down->  "1" CommandBox
+MainWindow *-down-> "1" ResultDisplay
+MainWindow *-down-> "1" PersonListPanel
+MainWindow *-down-> "1" StatusBarFooter
+MainWindow --> "0..1" HelpWindow
 
-class PersonCard {
-+ PersonCard(person : Person, displayedIndex : int)
-}
+PersonListPanel -down-> "*" PersonCard
 
-class CommandBox {
-+ CommandBox(executor : CommandExecutor)
-}
+MainWindow -left-|> UiPart
 
-class ResultDisplay {
-+ setFeedbackToUser(text : String)
-}
+ResultDisplay --|> UiPart
+CommandBox --|> UiPart
+PersonListPanel --|> UiPart
+PersonCard --|> UiPart
+StatusBarFooter --|> UiPart
+HelpWindow --|> UiPart
 
-class StatusBarFooter {
-+ StatusBarFooter(saveLocation : Path)
-}
+' AB3-level dependency to Model kept (PersonCard renders extra fields in ClubTrack).
+PersonCard ..> Model
+UiManager -right-> Logic
+MainWindow -left-> Logic
 
-class HelpWindow {
-+ show()
-+ hide()
-+ focus()
-}
+PersonListPanel -[hidden]left- HelpWindow
+HelpWindow -[hidden]left- CommandBox
+CommandBox -[hidden]left- ResultDisplay
+ResultDisplay -[hidden]left- StatusBarFooter
 
-' Inheritance/implementation
-UiManager ..|> Ui
-UiPart <|-- MainWindow
-UiPart <|-- PersonListPanel
-UiPart <|-- PersonCard
-UiPart <|-- CommandBox
-UiPart <|-- ResultDisplay
-UiPart <|-- StatusBarFooter
-UiPart <|-- HelpWindow
-
-' Composition/containment
-UiManager "1" *-- "1" MainWindow
-MainWindow "1" *-- "1" CommandBox
-MainWindow "1" *-- "1" ResultDisplay
-MainWindow "1" *-- "1" PersonListPanel
-MainWindow "1" *-- "1" StatusBarFooter
-MainWindow "1" *-- "0..1" HelpWindow
-PersonListPanel "1" *-- "*" PersonCard
-
+MainWindow -[hidden]-|> UiPart
 @enduml
