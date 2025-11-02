@@ -20,12 +20,29 @@ import seedu.address.model.person.Tag;
  */
 public class ParserUtil {
 
+    /**
+     * Maximum lengths and corresponding error messages for selected fields.
+     * These caps harden the parser against excessively long inputs during PE/testing.
+     * Keep caps here (ParserUtil) for now; move into value objects post-freeze.
+     */
+    public static final int NAME_MAX_LEN = 100;
+    public static final int ADDRESS_MAX_LEN = 200;
+    public static final int FACULTY_MAX_LEN = 100;
+    public static final int EMAIL_MAX_LEN = 254;
+
+    /**
+     * Error messages corresponding to the length caps above. Kept here so
+     * all ParserUtil validations surface consistent, user-facing messages.
+     */
+    public static final String MESSAGE_NAME_TOO_LONG = "Name is too long (max 100 characters).";
+    public static final String MESSAGE_ADDRESS_TOO_LONG = "Address is too long (max 200 characters).";
+    public static final String MESSAGE_FACULTY_TOO_LONG = "Faculty is too long (max 100 characters).";
+    public static final String MESSAGE_EMAIL_TOO_LONG = "Email is too long (max 254 characters).";
+
     /** Message used when an index string is not a non-zero unsigned integer. */
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
-
     /** Message used when a year of study is missing/invalid (non-integer or out of allowed range). */
     public static final String MESSAGE_INVALID_YOS = "Year of study must be an integer between 1 and 5.";
-
     /** Message used when a faculty string is empty after trimming. */
     public static final String MESSAGE_INVALID_FACULTY = "Faculty cannot be empty.";
 
@@ -52,6 +69,9 @@ public class ParserUtil {
     public static Name parseName(String name) throws ParseException {
         requireNonNull(name);
         String trimmedName = name.trim();
+        if (trimmedName.length() > NAME_MAX_LEN) {
+            throw new ParseException(MESSAGE_NAME_TOO_LONG);
+        }
         if (!Name.isValidName(trimmedName)) {
             throw new ParseException(Name.MESSAGE_CONSTRAINTS);
         }
@@ -82,6 +102,9 @@ public class ParserUtil {
     public static Address parseAddress(String address) throws ParseException {
         requireNonNull(address);
         String trimmedAddress = address.trim();
+        if (trimmedAddress.length() > ADDRESS_MAX_LEN) {
+            throw new ParseException(MESSAGE_ADDRESS_TOO_LONG);
+        }
         if (!Address.isValidAddress(trimmedAddress)) {
             throw new ParseException(Address.MESSAGE_CONSTRAINTS);
         }
@@ -97,6 +120,9 @@ public class ParserUtil {
     public static Email parseEmail(String email) throws ParseException {
         requireNonNull(email);
         String trimmedEmail = email.trim();
+        if (trimmedEmail.length() > EMAIL_MAX_LEN) {
+            throw new ParseException(MESSAGE_EMAIL_TOO_LONG);
+        }
         if (!Email.isValidEmail(trimmedEmail)) {
             throw new ParseException(Email.MESSAGE_CONSTRAINTS);
         }
@@ -104,13 +130,12 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String yearOfStudy} into an {@code int}.
-     * Leading and trailing whitespaces will be trimmed.
+     * Parses a {@code String yearOfStudy} into an {@code int}. Trims whitespace.
+     * Valid values are integers in {@code [1, 5]}.
      *
-     * <p>Throws a single, consistent message for both non-integer values and out-of-range values,
-     * matching test expectations.</p>
-     *
-     * @throws ParseException if the given {@code yearOfStudy} is not a valid integer in the range [1, 4].
+     * @param yearOfStudy raw user input (e.g., "2").
+     * @return parsed year as {@code int}.
+     * @throws ParseException if the input is not an integer in {@code [1, 5]}.
      */
     public static int parseYearOfStudy(String yearOfStudy) throws ParseException {
         requireNonNull(yearOfStudy);
@@ -127,16 +152,21 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String faculty} into a trimmed {@code String}.
-     * Leading and trailing whitespaces will be trimmed.
+     * Parses a {@code String faculty} into a trimmed {@code String}. Trims whitespace.
+     * Enforces non-empty and a maximum length of {@value #FACULTY_MAX_LEN}.
      *
-     * @throws ParseException if the given {@code faculty} is empty after trimming.
+     * @param faculty raw user input.
+     * @return trimmed faculty.
+     * @throws ParseException if empty after trimming or length exceeds the cap.
      */
     public static String parseFaculty(String faculty) throws ParseException {
         requireNonNull(faculty);
         String trimmedFaculty = faculty.trim();
         if (trimmedFaculty.isEmpty()) {
             throw new ParseException(MESSAGE_INVALID_FACULTY);
+        }
+        if (trimmedFaculty.length() > FACULTY_MAX_LEN) {
+            throw new ParseException(MESSAGE_FACULTY_TOO_LONG);
         }
         return trimmedFaculty;
     }
