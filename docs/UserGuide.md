@@ -349,6 +349,8 @@ Adds a tag to the specified member.
 **Format:**
 `tag INDEX TAG`
 
+* Only alphanumeric characters are accepted as tags, other inputs will be ignored.
+
 **Examples:**
 
 * `tag 1 Treasurer`
@@ -362,6 +364,8 @@ Removes a tag from the specified member.
 
 **Format:**
 `untag INDEX TAG`
+
+* Only alphanumeric characters are accepted to untag, other inputs will be ignored.
 
 **Examples:**
 
@@ -458,7 +462,7 @@ serve as a base template, eliminating the need to re-enter records manually. Fro
 | **Delete Member**        | `delete INDEX` e.g. `delete 3`                                                                                                                             |
 | **List Members**         | `list`                                                                                                                                                     |
 | **Find Member**          | `find KEYWORD [MORE_KEYWORDS]` e.g. `find John David`                                                                                                      |
-| **Search (Name & Tags)** | `search [n/NAME_QUERY] [t/TAG]… [any/]` e.g. `search t/Logistics any/`                                                                                     |
+| **Search (Name & Tags)** | `search [t/TAG]… [any/]` e.g. `search t/Logistics any/`                                                                                     |
 | **Mark Attendance**      | `present INDEX`                                                                                                                                            |
 | **Unmark Attendance**    | `absent INDEX`                                                                                                                                             |
 | **View Attendance**      | `attendance`                                                                                                                                               |
