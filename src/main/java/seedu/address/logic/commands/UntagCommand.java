@@ -40,6 +40,8 @@ public class UntagCommand extends Command {
 
     /** Error message when index is out of bounds. */
     private static final String MESSAGE_INVALID_INDEX = "The person index provided is invalid";
+    /** Error message when attempting to remove a tag that the person does not have. */
+    public static final String MESSAGE_INVALID_TAG = "Invalid tag: %1$s";
 
     /** Zero-based index into the current filtered list. */
     private final int index;
@@ -76,6 +78,11 @@ public class UntagCommand extends Command {
         }
 
         Person personToUntag = model.getFilteredPersonList().get(index);
+
+        // Ensure the person actually has the tag to be removed
+        if (!personToUntag.getTags().contains(tag)) {
+            throw new CommandException(String.format(MESSAGE_INVALID_TAG, tag));
+        }
 
         // Build updated tag set
         Set<Tag> updatedTags = new HashSet<>(personToUntag.getTags());

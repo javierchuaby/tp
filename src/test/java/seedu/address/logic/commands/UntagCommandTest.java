@@ -51,4 +51,17 @@ public class UntagCommandTest {
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertFalse(model.getFilteredPersonList().get(0).getTags().contains(tag));
     }
+
+    @Test
+    public void execute_untagNonexistentTag_throwsCommandException() {
+        Model model = new ModelManager();
+        Person person = new PersonBuilder().withTags("friend").build();
+        model.addPerson(person);
+
+        Tag tag = new Tag("nonexistent");
+        UntagCommand command = new UntagCommand(0, tag);
+
+        // Expect command to fail because the person does not have the tag
+        CommandTestUtil.assertCommandFailure(command, model, String.format(UntagCommand.MESSAGE_INVALID_TAG, tag));
+    }
 }
