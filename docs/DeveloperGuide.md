@@ -10,6 +10,7 @@ title: Developer Guide
   - [2.1 Architectural Extension: Switchable Lists](#21-architectural-extension-switchable-lists)
 - [3. UI Component](#3-ui-component)
 - [4. Logic Component](#4-logic-component)
+  - [4.1 Sequence Diagram for Command Execution](#41-sequence-diagram-for-command-execution)
 - [5. Model Component](#5-model-component)
   - [5.1 Person model](#51-person-model)
 - [6. Storage Component](#6-storage-component)
@@ -74,19 +75,19 @@ In AB3, storage always pointed to **one** file (`addressbook.json`).
 
 In ClubTrack, storage can point to **different files** depending on the **active list name**. The default file is:
 
-```text
+```tex
 data/default.json
 ````
 
 Whenever the user runs:
 
-```text
+```tex
 switch Training_2025_10_20
 ```
 
 the app starts reading/writing:
 
-```text
+```tex
 data/Training_2025_10_20.json
 ```
 
@@ -96,7 +97,7 @@ This keeps the architecture the same as AB3, but with an extra “current file�
 
 ---
 
-## 3. UI Component
+## 3. UI Componen
 
 The UI layer is JavaFX-based and largely follows AB3.
 
@@ -126,7 +127,7 @@ When the model reloads a different list (due to `switch`), the observable list c
 
 ---
 
-## 4. Logic Component
+## 4. Logic Componen
 
 The **Logic** component is responsible for:
 
@@ -138,6 +139,26 @@ The **Logic** component is responsible for:
 6. returning a `CommandResult`.
 
 ![Logic Class Diagram](diagrams/LogicClassDiagram.png)
+
+### 4.1 Command Execution
+
+The sequence diagram below illustrates the interactions inside the Logic component when executing a `delete` command. It shows how a command string flows through the parsing layer to create a command object, which is then executed to interact with the Model component.
+
+![Logic Sequence Diagram](diagrams/LogicSequenceDiagram.png)
+
+**Flow:**
+1. An external call to `LogicManager.execute("delete 2")` initiates the process.
+2. `LogicManager` delegates parsing to `AddressBookParser.parseCommand("delete 2")`.
+3. `AddressBookParser` creates a `DeleteCommandParser` and calls `parse("2")` to extract the index.
+4. `DeleteCommandParser` creates a `DeleteCommand` instance with the parsed index and returns it.
+5. `DeleteCommandParser` is destroyed after creating the command object.
+6. The `DeleteCommand` is returned through the parsing chain back to `LogicManager`.
+7. `LogicManager` calls `execute()` on the `DeleteCommand` object.
+8. `DeleteCommand` calls `deletePerson(2)` on the `Model` component.
+9. `Model` creates a `CommandResult` object to represent the operation's outcome.
+10. The `CommandResult` is returned back through the chain to `LogicManager`, which returns it to the caller.
+
+This pattern applies to all mutating commands (add, edit, delete, etc.), where the command object interacts with the Model to modify data and returns a `CommandResult` containing the operation outcome.
 
 **Key classes:**
 
@@ -161,7 +182,7 @@ After **every** successful mutating command, `LogicManager` asks `Storage` to sa
 
 ---
 
-## 5. Model Component
+## 5. Model Componen
 
 The **Model** layer keeps application state and provides observable lists to the UI.
 
@@ -178,7 +199,7 @@ The **Model** layer keeps application state and provides observable lists to the
 
 We extended AB3’s `Person` to include club-specific and attendance fields:
 
-```text
+```tex
 Person
  ├─ name : Name
  ├─ phone : Phone           // 8 digits, start with 8 or 9
@@ -188,7 +209,7 @@ Person
  ├─ faculty : String        // non-empty
  ├─ tags : Set<Tag>
  ├─ isPresent : boolean     // for attendance
- └─ points : Points         // value object
+ └─ points : Points         // value objec
 ```
 
 We also changed **identity**:
@@ -203,7 +224,7 @@ We also changed **identity**:
 
 ---
 
-## 6. Storage Component
+## 6. Storage Componen
 
 The Storage layer reads/writes JSON using the usual AB3 JSON storage classes, but with an extra concept: **active list name = file name**.
 
@@ -213,7 +234,7 @@ The Storage layer reads/writes JSON using the usual AB3 JSON storage classes, bu
 
 * On startup, we try to read:
 
-  ```text
+  ```tex
   data/default.json
   ```
 
@@ -221,13 +242,13 @@ The Storage layer reads/writes JSON using the usual AB3 JSON storage classes, bu
 
 * When user runs:
 
-  ```text
+  ```tex
   switch CCA_Showcase
   ```
 
   we from then on read/write:
 
-  ```text
+  ```tex
   data/CCA_Showcase.json
   ```
 
@@ -245,7 +266,7 @@ This design keeps lists isolated. Each event/training/day can have its own file,
 
 **Command format:**
 
-```text
+```tex
 switch LIST_NAME
 ```
 
@@ -278,7 +299,7 @@ switch LIST_NAME
 
 **New format (final):**
 
-```text
+```tex
 add n/NAME p/PHONE e/EMAIL a/ADDRESS y/YEAR_OF_STUDY f/FACULTY [t/TAG]...
 ```
 
@@ -298,7 +319,7 @@ add n/NAME p/PHONE e/EMAIL a/ADDRESS y/YEAR_OF_STUDY f/FACULTY [t/TAG]...
 
 **Example:**
 
-```text
+```tex
 add n/John Doe p/91234567 e/johnd@example.com a/Blk 123, #02-01 y/2 f/School of Computing t/committee
 ```
 
@@ -315,7 +336,7 @@ We deliberately split them to reduce PE bugs and to make behaviour easy to expla
 * **Does NOT** search tags, faculty, year, or address
 * **Examples:**
 
-  ```text
+  ```tex
   find john
   find alex david
   ```
@@ -328,7 +349,7 @@ We deliberately split them to reduce PE bugs and to make behaviour easy to expla
 * **Behaviour:** tag **prefix** matching
 * **Example:**
 
-  ```text
+  ```tex
   search t/log
   ```
 
@@ -371,7 +392,7 @@ Because we tightened phone validation **and** made `y/` + `f/` compulsory, sever
 
     * In tests where we trigger an `add` to force a save (e.g. in `LogicManagerTest`), the input must now contain **all compulsory prefixes**:
 
-      ```text
+      ```tex
       add n/Amy p/88888888 e/amy@example.com a/Blk 123 y/1 f/School of Computing
       ```
 
@@ -387,19 +408,19 @@ This keeps test data aligned with the real rules users see in the UI/UG.
 
 ClubTrack stores data in:
 
-```text
+```tex
 [JAR location]/data/<listName>.json
 ```
 
 * Default list:
 
-  ```text
+  ```tex
   data/default.json
   ```
 
 * After `switch clubtrack` (or any other name):
 
-  ```text
+  ```tex
   data/clubtrack.json
   ```
 
@@ -480,7 +501,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 **Extensions**
 
-* 1a. Member not found 
+* 1a. Member not found
 
   * 1a1. ClubTrack shows an error message.
     Use case ends.
@@ -522,7 +543,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 1. User issues the `add` command with valid prefixes, for example:
 
-   ```text
+   ```tex
    add n/John Doe p/91234567 e/john@example.com a/Blk 123, #02-01 y/2 f/School of Computing t/committee
    ```
 2. ClubTrack validates each field (phone format, year range, non-empty faculty/address).
@@ -549,7 +570,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 1. User issues the `edit` command with an index and fields to change, e.g.:
 
-   ```text
+   ```tex
    edit 2 p/91234568 a/New Address y/3
    ```
 2. ClubTrack validates inputs and locates the target member by displayed index.
@@ -574,7 +595,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 1. User issues the `find` command with one or more name keywords, e.g.:
 
-   ```text
+   ```tex
    find alex david
    ```
 2. ClubTrack filters the active list by case-insensitive substring match on the name field.
@@ -585,14 +606,14 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 * 1a. No members match
 
-  * 1a1. ClubTrack shows message indicating no members found and an empty list. 
+  * 1a1. ClubTrack shows message indicating no members found and an empty list.
   Use case ends.
 
-### UC07 – Clear current list
+### UC07 – Clear current lis
 
 **System:** ClubTrack
 
-**Use Case:** UC11 – Clear current list
+**Use Case:** UC11 – Clear current lis
 
 **Actor:** user
 
@@ -607,7 +628,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 * 2a. User cancels confirmation
 
-  * 2a1. ClubTrack aborts and no changes are made. 
+  * 2a1. ClubTrack aborts and no changes are made.
   Use case ends.
 
 ---
@@ -661,7 +682,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 **Input:**
 
-```text
+```tex
 add n/Amy Bee p/88888888 e/amy@example.com a/Blk 123 y/2 f/School of Computing
 ```
 
@@ -677,7 +698,7 @@ add n/Amy Bee p/88888888 e/amy@example.com a/Blk 123 y/2 f/School of Computing
 
 **Error case:**
 
-```text
+```tex
 add n/Bob p/123 e/bob@example.com a/Tampines y/2 f/SOC
 ```
 
@@ -687,7 +708,7 @@ Expected: error about phone constraints.
 
 1. Run:
 
-   ```text
+   ```tex
    switch Training_2025_10_20
    ```
 
@@ -698,14 +719,14 @@ Expected: error about phone constraints.
 
 3. Add someone here:
 
-   ```text
+   ```tex
    add n/John p/91234567 e/john@example.com a/UTown y/1 f/SoC
    ```
 
 4. Switch back:
 
-   ```text
-   switch default
+   ```tex
+   switch defaul
    ```
 
    Expected: you see the original list.
@@ -717,7 +738,7 @@ Expected: error about phone constraints.
 
 2. Run:
 
-   ```text
+   ```tex
    search t/log
    ```
 
@@ -725,18 +746,18 @@ Expected: error about phone constraints.
 
 3. Run:
 
-   ```text
+   ```tex
    find log
    ```
 
    Expected: **does not** return them unless “log” appears in their **name**.
 
-### A.5 Clearing current list
+### A.5 Clearing current lis
 
 1. Switch to a test list:
 
-   ```text
-   switch TestList
+   ```tex
+   switch TestLis
    add n/Test p/91234567 e/test@example.com a/Biz y/1 f/SoC
    clear
    ```
@@ -745,7 +766,7 @@ Expected: error about phone constraints.
 
 ---
 
-## Appendix B – Effort
+## Appendix B – Effor
 
 **Team size:** 5
 

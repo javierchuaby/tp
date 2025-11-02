@@ -31,7 +31,7 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
 
 ---
 
-## Quick start
+## Quick star
 
 1. **Check your Java version**
 
@@ -141,7 +141,7 @@ Adds a member to ClubTrack.
 - **Year of Study** — integer 1 to 5.
 - **Tag** — alphanumeric; up to 50 characters each.
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**  
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A member can have any number of tags (including 0), e.g. their role or committee.
 </div>
 
@@ -187,7 +187,7 @@ _Field constraints (e.g., max lengths, year 1–5) follow the same rules as in [
 
 Finds members whose **non-tag fields** contain **any** of the given keywords.
 
-**Format:**  
+**Format:**
 `find KEYWORD [MORE_KEYWORDS]`
 
 **What it searches:**
@@ -313,7 +313,7 @@ Adds a specified number of points to a member.
 
 * Points can represent participation, merit, or performance.
 * The integer VALUE can only be a positive integer.
-* In line with typical club operations, points are usually awarded in small increments (<=100), and therefore would be 
+* In line with typical club operations, points are usually awarded in small increments (<=100), and therefore would be
   unrealistic to have large increments in points e.g., adding 10000000 points at once.
 
 **Examples:**
@@ -407,7 +407,7 @@ Clears **all members in the current list**. Other lists are not affected.
 **Format:**
 `clear`
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**  
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 This action cannot be undone.
 </div>
 
@@ -433,9 +433,9 @@ There is no need to save manually.
 
 ClubTrack stores **each list in its own JSON file** inside the `data/` folder (next to the `.jar`).
 
-- The default list is saved as:  
+- The default list is saved as:
   `data/default.json`
-- When you run `switch Training_2025_10_20`, ClubTrack creates/uses:  
+- When you run `switch Training_2025_10_20`, ClubTrack creates/uses:
   `data/Training_2025_10_20.json`
 - Every list name maps 1-to-1 to a JSON file with the **same name**.
 
@@ -460,8 +460,8 @@ Advanced users may edit these JSON files directly.
 **A:** Ensure you are using Java 17 or above. If issues persist, download the latest `.jar` file and try again.
 
 **Q:** Will I have to create a completely new list from scratch for separate events?
-**A:** No, excos can simply duplicate a previous event's JSON file, rename it, and load it as a new list to 
-serve as a base template, eliminating the need to re-enter records manually. From there, edit the names accordingly. 
+**A:** No, excos can simply duplicate a previous event's JSON file, rename it, and load it as a new list to
+serve as a base template, eliminating the need to re-enter records manually. From there, edit the names accordingly.
 
 **Q:** Why do some fields reject very long input?  
 **A:** To ensure smooth performance and prevent corrupted files, ClubTrack limits field lengths (e.g., Name ≤ 100 chars).
