@@ -184,7 +184,7 @@ Finds members whose **non-tag fields** contain **any** of the given keywords.
 - email
 - address
 - faculty
-- year of study (as text, e.g. “Y1”, “1”, “Year 1”)
+- year of study
 
 **Rules:**
 
@@ -199,7 +199,7 @@ Finds members whose **non-tag fields** contain **any** of the given keywords.
 - `find john`
 - `find soc`
 - `find 9876`
-- `find malaysia year 2`
+- `find Y2`
 
 ### Searching members by tag prefix : `search`
 
