@@ -26,6 +26,8 @@ import seedu.address.model.person.Tag;
  * </pre>
  */
 public class UntagCommand extends Command {
+    /** Error message when attempting to remove a tag that the person does not have. */
+    public static final String MESSAGE_INVALID_TAG = "Invalid tag: %1$s";
     /** Command word used to invoke this command. */
     public static final String COMMAND_WORD = "untag";
 
@@ -40,8 +42,7 @@ public class UntagCommand extends Command {
 
     /** Error message when index is out of bounds. */
     private static final String MESSAGE_INVALID_INDEX = "The person index provided is invalid";
-    /** Error message when attempting to remove a tag that the person does not have. */
-    public static final String MESSAGE_INVALID_TAG = "Invalid tag: %1$s";
+
 
     /** Zero-based index into the current filtered list. */
     private final int index;
