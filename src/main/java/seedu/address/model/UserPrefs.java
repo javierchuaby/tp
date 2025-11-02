@@ -13,9 +13,15 @@ import seedu.address.commons.core.GuiSettings;
  */
 public class UserPrefs implements ReadOnlyUserPrefs {
 
-    private GuiSettings guiSettings = new GuiSettings();
     // default data file name changed from addressbook.json to default.json
-    private Path addressBookFilePath = Paths.get("data" , "default.json");
+    /** The default clubtrack/list base name (without extension). */
+    public static final String DEFAULT_CLUBTRACK_NAME = "default";
+
+    /** The default clubtrack file path (data/default.json). */
+    public static final Path DEFAULT_CLUBTRACK_PATH = Paths.get("data", DEFAULT_CLUBTRACK_NAME + ".json");
+
+    private GuiSettings guiSettings = new GuiSettings();
+    private Path addressBookFilePath = DEFAULT_CLUBTRACK_PATH;
 
     /**
      * Creates a {@code UserPrefs} with default values.
@@ -64,11 +70,10 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof UserPrefs)) {
+        if (!(other instanceof UserPrefs otherUserPrefs)) {
             return false;
         }
 
-        UserPrefs otherUserPrefs = (UserPrefs) other;
         return guiSettings.equals(otherUserPrefs.guiSettings)
                 && addressBookFilePath.equals(otherUserPrefs.addressBookFilePath);
     }
