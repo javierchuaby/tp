@@ -300,8 +300,8 @@ Adds a specified number of points to a member.
 `addpoints INDEX pts/VALUE`
 
 * Points can represent participation, merit, or performance.
-* The integer VALUE can be positive or negative.
-* In line with typical club operations, points are usually awarded in small increments, and therefore would be 
+* The integer VALUE can only be a positive integer.
+* In line with typical club operations, points are usually awarded in small increments (<=100), and therefore would be 
   unrealistic to have large increments in points e.g., adding 10000000 points at once.
 
 **Examples:**
@@ -318,8 +318,8 @@ Removes a specified number of points from a member.
 **Format:**
 `minuspoints INDEX pts/VALUE`
 
-* Similar to the 'addpoints' command, points are usually deducted in small decrements, and would be unrealistic
-  to have large decrements in points e.g., subtracting 100000000 points at once.
+* Similar to the 'addpoints' command, points are usually deducted in small decrements (<=100), and would be unrealistic to have large decrements in points e.g., subtracting 100000000 points at once.
+* The integer VALUE can only be a positive integer.
 
 **Examples:**
 

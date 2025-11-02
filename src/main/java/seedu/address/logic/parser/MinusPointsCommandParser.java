@@ -30,7 +30,7 @@ public class MinusPointsCommandParser implements Parser<MinusPointsCommand> {
             String pointsStr = argMultimap.getValue(PREFIX_POINTS).get();
 
             long parsedLong = Long.parseLong(pointsStr);
-            if (parsedLong > Integer.MAX_VALUE) {
+            if (parsedLong > 100) {
                 throw new ParseException("Too many points, please use a smaller value.");
             }
             int points = (int) parsedLong;

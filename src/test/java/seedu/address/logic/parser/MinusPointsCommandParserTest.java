@@ -10,7 +10,7 @@ public class MinusPointsCommandParserTest {
 
     @Test
     public void parse_tooLargePoints_throwsParseException() {
-        String userInput = "1 pts/" + ("" + ((long) Integer.MAX_VALUE + 1));
+        String userInput = "1 pts/" + ("" + ((long) 100 + 1));
         assertParseFailure(parser, userInput, "Too many points, please use a smaller value.");
     }
 
