@@ -37,10 +37,8 @@ public class UntagCommand extends Command {
 
     /** Success message template. */
     public static final String MESSAGE_SUCCESS = "Tag removed: %1$s";
-
     /** Error message when attempting to remove a tag that the person does not have. */
     public static final String MESSAGE_INVALID_TAG = "Invalid tag: %1$s";
-
     /** Error message when index is out of bounds. */
     private static final String MESSAGE_INVALID_INDEX = "The person index provided is invalid";
 
