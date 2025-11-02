@@ -29,6 +29,7 @@ public class ParserUtil {
     public static final int ADDRESS_MAX_LEN = 200;
     public static final int FACULTY_MAX_LEN = 100;
     public static final int EMAIL_MAX_LEN = 254;
+    public static final int TAG_MAX_LEN = 50;
 
     /**
      * Error messages corresponding to the length caps above. Kept here so
@@ -38,6 +39,7 @@ public class ParserUtil {
     public static final String MESSAGE_ADDRESS_TOO_LONG = "Address is too long (max 200 characters).";
     public static final String MESSAGE_FACULTY_TOO_LONG = "Faculty is too long (max 100 characters).";
     public static final String MESSAGE_EMAIL_TOO_LONG = "Email is too long (max 254 characters).";
+    public static final String MESSAGE_TAG_TOO_LONG = "Tag is too long (max 50 characters).";
 
     /** Message used when an index string is not a non-zero unsigned integer. */
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
@@ -180,6 +182,9 @@ public class ParserUtil {
     public static Tag parseTag(String tag) throws ParseException {
         requireNonNull(tag);
         String trimmedTag = tag.trim();
+        if (trimmedTag.length() > TAG_MAX_LEN) {
+            throw new ParseException(MESSAGE_TAG_TOO_LONG);
+        }
         if (!Tag.isValidTagName(trimmedTag)) {
             throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
         }
