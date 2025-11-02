@@ -301,6 +301,8 @@ Adds a specified number of points to a member.
 
 * Points can represent participation, merit, or performance.
 * The integer VALUE can be positive or negative.
+* In line with typical club operations, points are usually awarded in small increments, and therefore would be 
+  unrealistic to have large increments in points e.g., adding 10000000 points at once.
 
 **Examples:**
 
@@ -315,6 +317,9 @@ Removes a specified number of points from a member.
 
 **Format:**
 `minuspoints INDEX pts/VALUE`
+
+* Similar to the 'addpoints' command, points are usually deducted in small decrements, and would be unrealistic
+  to have large decrements in points e.g., subtracting 100000000 points at once.
 
 **Examples:**
 
@@ -437,6 +442,10 @@ Advanced users may edit these JSON files directly.
 
 **Q:** The app does not open.
 **A:** Ensure you are using Java 17 or above. If issues persist, download the latest `.jar` file and try again.
+
+**Q:** Will I have to create a completely new list from scratch for separate events?
+**A:** No, excos can simply duplicate a previous event's JSON file, rename it, and load it as a new list to 
+serve as a base template, eliminating the need to re-enter records manually. From there, edit the names accordingly. 
 
 ---
 
