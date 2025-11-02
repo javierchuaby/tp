@@ -1,96 +1,61 @@
+ParserClassDiagram.puml:
 @startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor LOGIC_COLOR_T4
+skinparam classBackgroundColor LOGIC_COLOR
 
-' ===== Parser slice =====
+Class "{abstract}\nCommand" as Command
+Class XYZCommand
 
-' Core parser interfaces and classes
-interface Parser
-
-class ClubTrackParser {
-- BASIC_COMMAND_FORMAT : Pattern
-+ parseCommand(userInput : String) : Command
+package "Parser classes"{
+Class "<<interface>>\nParser" as Parser
+Class ClubTrackParser
+Class XYZCommandParser
+Class SearchCommandParser
+Class SwitchCommandParser
+Class CliSyntax
+Class ParserUtil
+Class ArgumentMultimap
+Class ArgumentTokenizer
+Class Prefix
 }
 
-class ArgumentTokenizer
-class ArgumentMultimap {
-- argMultimap : Map<Prefix, List<String>>
-+ put(prefix : Prefix, argValue : String)
-+ Optional<String> getValue(prefix : Prefix)
-+ List<String> getAllValues(prefix : Prefix)
-+ String getPreamble()
-+ verifyNoDuplicatePrefixesFor(prefix...)
-}
+Class HiddenOutside #FFFFFF
+HiddenOutside ..> ClubTrackParser
 
-class Prefix
-class ParserUtil
-class ParseException
+ClubTrackParser .down.> XYZCommandParser: <<create>>
+ClubTrackParser .down.> SearchCommandParser: <<create>>
+ClubTrackParser .down.> SwitchCommandParser: <<create>>
 
-' Representative concrete parsers (implement Parser<T>)
-class AddCommandParser
-class EditCommandParser
-class DeleteCommandParser
-class FindCommandParser
-class AttendanceCommandParser
-class PointsCommandParser
-class AddPointsCommandParser
-class MinusPointsCommandParser
-class TagCommandParser
-class SearchCommandParser
-class SwitchCommandParser
-class RemoveCommandParser
-class MarkCommandParser
-class UnmarkCommandParser
-class UntagCommandParser
+XYZCommandParser ..> XYZCommand : <<create>>
+SearchCommandParser ..> XYZCommand : <<create>>
+SwitchCommandParser ..> XYZCommand : <<create>>
 
-' Relationships
-Parser <|-- AddCommandParser
-Parser <|-- EditCommandParser
-Parser <|-- DeleteCommandParser
-Parser <|-- FindCommandParser
-Parser <|-- AttendanceCommandParser
-Parser <|-- PointsCommandParser
-Parser <|-- AddPointsCommandParser
-Parser <|-- MinusPointsCommandParser
-Parser <|-- TagCommandParser
-Parser <|-- SearchCommandParser
-Parser <|-- SwitchCommandParser
-Parser <|-- RemoveCommandParser
-Parser <|-- MarkCommandParser
-Parser <|-- UnmarkCommandParser
-Parser <|-- UntagCommandParser
+ClubTrackParser ..> Command : <<use>>
+XYZCommandParser .up.|> Parser
+SearchCommandParser .up.|> Parser
+SwitchCommandParser .up.|> Parser
 
-' ClubTrackParser delegates to concrete parsers
-ClubTrackParser --> AddCommandParser
-ClubTrackParser --> EditCommandParser
-ClubTrackParser --> DeleteCommandParser
-ClubTrackParser --> FindCommandParser
-ClubTrackParser --> AttendanceCommandParser
-ClubTrackParser --> PointsCommandParser
-ClubTrackParser --> AddPointsCommandParser
-ClubTrackParser --> MinusPointsCommandParser
-ClubTrackParser --> TagCommandParser
-ClubTrackParser --> SearchCommandParser
-ClubTrackParser --> SwitchCommandParser
-ClubTrackParser --> RemoveCommandParser
-ClubTrackParser --> MarkCommandParser
-ClubTrackParser --> UnmarkCommandParser
-ClubTrackParser --> UntagCommandParser
+XYZCommandParser ..> ArgumentMultimap
+XYZCommandParser ..> ArgumentTokenizer
+XYZCommandParser ..> CliSyntax
+XYZCommandParser ..> ParserUtil
 
-' Tokenizer / multimap / prefix relationships
-ArgumentTokenizer --> ArgumentMultimap
-ArgumentTokenizer --> Prefix
-ArgumentMultimap *-- Prefix
-ArgumentMultimap ..> ParseException
+SearchCommandParser ..> ArgumentMultimap
+SearchCommandParser ..> ArgumentTokenizer
+SearchCommandParser ..> CliSyntax
+SearchCommandParser ..> ParserUtil
 
-' ParserUtil dependencies (parsing primitives and model value objects)
-ParserUtil ..> ParseException
-ParserUtil ..> Name
-ParserUtil ..> Phone
-ParserUtil ..> Email
-ParserUtil ..> Address
-ParserUtil ..> Tag
+SwitchCommandParser ..> ArgumentMultimap
+SwitchCommandParser ..> ArgumentTokenizer
+SwitchCommandParser ..> CliSyntax
+SwitchCommandParser ..> ParserUtil
 
-' High-level relationship: Logic slice already references ClubTrackParser
-' (LogicClassDiagram shows LogicManager -> ClubTrackParser)
+ArgumentTokenizer .left.> ArgumentMultimap
+CliSyntax ..> Prefix
+ParserUtil .down.> Prefix
 
+XYZCommand -up-|> Command
 @enduml
 
