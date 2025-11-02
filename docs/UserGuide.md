@@ -265,7 +265,7 @@ Displays the current attendance list, showing who is present and absent **for th
 
 Switches between different member/attendance lists, such as separate event rosters.
 If the specified list does **not** exist, ClubTrack **creates a new empty list** with that name.
-The app starts on the default list named `clubtrack`.
+The app starts on the default list named `default`.
 
 **Format:**
 `switch NAME_OF_LIST`
