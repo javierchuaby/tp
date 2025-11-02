@@ -1,82 +1,80 @@
 @startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
 
-' ===== Model slice =====
+' Simplified Model class diagram for ClubTrack / AddressBook slice
 
-interface Model
+package Model {
+	interface "<<interface>>\nModel" as Model
+	interface "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
+	interface "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
 
-class ModelManager {
-- clubTrack : ClubTrack
-- userPrefs : UserPrefs
-- filteredPersons : FilteredList<Person>
-+ getClubTrack() : ReadOnlyClubTrack
-+ setClubTrack(clubTrack: ReadOnlyClubTrack) : void
-+ getFilteredPersonList() : ObservableList<Person>
-+ updateFilteredPersonList(predicate: Predicate<Person>) : void}
+	class AddressBook {
+		- persons : UniquePersonList
+		+ getPersonList() : ObservableList<Person>
+	}
 
-class ClubTrack {
-- persons : UniquePersonList
-+ getPersonList() : ObservableList<Person>
-+ addPerson(Person p)
-+ removePerson(Person target)
+	class ModelManager {
+		- addressBook : AddressBook
+		- userPrefs : UserPrefs
+		- filteredPersons : FilteredList<Person>
+		+ getFilteredPersonList() : ObservableList<Person>
+		+ updateFilteredPersonList(p : Predicate<Person>) : void
+	}
+
+	class UserPrefs {
+		- guiSettings : GuiSettings
+		- addressBookFilePath : Path
+		+ getAddressBookFilePath() : Path
+	}
+
+	class UniquePersonList {
+		- internalList : List<Person>
+		+ add(p : Person)
+		+ remove(p : Person)
+	}
+
+	class Person {
+		- name : Name
+		- phone : Phone
+		- email : Email
+		- address : Address
+		- yearOfStudy : int
+		- faculty : String
+		- tags : Set<Tag>
+		- isPresent : boolean
+		- points : Points
+		+ getName() : Name
+		+ getPoints() : Points
+	}
+
+	' Value objects
+	class Name
+	class Phone
+	class Email
+	class Address
+	class Tag
+	class YearOfStudy
+	class Faculty
+	class Points
+
+	' Relationships
+	ModelManager ..|> Model
+	AddressBook .up.|> ReadOnlyAddressBook
+	UserPrefs .up.|> ReadOnlyUserPrefs
+
+	ModelManager --> "1" AddressBook
+	ModelManager --> "1" UserPrefs
+	AddressBook *--> "1" UniquePersonList
+	UniquePersonList --> "*" Person
+	Person *-- Name
+	Person *-- Phone
+	Person *-- Email
+	Person *-- Address
+	Person *-- Points
+	Person *-- Tag
 }
-
-class UniquePersonList {
-- internalList : List<Person>
-+ add(p: Person)
-+ remove(p: Person)
-+ setPersons(UniquePersonList replacement)
-}
-
-class Person {
-- name : Name
-- phone : Phone
-- email : Email
-- yearOfStudy : int
-- faculty : String
-- address : Address
-- tags : Set<Tag>
-- isPresent : boolean
-- points : Points
-+ getName() : Name
-+ getPhone() : Phone
-+ getEmail() : Email
-+ isSamePerson(otherPerson: Person) : boolean
-+ markPresent() : void
-+ markAbsent() : void
-}
-
-class UserPrefs {
-- guiSettings : GuiSettings
-- clubTrackFilePath : Path
-+ getClubTrackFilePath() : Path
-}
-
-' Value objects
-class Name
-class Phone
-class Email
-class Address
-class Tag
-class Points
-
-' Interfaces
-interface ReadOnlyClubTrack
-interface ReadOnlyUserPrefs
-
-' Relationships
-ModelManager ..|> Model
-ClubTrack ..|> ReadOnlyClubTrack
-UserPrefs ..|> ReadOnlyUserPrefs
-
-ModelManager "1" *-- "1" ClubTrack
-ModelManager "1" *-- "1" UserPrefs
-ClubTrack "1" *-- "1" UniquePersonList
-UniquePersonList "1" *-- "*" Person
-Person *-- Name
-Person *-- Phone
-Person *-- Email
-Person *-- Address
-Person *-- Points
-Person o-- Tag
 
 @enduml
