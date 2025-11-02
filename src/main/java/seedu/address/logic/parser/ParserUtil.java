@@ -24,7 +24,7 @@ public class ParserUtil {
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
 
     /** Message used when a year of study is missing/invalid (non-integer or out of allowed range). */
-    public static final String MESSAGE_INVALID_YOS = "Year of study must be an integer between 1 and 4.";
+    public static final String MESSAGE_INVALID_YOS = "Year of study must be an integer between 1 and 5.";
 
     /** Message used when a faculty string is empty after trimming. */
     public static final String MESSAGE_INVALID_FACULTY = "Faculty cannot be empty.";
@@ -117,7 +117,7 @@ public class ParserUtil {
         String trimmedYear = yearOfStudy.trim();
         try {
             int year = Integer.parseInt(trimmedYear);
-            if (year < 1 || year > 4) {
+            if (year < 1 || year > 5) {
                 throw new ParseException(MESSAGE_INVALID_YOS);
             }
             return year;
