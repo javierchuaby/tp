@@ -15,6 +15,8 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.ClubTrack;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyClubTrack;
+import seedu.address.model.UserPrefs;
+import seedu.address.model.util.SampleDataUtil;
 import seedu.address.storage.Storage;
 
 /**
@@ -47,7 +49,11 @@ public class ClubTrackListManager {
             if (data.isPresent()) {
                 model.setClubTrack(data.get());
             } else {
-                model.setClubTrack(new ClubTrack());
+                if (UserPrefs.DEFAULT_CLUBTRACK_NAME.equals(listName)) {
+                    model.setClubTrack(SampleDataUtil.getSampleAddressBook());
+                } else {
+                    model.setClubTrack(new ClubTrack());
+                }
                 storage.saveClubTrack(model.getClubTrack(), filePath);
             }
             model.setClubTrackFilePath(filePath);
@@ -76,9 +82,10 @@ public class ClubTrackListManager {
         Path filePath = Paths.get("data", listName + ".json");
 
         // Prevent removal of the default data file; this file must always exist.
-        Path defaultPath = Paths.get("data", "default.json");
+        Path defaultPath = UserPrefs.DEFAULT_CLUBTRACK_PATH;
         if (filePath.equals(defaultPath)) {
-            throw new CommandException("Cannot remove the default list 'default.json'.");
+            throw new CommandException("Cannot remove the default list '"
+                    + UserPrefs.DEFAULT_CLUBTRACK_PATH.getFileName().toString() + "'.");
         }
 
         try {
@@ -90,7 +97,7 @@ public class ClubTrackListManager {
                     if (defaultData.isPresent()) {
                         model.setClubTrack(defaultData.get());
                     } else {
-                        model.setClubTrack(new ClubTrack());
+                        model.setClubTrack(SampleDataUtil.getSampleAddressBook());
                         storage.saveClubTrack(model.getClubTrack(), defaultPath);
                     }
                     model.setClubTrackFilePath(defaultPath);
