@@ -1,84 +1,49 @@
+StorageClassDiagram.puml:
 @startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor STORAGE_COLOR
+skinparam classBackgroundColor STORAGE_COLOR
 
-' ===== Storage slice =====
+package Storage as StoragePackage {
 
-package "UserPrefs Storage" {
-Interface "<<interface>>\nUserPrefsStorage" as UserPrefsStorage {
-    +Path getUserPrefsFilePath()
-    +Optional<UserPrefs> readUserPrefs()
-    +void saveUserPrefs(ReadOnlyUserPrefs userPrefs)
-}
-Class JsonUserPrefsStorage {
-    -Path filePath
-    +JsonUserPrefsStorage(Path filePath)
-}
+package "UserPrefs Storage" #F4F6F6{
+Class "<<interface>>\nUserPrefsStorage" as UserPrefsStorage
+Class JsonUserPrefsStorage
 }
 
-Interface "<<interface>>\nStorage" as Storage {
-    +Path getUserPrefsFilePath()
-    +Optional<UserPrefs> readUserPrefs()
-    +void saveUserPrefs(ReadOnlyUserPrefs userPrefs)
-    +Path getClubTrackFilePath()
-    +Optional<ReadOnlyClubTrack> readClubTrack()
-    +void saveClubTrack(ReadOnlyClubTrack clubTrack)
-}
+Class "<<interface>>\nStorage" as Storage
+Class StorageManager
 
-Class StorageManager {
-    -UserPrefsStorage userPrefsStorage
-    -ClubTrackStorage clubTrackStorage
-    +StorageManager(UserPrefsStorage userPrefsStorage, ClubTrackStorage clubTrackStorage)
-}
-
-package "ClubTrack Storage" {
-Interface "<<interface>>\nClubTrackStorage" as ClubTrackStorage {
-    +Path getClubTrackFilePath()
-    +Optional<ReadOnlyClubTrack> readClubTrack()
-    +Optional<ReadOnlyClubTrack> readClubTrack(Path filePath)
-    +void saveClubTrack(ReadOnlyClubTrack clubTrack)
-    +void saveClubTrack(ReadOnlyClubTrack clubTrack, Path filePath)
-}
-Class JsonClubTrackStorage {
-    -Path filePath
-    +JsonClubTrackStorage(Path filePath)
-}
-Class JsonSerializableClubTrack {
-    +List<JsonAdaptedPerson> persons
-    +JsonSerializableClubTrack()
-    +JsonSerializableClubTrack(ReadOnlyClubTrack src)
-    +ClubTrack toModelType()
-}
-Class JsonAdaptedPerson {
-    -String name
-    -String phone
-    -String email
-    -String address
-    -List<JsonAdaptedTag> tags
-    +JsonAdaptedPerson(Person source)
-    +Person toModelType()
-}
-Class JsonAdaptedTag {
-    -String tagName
-    +JsonAdaptedTag(Tag source)
-    +Tag toModelType()
+package "ClubTrack Storage" #F4F6F6{
+Class "<<interface>>\nClubTrackStorage" as AddressBookStorage
+Class JsonClubTrackStorage
+Class JsonSerializableClubTrack
+Class JsonAdaptedPerson
+Class JsonAdaptedTag
 }
 }
 
-' Inheritance relationships
+Class HiddenOutside #FFFFFF
+HiddenOutside ..> Storage
+
 StorageManager .up.|> Storage
+StorageManager -up-> "1" UserPrefsStorage
+StorageManager -up-> "1" AddressBookStorage
+
+Storage -left-|> UserPrefsStorage
+Storage -right-|> AddressBookStorage
+
 JsonUserPrefsStorage .up.|> UserPrefsStorage
-JsonClubTrackStorage .up.|> ClubTrackStorage
-
-' Composition relationships
-StorageManager *-up-> "1" UserPrefsStorage
-StorageManager *-up-> "1" ClubTrackStorage
-
-' Interface inheritance
-Storage --|> UserPrefsStorage
-Storage --|> ClubTrackStorage
-
-' Dependencies and associations
+JsonClubTrackStorage .up.|> AddressBookStorage
 JsonClubTrackStorage ..> JsonSerializableClubTrack
-JsonSerializableClubTrack *-- JsonAdaptedPerson
-JsonAdaptedPerson *-- JsonAdaptedTag
+JsonSerializableClubTrack --> "*" JsonAdaptedPerson
+JsonAdaptedPerson --> "*" JsonAdaptedTag
 
+note right of JsonClubTrackStorage
+  ClubTrack uses an active list context:
+  data/<LIST_NAME>.json
+  e.g., data/default.json, data/freshers.json
+  (resolved by commands like SwitchCommand)
+end note
 @enduml
