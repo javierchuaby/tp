@@ -361,7 +361,7 @@ Adds a tag to the specified member.
 **Format:**
 `tag INDEX TAG`
 
-* Tags must be alphanumeric and ≤ 30 characters.
+* Tags must be alphanumeric and ≤ 50 characters.
 
 **Examples:**
 
@@ -377,7 +377,7 @@ Removes a tag from the specified member.
 **Format:**
 `untag INDEX TAG`
 
-* Tags must be alphanumeric and ≤ 30 characters.
+* Tags must be alphanumeric and ≤ 50 characters.
 
 **Examples:**
 
