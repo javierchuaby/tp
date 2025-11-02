@@ -1,0 +1,45 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+title Figure 6. Interactions Inside the Logic Component for the delete 2 Command
+
+box "Logic" LOGIC_COLOR_T1
+  participant ":LogicManager" as logic LOGIC_COLOR
+  participant ":AddressBookParser" as abp LOGIC_COLOR
+  participant ":DeleteCommandParser" as dcp LOGIC_COLOR
+  participant "d:DeleteCommand" as dc LOGIC_COLOR
+end box
+
+box "Model" MODEL_COLOR_T1
+  participant ":Model" as model MODEL_COLOR
+  participant ":CommandResult" as result MODEL_COLOR
+end box
+
+[-> logic : execute("delete 2")
+activate logic
+
+logic -> abp ++: parseCommand("delete 2")
+create dcp
+abp -> dcp
+
+abp -> dcp ++: parse("2")
+create dc
+dcp -> dc ++: new DeleteCommand(Index=2)
+dc --> dcp --: d
+destroy dcp
+dcp --> abp --: d
+abp --> logic --: d
+
+logic -> dc ++: execute()
+dc -> model ++: deletePerson(2)
+create result
+model -> result
+result --> dc --: CommandResult
+deactivate model
+dc --> logic --: result
+deactivate dc
+deactivate logic
+
+@enduml
+

@@ -10,6 +10,7 @@ title: Developer Guide
   - [2.1 Architectural Extension: Switchable Lists](#21-architectural-extension-switchable-lists)
 - [3. UI Component](#3-ui-component)
 - [4. Logic Component](#4-logic-component)
+  - [4.1 Sequence Diagram for Command Execution](#41-sequence-diagram-for-command-execution)
 - [5. Model Component](#5-model-component)
   - [5.1 Person model](#51-person-model)
 - [6. Storage Component](#6-storage-component)
@@ -138,6 +139,26 @@ The **Logic** component is responsible for:
 6. returning a `CommandResult`.
 
 ![Logic Class Diagram](diagrams/LogicClassDiagram.png)
+
+### 4.1 Command Execution
+
+The sequence diagram below illustrates the interactions inside the Logic component when executing a `delete` command. It shows how a command string flows through the parsing layer to create a command object, which is then executed to interact with the Model component.
+
+![Logic Sequence Diagram](diagrams/LogicSequenceDiagram.png)
+
+**Flow:**
+1. An external call to `LogicManager.execute("delete 2")` initiates the process.
+2. `LogicManager` delegates parsing to `AddressBookParser.parseCommand("delete 2")`.
+3. `AddressBookParser` creates a `DeleteCommandParser` and calls `parse("2")` to extract the index.
+4. `DeleteCommandParser` creates a `DeleteCommand` instance with the parsed index and returns it.
+5. `DeleteCommandParser` is destroyed after creating the command object.
+6. The `DeleteCommand` is returned through the parsing chain back to `LogicManager`.
+7. `LogicManager` calls `execute()` on the `DeleteCommand` object.
+8. `DeleteCommand` calls `deletePerson(2)` on the `Model` component.
+9. `Model` creates a `CommandResult` object to represent the operation's outcome.
+10. The `CommandResult` is returned back through the chain to `LogicManager`, which returns it to the caller.
+
+This pattern applies to all mutating commands (add, edit, delete, etc.), where the command object interacts with the Model to modify data and returns a `CommandResult` containing the operation outcome.
 
 **Key classes:**
 

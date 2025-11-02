@@ -1,65 +1,97 @@
 @startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor LOGIC_COLOR_T4
+skinparam classBackgroundColor LOGIC_COLOR
 
-' ===== Logic slice: Commands + LogicManager =====
+title ClubTrack — Logic Component
 
-interface Logic
+package Logic as LogicPackage {
 
-interface Model
+  package "Parser" as ParserPkg {
+    class "<<interface>>\nParser<T>" as IParser
+    class ClubTrackParser
+    class XYZCommandParser
 
-abstract class Command {
-+ execute(model : Model) : CommandResult
+    class ArgumentTokenizer
+    class ArgumentMultimap
+    class Prefix
+    class CliSyntax
+    class ParserUtil
+  }
+
+  package "Commands" as CmdPkg {
+    class CommandResult
+    abstract class Command
+    class XYZCommand
+
+    package "exceptions" {
+      class CommandException
+      class ParseException
+    }
+  }
+
+  class "<<interface>>\nLogic" as Logic
+  class LogicManager
+  class ClubTrackListManager
+  class Messages
 }
 
-class CommandResult {
-+ feedbackToUser : String
-+ showHelp : boolean
-+ exit : boolean
+package Model {
+  interface Model
 }
 
-class LogicManager {
-- model : Model
-- storage : Storage
-- clubTrackParser : ClubTrackParser
-+ execute(commandText : String) : CommandResult
-+ getClubTrack() : ReadOnlyClubTrack
-+ getClubTrackFilePath() : Path
-}
+'===========================
+'  Component relationships
+'===========================
 
-class AddCommand
-class EditCommand
-class FindCommand
-class AttendanceCommand
-class AddPointsCommand
-class MinusPointsCommand
-class DeleteCommand
-class ListCommand
-class ClearCommand
-class ExitCommand
-class HelpCommand
-
-' Command hierarchy
-Command <|-- AddCommand
-Command <|-- EditCommand
-Command <|-- FindCommand
-Command <|-- AttendanceCommand
-Command <|-- AddPointsCommand
-Command <|-- MinusPointsCommand
-Command <|-- DeleteCommand
-Command <|-- ListCommand
-Command <|-- ClearCommand
-Command <|-- ExitCommand
-Command <|-- HelpCommand
-
-interface Storage
-class ClubTrackParser
-class NameContainsKeywordsPredicate
-
-' Relationships
-LogicManager ..|> Logic
-Command --> Model
-LogicManager --> ClubTrackParser
-LogicManager --> Storage
+LogicManager .right.|> Logic
 LogicManager --> Model
-FindCommand --> NameContainsKeywordsPredicate
+LogicManager --> ClubTrackParser
+LogicManager --> ClubTrackListManager
+LogicManager ..> Messages
+
+Logic ..> CommandResult
+LogicManager ..> CommandResult : returns
+
+LogicManager .down.> Command : executes()
+XYZCommand -up-|> Command
+CmdPkg.Command ..> Model : reads/writes
+
+'===========================
+'  Parser relationships
+'===========================
+
+IParser <|.. XYZCommandParser
+ClubTrackParser ..> XYZCommandParser : delegates
+ParserUtil ..> Prefix
+ParserUtil ..> CliSyntax
+XYZCommandParser ..> ArgumentTokenizer
+ArgumentTokenizer --> ArgumentMultimap
+ArgumentMultimap ..> Prefix
+CliSyntax ..> Prefix
+
+' Parser creates concrete command instances (abstracted as XYZCommand)
+XYZCommandParser ..> XYZCommand : <<create>>
+
+'===========================
+'  Notes
+'===========================
+
+note right of XYZCommand
+  Represents all concrete commands in ClubTrack, e.g.:
+  - AddCommand / EditCommand / DeleteCommand
+  - FindCommand, SearchCommand (n/, t/, any/)
+  - TagCommand / UntagCommand
+  - MarkCommand / UnmarkCommand
+  - AttendanceCommand
+  - SwitchCommand (active list)
+  - AddPointsCommand / MinusPointsCommand / PointsCommand
+  - ListCommand / RemoveCommand / HelpCommand / ExitCommand / ClearCommand
+end note
+
+note bottom of ClubTrackListManager
+  Used by Switch-related command(s) to change the active list.
+end note
 
 @enduml
