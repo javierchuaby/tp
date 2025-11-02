@@ -184,7 +184,7 @@ Finds members whose **non-tag fields** contain **any** of the given keywords.
 - email
 - address
 - faculty
-- year of study (as text, e.g. “Y1”, “1”, “Year 1”)
+- year of study
 
 **Rules:**
 
@@ -199,7 +199,7 @@ Finds members whose **non-tag fields** contain **any** of the given keywords.
 - `find john`
 - `find soc`
 - `find 9876`
-- `find malaysia year 2`
+- `find Y2`
 
 ### Searching members by tag prefix : `search`
 
@@ -301,6 +301,8 @@ Adds a specified number of points to a member.
 
 * Points can represent participation, merit, or performance.
 * The integer VALUE can be positive or negative.
+* In line with typical club operations, points are usually awarded in small increments, and therefore would be 
+  unrealistic to have large increments in points e.g., adding 10000000 points at once.
 
 **Examples:**
 
@@ -315,6 +317,9 @@ Removes a specified number of points from a member.
 
 **Format:**
 `minuspoints INDEX pts/VALUE`
+
+* Similar to the 'addpoints' command, points are usually deducted in small decrements, and would be unrealistic
+  to have large decrements in points e.g., subtracting 100000000 points at once.
 
 **Examples:**
 
@@ -344,6 +349,8 @@ Adds a tag to the specified member.
 **Format:**
 `tag INDEX TAG`
 
+* Only alphanumeric characters are accepted as tags, other inputs will be ignored.
+
 **Examples:**
 
 * `tag 1 Treasurer`
@@ -357,6 +364,8 @@ Removes a tag from the specified member.
 
 **Format:**
 `untag INDEX TAG`
+
+* Only alphanumeric characters are accepted to untag, other inputs will be ignored.
 
 **Examples:**
 
@@ -438,6 +447,10 @@ Advanced users may edit these JSON files directly.
 **Q:** The app does not open.
 **A:** Ensure you are using Java 17 or above. If issues persist, download the latest `.jar` file and try again.
 
+**Q:** Will I have to create a completely new list from scratch for separate events?
+**A:** No, excos can simply duplicate a previous event's JSON file, rename it, and load it as a new list to 
+serve as a base template, eliminating the need to re-enter records manually. From there, edit the names accordingly. 
+
 ---
 
 ## Command summary
@@ -449,7 +462,7 @@ Advanced users may edit these JSON files directly.
 | **Delete Member**        | `delete INDEX` e.g. `delete 3`                                                                                                                             |
 | **List Members**         | `list`                                                                                                                                                     |
 | **Find Member**          | `find KEYWORD [MORE_KEYWORDS]` e.g. `find John David`                                                                                                      |
-| **Search (Name & Tags)** | `search [n/NAME_QUERY] [t/TAG]… [any/]` e.g. `search t/Logistics any/`                                                                                     |
+| **Search (Name & Tags)** | `search [t/TAG]… [any/]` e.g. `search t/Logistics any/`                                                                                     |
 | **Mark Attendance**      | `present INDEX`                                                                                                                                            |
 | **Unmark Attendance**    | `absent INDEX`                                                                                                                                             |
 | **View Attendance**      | `attendance`                                                                                                                                               |

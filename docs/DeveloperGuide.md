@@ -463,7 +463,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
       Use case ends.
 * 3a. Tag format is invalid
 
-    * 3a1. ClubTrack shows an error message with proper format.
+    * 3a1. ClubTrack shows an error message.
       Use case resumes at step 3.
 
 ### UC02 – Mark attendance and track payment status
@@ -480,8 +480,15 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 **Extensions**
 
-* 1a. Member not found → show error → use case ends.
-* 3a. Member already paid → show current status → resume at step 6.
+* 1a. Member not found 
+
+  * 1a1. ClubTrack shows an error message.
+    Use case ends.
+
+* 3a. Member already paid
+
+  * 3a1. Show current status.
+    Resume at step 6.
 
 ### UC03 – Generate attendance report for event planning
 
@@ -496,8 +503,112 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 **Extensions**
 
-* 1a. No attendance records → show “no records” → use case ends.
-* 3a. Insufficient data → show partial data with a note → continue at step 5.
+* 1a. No attendance records.
+
+  * 1a1. ClubTrack shows a message indicating no records found.
+    Use case ends.
+
+* 3a. Insufficient data.
+
+  * Show partial data with a note.
+    Continue at step 5.
+
+
+### UC04 – Add a member
+
+**Use Case:** UC04 – Add a member
+
+**MSS**
+
+1. User issues the `add` command with valid prefixes, for example:
+
+   ```text
+   add n/John Doe p/91234567 e/john@example.com a/Blk 123, #02-01 y/2 f/School of Computing t/committee
+   ```
+2. ClubTrack validates each field (phone format, year range, non-empty faculty/address).
+3. ClubTrack adds the member to the current active list and saves the list to disk.
+4. ClubTrack displays a confirmation message and the new member card in the UI.
+   Use case ends.
+
+**Extensions**
+
+* 1a. Invalid phone / year / missing compulsory prefix
+
+  * 1a1. ClubTrack shows an error message describing the invalid field(s).
+    Use case ends.
+* 3a. Duplicate identity (same phone or email already exists)
+
+  * 3a1. ClubTrack rejects the add and shows a duplicate-person error.
+    Use case ends.
+
+### UC05 – Edit a member
+
+**Use Case:** UC05 – Edit a member
+
+**MSS**
+
+1. User issues the `edit` command with an index and fields to change, e.g.:
+
+   ```text
+   edit 2 p/91234568 a/New Address y/3
+   ```
+2. ClubTrack validates inputs and locates the target member by displayed index.
+3. ClubTrack applies the changes, updates model and saves the active list to disk.
+4. ClubTrack displays a success message and the updated member card.
+   Use case ends.
+
+**Extensions**
+
+* 2a. Target index out of range
+
+  * 2a1. ClubTrack shows an invalid index error. Use case ends.
+* 1a. Attempt to edit to a duplicate identity (phone/email clashes)
+
+  * 1a1. ClubTrack rejects the edit and shows duplicate-person error. Use case ends.
+
+### UC06 – Find members by name
+
+**Use Case:** UC06 – Find members by name
+
+**MSS**
+
+1. User issues the `find` command with one or more name keywords, e.g.:
+
+   ```text
+   find alex david
+   ```
+2. ClubTrack filters the active list by case-insensitive substring match on the name field.
+3. ClubTrack displays the filtered list (and a result summary message).
+   Use case ends.
+
+**Extensions**
+
+* 1a. No members match
+
+  * 1a1. ClubTrack shows message indicating no members found and an empty list. 
+  Use case ends.
+
+### UC07 – Clear current list
+
+**System:** ClubTrack
+
+**Use Case:** UC11 – Clear current list
+
+**Actor:** user
+
+**MSS**
+
+1. User issues `clear` while the desired list is active.
+2. ClubTrack asks for confirmation (optional GUI dialog) or accepts unconditional CLI invocation depending on mode.
+3. On confirmation, ClubTrack clears the in-memory address book for that list and saves an empty `data/<list>.json`.
+4. ClubTrack displays a success message and an empty list in the UI. Use case ends.
+
+**Extensions**
+
+* 2a. User cancels confirmation
+
+  * 2a1. ClubTrack aborts and no changes are made. 
+  Use case ends.
 
 ---
 
@@ -506,7 +617,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 1. **Performance**: Should work on any mainstream OS with Java 17 or above.
 2. **Scalability**: Should handle up to 200 members per list without noticeable sluggishness.
 3. **Usability**: A club exco member with above-average typing speed should be able to accomplish common tasks faster than using spreadsheets.
-4. **Reliability**: Should maintain data integrity when recording attendance and payment information.
+4. **Reliability**: Should maintain data integrity when recording information.
 5. **Portability**: Should run on university PCs and personal laptops without admin rights.
 6. **Response time**: Common ops (search, add, present) should complete within 2 seconds.
 7. **Data persistence**: Should automatically save after every mutating command.
