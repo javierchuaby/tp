@@ -6,6 +6,9 @@ title: User Guide
 
 ClubTrack is a **desktop app for managing club members and attendance, optimized for use via a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI).
 
+* Table of Contents
+  {:toc}
+
 ## Target User Profile
 
 ClubTrack is designed for **university student club executive committee (exco) members** who need to:
@@ -129,7 +132,14 @@ Adds a member to ClubTrack.
 **Format:**
 `add n/NAME p/PHONE e/EMAIL a/ADDRESS y/YEAR_OF_STUDY f/FACULTY [t/TAG]…`
 
-**Phone constraint:** phone numbers must be **Singapore mobile numbers** — **exactly 8 digits, starting with 8 or 9** (e.g. `98123456`, `83123456`).
+**Field constraints:**
+- **Name** — up to 100 characters; must contain only letters, numbers, and spaces.
+- **Phone** — 8 digits, must start with 8 or 9.
+- **Email** — up to 254 characters, must be a valid email format.
+- **Address** — up to 200 characters.
+- **Faculty** — cannot be blank, up to 100 characters.
+- **Year of Study** — integer 1 to 5.
+- **Tag** — alphanumeric; up to 50 characters each.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A member can have any number of tags (including 0), e.g. their role or committee.
@@ -163,6 +173,8 @@ Edits an existing member.
 * Existing values will be updated to the input values.
 * When editing tags, the existing tags of the member will be replaced.
 * You can remove all tags by typing `t/` without specifying any tags after it.
+
+_Field constraints (e.g., max lengths, year 1–5) follow the same rules as in [`add`](#adding-a-member--add)._
 
 **Examples:**
 
@@ -349,7 +361,7 @@ Adds a tag to the specified member.
 **Format:**
 `tag INDEX TAG`
 
-* Only alphanumeric characters are accepted as tags, other inputs will be ignored.
+* Tags must be alphanumeric and ≤ 50 characters.
 
 **Examples:**
 
@@ -365,7 +377,7 @@ Removes a tag from the specified member.
 **Format:**
 `untag INDEX TAG`
 
-* Only alphanumeric characters are accepted to untag, other inputs will be ignored.
+* Tags must be alphanumeric and ≤ 50 characters.
 
 **Examples:**
 
@@ -450,6 +462,9 @@ Advanced users may edit these JSON files directly.
 **Q:** Will I have to create a completely new list from scratch for separate events?
 **A:** No, excos can simply duplicate a previous event's JSON file, rename it, and load it as a new list to
 serve as a base template, eliminating the need to re-enter records manually. From there, edit the names accordingly.
+
+**Q:** Why do some fields reject very long input?  
+**A:** To ensure smooth performance and prevent corrupted files, ClubTrack limits field lengths (e.g., Name ≤ 100 chars).
 
 ---
 
