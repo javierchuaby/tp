@@ -26,8 +26,6 @@ import seedu.address.model.person.Tag;
  * </pre>
  */
 public class UntagCommand extends Command {
-    /** Error message when attempting to remove a tag that the person does not have. */
-    public static final String MESSAGE_INVALID_TAG = "Invalid tag: %1$s";
     /** Command word used to invoke this command. */
     public static final String COMMAND_WORD = "untag";
 
