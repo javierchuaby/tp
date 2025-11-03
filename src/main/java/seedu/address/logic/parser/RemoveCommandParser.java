@@ -20,6 +20,11 @@ public class RemoveCommandParser implements Parser<RemoveCommand> {
         if (trimmed.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveCommand.MESSAGE_USAGE));
         }
+        // Reject invalid list names (e.g. contains spaces, path separators or glob characters like '*')
+        // Allowed: letters, digits, underscore and hyphen only
+        if (!trimmed.matches("[A-Za-z0-9_-]+")) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemoveCommand.MESSAGE_USAGE));
+        }
         return new RemoveCommand(trimmed);
     }
 }

@@ -21,13 +21,11 @@ public class SwitchCommandParser implements Parser<SwitchCommand> {
         if (trimmed.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SwitchCommand.MESSAGE_USAGE));
         }
-
-        if (trimmed.contains("*") || trimmed.contains("?") || trimmed.contains("<")
-            || trimmed.contains(">") || trimmed.contains("|") || trimmed.contains("\"")
-            || trimmed.contains(":") || trimmed.contains("\\") || trimmed.contains("/")) {
-            throw new ParseException("List name cannot contain special characters: * ? < > | \" : \\ /");
+        // Reject invalid list names (e.g. contains spaces, path separators or glob characters like '*')
+        // Allowed: letters, digits, underscore and hyphen only
+        if (!trimmed.matches("[A-Za-z0-9_-]+")) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SwitchCommand.MESSAGE_USAGE));
         }
-
         return new SwitchCommand(trimmed);
     }
 }

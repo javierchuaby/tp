@@ -4,8 +4,11 @@ package seedu.address.logic;
 import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -16,6 +19,8 @@ import seedu.address.model.ClubTrack;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyClubTrack;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.Points;
 import seedu.address.model.util.SampleDataUtil;
 import seedu.address.storage.Storage;
 
@@ -57,6 +62,13 @@ public class ClubTrackListManager {
                 storage.saveClubTrack(model.getClubTrack(), filePath);
             }
             model.setClubTrackFilePath(filePath);
+
+            // Lazy cumulative merge: accumulate points across all lists by member identity
+            Map<String, Integer> identityToTotalPoints = buildGlobalPointsIndex();
+            boolean changed = reconcilePointsWithTotals(model, identityToTotalPoints);
+            if (changed) {
+                storage.saveClubTrack(model.getClubTrack(), filePath);
+            }
         } catch (DataLoadingException dle) {
             logger.warning("Failed to load list at " + filePath + ". Starting with empty list.");
             model.setClubTrack(new ClubTrack());
@@ -69,6 +81,84 @@ public class ClubTrackListManager {
         } catch (IOException ioe) {
             throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
         }
+    }
+
+    /** Builds a map of identity -> total points summed across all data/*.json lists. */
+    private Map<String, Integer> buildGlobalPointsIndex() {
+        Map<String, Integer> totals = new HashMap<>();
+        Path dataDir = Paths.get("data");
+        try (DirectoryStream<Path> stream = java.nio.file.Files.newDirectoryStream(dataDir, "*.json")) {
+            for (Path path : stream) {
+                try {
+                    Optional<ReadOnlyClubTrack> ro = storage.readClubTrack(path);
+                    if (ro.isEmpty()) {
+                        continue;
+                    }
+                    for (Person p : ro.get().getPersonList()) {
+                        String id = getIdentityKey(p);
+                        if (id == null) {
+                            continue;
+                        }
+                        totals.merge(id, p.getPoints().getValue(), Integer::sum);
+                    }
+                } catch (Exception e) {
+                    // Skip unreadable/malformed files; continue accumulating from others
+                    logger.fine("Skipping file during points index build: " + path + ", reason: " + e.getMessage());
+                }
+            }
+        } catch (IOException ioe) {
+            // If data directory cannot be read, treat as zero totals
+            logger.fine("Unable to scan data directory for cumulative points: " + ioe.getMessage());
+        }
+        return totals;
+    }
+
+    /** Reconciles current model's persons with provided totals; returns true if any points changed. */
+    private boolean reconcilePointsWithTotals(Model model, Map<String, Integer> totals) {
+        boolean changed = false;
+        for (Person person : model.getClubTrack().getPersonList()) {
+            String id = getIdentityKey(person);
+            if (id == null) {
+                continue;
+            }
+            Integer total = totals.get(id);
+            if (total == null) {
+                continue;
+            }
+            int current = person.getPoints().getValue();
+            if (total != current) {
+                Person updated = new Person(
+                        person.getName(),
+                        person.getPhone(),
+                        person.getEmail(),
+                        person.getYearOfStudy(),
+                        person.getFaculty(),
+                        person.getAddress(),
+                        person.getTags(),
+                        person.isPresent(),
+                        new Points(total));
+                model.setPerson(person, updated);
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    /** Returns a stable identity key for a person: email preferred, else phone. */
+    private String getIdentityKey(Person p) {
+        if (p.getEmail() != null && p.getEmail().toString() != null) {
+            String email = p.getEmail().toString().trim();
+            if (!email.isEmpty()) {
+                return "E:" + email;
+            }
+        }
+        if (p.getPhone() != null && p.getPhone().toString() != null) {
+            String phone = p.getPhone().toString().trim();
+            if (!phone.isEmpty()) {
+                return "P:" + phone;
+            }
+        }
+        return null;
     }
 
     /**
