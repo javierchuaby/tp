@@ -224,11 +224,11 @@ Person
  ├─ phone : Phone           // 8 digits, start with 8 or 9
  ├─ email : Email
  ├─ address : Address       // shown on card
- ├─ yearOfStudy : int       // 1..4
+ ├─ yearOfStudy : int       // 1..5
  ├─ faculty : String        // non-empty
  ├─ tags : Set<Tag>
  ├─ isPresent : boolean     // for attendance
- └─ points : Points         // value objec
+ └─ points : Points         // value object
 ```
 
 We also changed **identity**:
@@ -449,35 +449,42 @@ Advanced users may edit these JSON files manually.
 
 ---
 
+\
 ## 10. User stories
 
 Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (unlikely to have) – `*`
 
-| Priority | As a …           | I want to …                                 | So that I can…                        |
-| -------- | ---------------- | ------------------------------------------- | ------------------------------------- |
-| `* * *`  | Club Exco Member | add a new member                            | keep track of the membership list     |
-| `* * *`  | Club Secretary   | mark a member as present                    | keep track of their attendance        |
-| `* * *`  | Club Exco Member | delete a current member                     | keep the membership list up to date   |
-| `* * *`  | Club Exco Member | list all members                            | keep track of the total membership    |
-| `* * *`  | Club Exco Member | search for a member by name                 | find them quickly without scrolling   |
-| `* *`    | Club Secretary   | unmark a member as present                  | correct attendance mistakes           |
-| `* *`    | Club Exco Member | tag a member                                | remember extra info (role, committee) |
-| `* *`    | Club Exco Member | check if a member is present                | verify attendance status              |
-| `* *`    | Club Exco Member | search members by tags                      | filter according to specific criteria |
-| `* *`    | Club Exco Member | edit a member's details                     | keep contact information up to date   |
-| `* *`    | Club Treasurer   | record membership fee payments              | track who has paid                    |
-| `* *`    | Club Treasurer   | list members who haven't paid fees          | remind them to pay                    |
-| `* *`    | Club Secretary   | view a member's attendance history          | track participation across events     |
-| `*`      | Club Exco Member | export member data to a file                | share it with other parties           |
-| `*`      | Club Exco Member | undo my last action                         | fix mistakes quickly                  |
-| `*`      | Club Exco Member | count the total number of members           | report club size to the university    |
-| `*`      | Club Secretary   | list members sorted by attendance rate      | see who participates most/least       |
-| `*`      | Club Secretary   | list attendance summary for a specific date | check how many people showed up       |
-| `*`      | Club Exco Member | generate a random selection of members      | pick someone fairly                   |
-| `*`      | Club Treasurer   | record an expense                           | keep track of spending                |
-| `*`      | Club Treasurer   | show all expenses                           | keep track of spending patterns       |
+| Priority | As a …           | I want to …                            | So that I can …                           |
+|----------|------------------|----------------------------------------|-------------------------------------------|
+| `* * *`  | Club Exco Member | add a new member                       | keep track of the membership list         |
+| `* * *`  | Club Exco Member | edit a member’s details                | keep contact information up to date       |
+| `* * *`  | Club Exco Member | delete a current member                | keep the membership list up to date       |
+| `* * *`  | Club Exco Member | list all members                       | see the complete membership at a glance   |
+| `* * *`  | Club Exco Member | search for a member by name            | find them quickly without scrolling       |
+| `* * *`  | Club Exco Member | search members by tag prefix           | filter according to specific criteria     |
+| `* * *`  | Club Secretary   | mark a member as present               | keep track of their attendance            |
+| `* * *`  | Club Secretary   | unmark a member as present             | correct attendance mistakes               |
+| `* * *`  | Club Secretary   | view attendance list                   | verify attendance status                  |
+| `* * *`  | Club Exco Member | tag a member                           | record their role or committee            |
+| `* * *`  | Club Exco Member | remove a tag from a member             | keep tags accurate and up to date         |
+| `* * *`  | Club Exco Member | switch to another member list          | manage attendance for different events    |
+| `* * *`  | Club Exco Member | remove an existing list                | delete outdated event rosters             |
+| `* * *`  | Club Exco Member | add points to a member                 | reward participation and contributions    |
+| `* * *`  | Club Exco Member | deduct points from a member            | correct point assignment mistakes         |
+| `* * *`  | Club Exco Member | view a member’s current points         | see their participation progress          |
+| `* *`    | Club Exco Member | clear all members in the current list  | reset event attendance quickly            |
+| `* *`    | Club Exco Member | access help information                | learn how to use the available commands   |
+| `* *`    | Club Exco Member | exit the program                       | close the application safely              |
+| `*`      | Club Secretary   | view attendance summary for a date     | check how many people showed up           |
+| `*`      | Club Exco Member | list members sorted by attendance rate | see who participates most/least           |
+| `*`      | Club Exco Member | generate a random selection of members | pick someone fairly                       |
+| `*`      | Club Exco Member | export member data to a file           | share it with other committees/executives |
 
 *Note: Some user stories above are for future versions and may not be in the current build.*
+
+---
+
+Here’s your **updated Use Cases section** rewritten to fully reflect ClubTrack’s current commands, features, and audience — following CS2103T format and tone. It’s copy-paste ready for your `.md` file ✅
 
 ---
 
@@ -485,184 +492,227 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 (For all use cases below, the **System** is `ClubTrack` and the **Actor** is the `user`, unless specified otherwise.)
 
-### UC01 – Tag a member with a role
+---
 
-**MSS**
-
-1. User requests to find a specific member by name.
-2. ClubTrack shows the member’s details.
-3. User requests to tag the member with a specific role (e.g. `treasurer`).
-4. ClubTrack adds the tag to the member and displays confirmation.
-   Use case ends.
-
-**Extensions**
-
-* 1a. Member name is not found
-
-    * 1a1. ClubTrack shows an error message.
-      Use case ends.
-* 3a. Tag format is invalid
-
-    * 3a1. ClubTrack shows an error message.
-      Use case resumes at step 3.
-
-### UC02 – Mark attendance and track payment status
-
-**MSS**
-
-1. User requests to mark a member as present.
-2. ClubTrack updates the member’s attendance record.
-3. User requests to check if the same member has paid membership fees.
-4. ClubTrack displays the member’s payment status.
-5. If unpaid, user records the fee payment.
-6. ClubTrack updates the member’s payment status.
-   Use case ends.
-
-**Extensions**
-
-* 1a. Member not found
-
-  * 1a1. ClubTrack shows an error message.
-    Use case ends.
-
-* 3a. Member already paid
-
-  * 3a1. Show current status.
-    Resume at step 6.
-
-### UC03 – Generate attendance report for event planning
-
-**MSS**
-
-1. User requests to view attendance summary for a specific date.
-2. ClubTrack displays the list of members who attended on that date.
-3. User requests to see members sorted by attendance rate.
-4. ClubTrack displays members ranked by attendance frequency.
-5. User selects high-attendance members for important roles.
-   Use case ends.
-
-**Extensions**
-
-* 1a. No attendance records.
-
-  * 1a1. ClubTrack shows a message indicating no records found.
-    Use case ends.
-
-* 3a. Insufficient data.
-
-  * Show partial data with a note.
-    Continue at step 5.
-
-
-### UC04 – Add a member
-
-**Use Case:** UC04 – Add a member
+### **UC01 – Add a member**
 
 **MSS**
 
 1. User issues the `add` command with valid prefixes, for example:
 
    ```tex
-   add n/John Doe p/91234567 e/john@example.com a/Blk 123, #02-01 y/2 f/School of Computing t/committee
+   add n/John Doe p/91234567 e/john@example.com a/Blk 123, #02-01 y/2 f/SOC t/committee
    ```
-2. ClubTrack validates each field (phone format, year range, non-empty faculty/address).
-3. ClubTrack adds the member to the current active list and saves the list to disk.
-4. ClubTrack displays a confirmation message and the new member card in the UI.
+2. ClubTrack validates each field (e.g. phone format, year range, non-empty faculty/address).
+3. ClubTrack adds the member to the **active list** and saves the list to disk.
+4. ClubTrack displays a confirmation message and shows the new member in the UI.
    Use case ends.
 
 **Extensions**
 
-* 1a. Invalid phone / year / missing compulsory prefix
+* 1a. Missing or invalid field (e.g. invalid phone/year/faculty)
 
-  * 1a1. ClubTrack shows an error message describing the invalid field(s).
-    Use case ends.
-* 3a. Duplicate identity (same phone or email already exists)
+    * 1a1. ClubTrack shows an error message. Use case ends.
+* 3a. Duplicate member detected (same phone or email)
 
-  * 3a1. ClubTrack rejects the `add` and shows a duplicate-person error.
-    Use case ends.
+    * 3a1. ClubTrack rejects the command and shows a duplicate-member error. Use case ends.
 
-### UC05 – Edit a member
+---
 
-**Use Case:** UC05 – Edit a member
+### **UC02 – Edit a member**
 
 **MSS**
 
-1. User issues the `edit` command with an index and fields to change, e.g.:
+1. User issues the `edit` command with the member’s index and fields to change, e.g.:
 
    ```tex
-   edit 2 p/91234568 a/New Address y/3
+   edit 2 p/91234568 a/21 Kent Ridge y/3
    ```
-2. ClubTrack validates inputs and locates the target member by displayed index.
-3. ClubTrack applies the changes, updates model and saves the active list to disk.
-4. ClubTrack displays a success message and the updated member card.
+2. ClubTrack validates the new input fields and locates the member by index.
+3. ClubTrack updates the member’s details and saves the updated list.
+4. ClubTrack displays a success message and the updated member details in the UI.
    Use case ends.
 
 **Extensions**
 
-* 2a. Target index out of range
+* 2a. Invalid index
 
-  * 2a1. ClubTrack shows an invalid index error. Use case ends.
-* 1a. Attempt to edit to a duplicate identity (phone/email clashes)
+    * 2a1. ClubTrack shows an invalid index error. Use case ends.
+* 1a. Attempt to edit to a duplicate member (same phone/email)
 
-  * 1a1. ClubTrack rejects the edit and shows duplicate-person error. Use case ends.
+    * 1a1. ClubTrack rejects the edit and shows a duplicate-member error. Use case ends.
 
-### UC06 – Find members by name
+---
 
-**Use Case:** UC06 – Find members by name
+### **UC03 – Mark attendance for an event**
 
 **MSS**
 
-1. User issues the `find` command with one or more name keywords, e.g.:
+1. User switches to the relevant list for the event (e.g. `switch Training_2025_10_20`).
+2. User issues the `present` command with a member’s index, e.g.:
 
    ```tex
-   find alex david
+   present 3
    ```
-2. ClubTrack filters the active list by case-insensitive substring match on the name field.
-3. ClubTrack displays the filtered list (and a result summary message).
+3. ClubTrack marks the member as present in that event list.
+4. ClubTrack displays a success message and updates the attendance status in the UI.
    Use case ends.
 
 **Extensions**
 
-* 1a. No members match
+* 2a. Invalid index or member not found
 
-  * 1a1. ClubTrack shows message indicating no members found and an empty list.
-  Use case ends.
+    * 2a1. ClubTrack shows an error message. Use case ends.
+* 3a. Member already marked present
 
-### UC07 – Clear current list
+    * 3a1. ClubTrack shows a warning and makes no change. Use case ends.
 
-**System:** ClubTrack
+---
 
-**Use Case:** UC11 – Clear current lis
-
-**Actor:** user
+### **UC04 – Add points to a member**
 
 **MSS**
 
-1. User issues `clear` while the desired list is active.
-2. ClubTrack asks for confirmation (optional GUI dialog) or accepts unconditional CLI invocation depending on mode.
-3. On confirmation, ClubTrack clears the in-memory address book for that list and saves an empty `data/<list>.json`.
-4. ClubTrack displays a success message and an empty list in the UI. Use case ends.
+1. User issues the `addpoints` command with a valid member index and points value, e.g.:
+
+   ```tex
+   addpoints 1 pts/5
+   ```
+2. ClubTrack validates that the points value is a positive integer within reasonable limits.
+3. ClubTrack updates the member’s points in the active list and saves the file.
+4. ClubTrack displays the new total points and a confirmation message.
+   Use case ends.
+
+**Extensions**
+
+* 1a. Invalid index or points format
+
+    * 1a1. ClubTrack shows an error message. Use case ends.
+
+---
+
+### **UC05 – Search for members by tag**
+
+**MSS**
+
+1. User issues the `search` command with one or more tag prefixes, e.g.:
+
+   ```tex
+   search t/exco t/dance
+   ```
+2. ClubTrack filters members whose tags begin with the given prefixes.
+3. ClubTrack displays the filtered list of matching members.
+   Use case ends.
+
+**Extensions**
+
+* 1a. No matches found
+
+    * 1a1. ClubTrack shows a message indicating no members found. Use case ends.
+
+---
+
+### **UC06 – Switch to another member list**
+
+**MSS**
+
+1. User issues the `switch` command with the desired list name, e.g.:
+
+   ```tex
+   switch MatchDay_2025_11_05
+   ```
+2. ClubTrack checks if the list file exists in the `data/` directory.
+3. If it exists, ClubTrack loads it; otherwise, a new empty list is created.
+4. ClubTrack displays confirmation and updates the UI to show the new active list.
+   Use case ends.
+
+**Extensions**
+
+* 2a. Invalid list name (e.g. contains restricted characters)
+
+    * 2a1. ClubTrack rejects the command and shows an error message. Use case ends.
+
+---
+
+### **UC07 – Delete a member**
+
+**MSS**
+
+1. User issues the `delete` command with the member’s index, e.g.:
+
+   ```tex
+   delete 4
+   ```
+2. ClubTrack validates the index and removes the corresponding member from the active list.
+3. ClubTrack saves the updated list and displays a confirmation message.
+   Use case ends.
+
+**Extensions**
+
+* 1a. Invalid index
+
+    * 1a1. ClubTrack shows an invalid index error. Use case ends.
+
+---
+
+### **UC08 – Clear current list**
+
+**MSS**
+
+1. User issues the `clear` command to remove all members from the current list.
+2. ClubTrack prompts for confirmation (if applicable).
+3. Upon confirmation, ClubTrack clears the list and saves an empty file.
+4. ClubTrack displays a success message and an empty list in the UI.
+   Use case ends.
 
 **Extensions**
 
 * 2a. User cancels confirmation
 
-  * 2a1. ClubTrack aborts and no changes are made.
-  Use case ends.
+    * 2a1. ClubTrack aborts and no data is modified. Use case ends.
+
+---
+
+### **UC09 – View member points**
+
+**MSS**
+
+1. User issues the `points` command with a member’s index, e.g.:
+
+   ```tex
+   points 2
+   ```
+2. ClubTrack retrieves and displays the total points of the specified member.
+   Use case ends.
+
+**Extensions**
+
+* 1a. Invalid index
+
+    * 1a1. ClubTrack shows an error message. Use case ends.
+
+---
+
+### **UC10 – Exit the program**
+
+**MSS**
+
+1. User issues the `exit` command.
+2. ClubTrack saves all data and closes the application.
+   Use case ends.
 
 ---
 
 ## 12. Non-Functional Requirements
 
-1. **Performance**: Should work on any mainstream OS with Java 17 or above.
-2. **Scalability**: Should handle up to 200 members per list without noticeable sluggishness.
-3. **Usability**: A club exco member with above-average typing speed should be able to accomplish common tasks faster than using spreadsheets.
-4. **Reliability**: Should maintain data integrity when recording information.
-5. **Portability**: Should run on university PCs and personal laptops without admin rights.
-6. **Response time**: Common ops (search, add, present) should complete within 2 seconds.
-7. **Data persistence**: Should automatically save after every mutating command.
-8. **Offline**: Core functionality should work without internet.
-9. **Consistency**: CLI commands should follow consistent prefix style to reduce user confusion.
+1. Should work on any **mainstream OS** with Java 17 or above installed.
+2. Should be able to support **up to 500 members per list**, with common commands such as `add`, `edit`, or `find` completing within **2 seconds under normal conditions**.
+3. A **typical user** with above-average typing speed should be able to accomplish most tasks faster using commands than using the mouse.
+4. Should automatically save data after every mutating command.
+5. Core functionality should work fully **offline**.
+6. Should maintain data integrity when recording or modifying information.
+7. Should run on university PCs and personal laptops without requiring administrative rights.
+8. Command prefixes should follow a **consistent format** to reduce user confusion.
 
 ---
 
@@ -672,11 +722,12 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 * **Attendance Record** – a log entry indicating whether a member was present at a specific event.
 * **Mainstream OS** – Windows, macOS, Linux.
 * **Member Tag** – a label assigned to members to categorise them (e.g. `treasurer`, `dance`, `freshie`).
-* **Payment Status** – whether a member has paid required fees.
 * **CLI** – Command Line Interface.
 * **Active list** – the currently selected member list; determines which JSON file is read/written.
 * **Duty Roster** – schedule assigning tasks to members.
-* **Financial Record** – transaction logs including fees, expenses, etc.
+* **Normal conditions** – refers to running ClubTrack on a mainstream operating system (Windows 11, macOS 14, or Ubuntu 22.04) with Java 17 or above, on a typical university laptop (≥ 8 GB RAM, ≥ 2.5 GHz dual-core processor, SSD storage) while managing up to 500 members.
+* **Typical user** – a club executive or secretary familiar with basic computer use and able to type at an average speed of around 60 words per minute.
+* **Common operations** – frequently used commands such as `add`, `edit`, `delete`, `find`, `list`, and `switch`.
 
 ---
 
@@ -822,3 +873,21 @@ Expected: error about phone constraints.
 
 4. **Import from CSV**
    Many clubs keep members in Google Sheets. A CSV import would reduce data entry.
+
+5. **Support for non-Singapore phone numbers**
+   Currently only 8-digit local numbers (starting with 8 or 9) are allowed. We plan to extend validation to include international formats (e.g., +60, +65, +91).
+
+6. **Allow `/` in member names**
+   Certain legal names include slashes (e.g., “S/O John Doe”). We will enhance `Name` validation to support these characters safely.
+
+7. **Input validation for duplicate faculty fields**
+   Editing a member with multiple `f/` prefixes silently keeps the latest. We plan to detect duplicates and show a proper error message.
+
+8. **Input validation for duplicate year fields**
+   Similar to faculty, multiple `y/` prefixes during edit or add should trigger an error instead of overwriting the last value.
+
+9. **Strict date validation for invalid calendar dates**
+   Currently, invalid dates like 31/11/2025 are silently adjusted to the nearest valid date (30/11/2025) due to Java’s lenient date parsing. We plan to enable strict validation using ResolverStyle.STRICT so that impossible dates trigger a clear error message instead of being auto-corrected.
+
+10. **Prevent directory traversal in list names**
+    Lists with ../ in their names can delete files outside the app folder. Future versions will block such inputs to prevent unauthorized file access.
