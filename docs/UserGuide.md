@@ -8,7 +8,6 @@ ClubTrack is a **desktop app for managing club members and attendance, optimized
 
 ***
 
-## Table of Contents
 * Table of Contents
   {:toc}
 
