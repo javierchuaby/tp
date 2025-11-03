@@ -326,7 +326,7 @@ add n/NAME p/PHONE e/EMAIL a/ADDRESS y/YEAR_OF_STUDY f/FACULTY [t/TAG]...
 
 * `p/PHONE` → 8 digits, starts with 8 or 9
 * `a/ADDRESS` → non-empty
-* `y/` → integer 1–4
+* `y/` → integer 1–5
 * `f/` → non-empty
 * single-valued prefixes must not be repeated
 
@@ -481,10 +481,6 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 | `*`      | Club Exco Member | export member data to a file           | share it with other committees/executives |
 
 *Note: Some user stories above are for future versions and may not be in the current build.*
-
----
-
-Here’s your **updated Use Cases section** rewritten to fully reflect ClubTrack’s current commands, features, and audience — following CS2103T format and tone. It’s copy-paste ready for your `.md` file ✅
 
 ---
 
@@ -822,7 +818,7 @@ Expected: error about phone constraints.
 
    Expected: **does not** return them unless “log” appears in their **name**.
 
-### A.5 Clearing current lis
+### A.5 Clearing current list
 
 1. Switch to a test list:
 
