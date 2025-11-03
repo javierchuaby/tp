@@ -7,18 +7,19 @@ title: Developer Guide
 
 - [1. Introduction](#1-introduction)
 - [2. Architecture](#2-architecture)
-  - [2.1 Architectural Extension: Switchable Lists](#21-architectural-extension-switchable-lists)
+    - [2.1 Architectural Extension: Switchable Lists](#21-architectural-extension-switchable-lists)
 - [3. UI Component](#3-ui-component)
 - [4. Logic Component](#4-logic-component)
-  - [4.1 Sequence Diagram for Command Execution](#41-sequence-diagram-for-command-execution)
+    - [4.1 Command Execution](#41-command-execution)
+    - [4.2 Parser Class Diagram](#42-parser-class-diagram)
 - [5. Model Component](#5-model-component)
-  - [5.1 Person model](#51-person-model)
+    - [5.1 Person model](#51-person-model)
 - [6. Storage Component](#6-storage-component)
 - [7. Feature Implementation](#7-feature-implementation)
-  - [7.1 `switch` feature](#71-switch-feature)
-  - [7.2 `add` command (updated)](#72-add-command-updated)
-  - [7.3 `find` vs `search`](#73-find-vs-search)
-  - [7.4 Points features](#74-points-features)
+    - [7.1 `switch` feature](#71-switch-feature)
+    - [7.2 `add` command (updated)](#72-add-command-updated)
+    - [7.3 `find` vs `search`](#73-find-vs-search)
+    - [7.4 Points features](#74-points-features)
 - [8. Testing and Test Updates](#8-testing-and-test-updates)
 - [9. Editing the data file](#9-editing-the-data-file)
 - [10. User stories](#10-user-stories)
@@ -67,7 +68,7 @@ The entry point is `MainApp`. On startup it:
 4. creates the logic; and
 5. hands control to the UI.
 
-![Architecture Diagram](images/ArchitectureDiagram.png)
+![Architecture Diagram](diagrams/MainClassDiagram.png)
 
 ### 2.1 Architectural Extension: Switchable Lists
 
@@ -142,43 +143,63 @@ The **Logic** component is responsible for:
 
 ### 4.1 Command Execution
 
-The sequence diagram below illustrates the interactions inside the Logic component when executing a `delete` command. It shows how a command string flows through the parsing layer to create a command object, which is then executed to interact with the Model component.
+The sequence diagram below illustrates the interactions inside the Logic component when executing a `delete` command. It shows how a user command string flows through the parsing layer to create a `Command` object, which is then executed to interact with the `Model` component.
 
 ![Logic Sequence Diagram](diagrams/LogicSequenceDiagram.png)
 
 **Flow:**
-1. An external call to `LogicManager.execute("delete 2")` initiates the process.
-2. `LogicManager` delegates parsing to `AddressBookParser.parseCommand("delete 2")`.
-3. `AddressBookParser` creates a `DeleteCommandParser` and calls `parse("2")` to extract the index.
-4. `DeleteCommandParser` creates a `DeleteCommand` instance with the parsed index and returns it.
-5. `DeleteCommandParser` is destroyed after creating the command object.
-6. The `DeleteCommand` is returned through the parsing chain back to `LogicManager`.
-7. `LogicManager` calls `execute()` on the `DeleteCommand` object.
-8. `DeleteCommand` calls `deletePerson(2)` on the `Model` component.
-9. `Model` creates a `CommandResult` object to represent the operation's outcome.
-10. The `CommandResult` is returned back through the chain to `LogicManager`, which returns it to the caller.
+1. An external call to `LogicManager.execute("delete 2")` begins the process.
+2. `LogicManager` delegates parsing to `ClubTrackParser.parseCommand("delete 2")`.
+3. `ClubTrackParser` identifies the command word (`delete`) and creates the appropriate parser (`DeleteCommandParser`), which implements the `Parser` interface.
+4. The `DeleteCommandParser` parses the argument (`"2"`) and instantiates a new `DeleteCommand` object with the parsed index.
+5. The command object is returned to `LogicManager`.
+6. `LogicManager` calls `execute()` on the `DeleteCommand`, which invokes `deletePerson(2)` on the `Model`.
+7. The `Model` performs the deletion, constructs a `CommandResult` object to represent the outcome, and returns it to `LogicManager`.
+8. `LogicManager` returns the `CommandResult` to the caller (e.g., the UI).
 
-This pattern applies to all mutating commands (add, edit, delete, etc.), where the command object interacts with the Model to modify data and returns a `CommandResult` containing the operation outcome.
+This interaction pattern is consistent across all commands — every command goes through the same **parse → create → execute → result** cycle.
 
-**Key classes:**
+**Key classes involved:**
+- `LogicManager` — main orchestrator that executes user commands.
+- `ClubTrackParser` — determines which parser to use based on the command word.
+- `Parser` (interface) — defines the `parse(String args)` method.
+- `DeleteCommandParser` — concrete parser that extracts the argument and constructs `DeleteCommand`.
+- `Command` (abstract) — base class for all executable user commands.
+- `CommandResult` — encapsulates the output of command execution.
+- `Model` — the data layer that performs the actual operation (e.g., delete, add).
 
-* `Logic` (interface)
-* `LogicManager` (concrete)
-* `AddressBookParser`
-* `Command` (abstract)
-* Concrete commands:
+**Design intent:**  
+This structure cleanly separates concerns between **command parsing**, **command execution**, and **data management**, allowing new commands to be added with minimal coupling.
 
-    * `AddCommand`
-    * `EditCommand`
-    * `PresentCommand`, `AbsentCommand`, `AttendanceCommand`
-    * `FindCommand` (**now: name-only, substring**)
-    * `SearchCommand` (**now: tag-prefix filtering**)
-    * `SwitchCommand` (**new**)
-    * `PointsCommand`, `AddPointsCommand`, `MinusPointsCommand`
-    * `ClearCommand` (clears **current** list only)
+---
 
-**Important change:**
-After **every** successful mutating command, `LogicManager` asks `Storage` to save **to the JSON file of the current active list name**. This is the main place where the new “multiple lists” idea shows up in Logic.
+### 4.2 Parser Class Diagram
+
+The diagram below provides a detailed view of the **Parser layer**, showing how user input is transformed into executable `Command` objects.
+
+![Parser Class Diagram](diagrams/ParserClassDiagram.png)
+
+**Description:**
+- `ClubTrackParser` serves as the **entry point** for all command strings.  
+  It reads the user input, identifies the command word, and delegates parsing to the corresponding command parser (represented collectively as `XYZCommandParser`).
+- Each concrete command parser (e.g., `SearchCommandParser`, `SwitchCommandParser`) implements the `Parser` interface and follows the same structure:  
+  tokenize input → extract arguments → create the corresponding `Command`.
+- `XYZCommandParser` represents all other command parsers (`AddCommandParser`, `EditCommandParser`, etc.) in simplified form for clarity.
+- `CliSyntax`, `Prefix`, `ArgumentTokenizer`, and `ArgumentMultimap` form the utility layer responsible for processing argument prefixes (e.g., `n/`, `p/`, `t/`) and mapping them to their values.
+- `ParserUtil` provides static helper methods for validating and converting these argument values into model types (e.g., `Name`, `Tag`, `Phone`).
+
+**Key relationships:**
+- `ClubTrackParser` **creates** the appropriate parser (`XYZCommandParser`) based on the user input.
+- Each parser **creates** a `Command` instance after parsing its arguments.
+- `ParserUtil`, `ArgumentTokenizer`, and `ArgumentMultimap` are **used** across multiple parsers to handle argument processing.
+- `CliSyntax` and `Prefix` define how argument prefixes are recognized and structured.
+
+**Design intent:**  
+This modular parser design ensures that adding new commands only requires:
+1. Creating a new `*CommandParser` class implementing the `Parser` interface, and
+2. Registering it in `ClubTrackParser`.
+
+This maintains **consistency**, **extensibility**, and **low coupling** across all commands.
 
 ---
 
