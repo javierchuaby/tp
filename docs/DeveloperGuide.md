@@ -865,8 +865,8 @@ Expected: error about phone constraints.
 1. **List existing lists**
    Since we now create JSON files on demand, users should be able to run something like `lists` to see available roster files.
 
-2. **Per-event attendance history**
-   Currently attendance is a simple boolean. We plan to support per-session logs (date → present/absent).
+2. **Email validation consistency**
+   Update validation to accept documented special characters (+, _, ., -) in the local-part to match the error message and standard email formats.
 
 3. **Role-based tags**
    Some tags are “roles” (President, Secretary). We can display them differently in the UI.
