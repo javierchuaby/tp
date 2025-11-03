@@ -1,4 +1,3 @@
-ParserClassDiagram.puml:
 @startuml
 !include style.puml
 skinparam arrowThickness 1.1
@@ -35,9 +34,9 @@ XYZCommandParser ..> CliSyntax
 XYZCommandParser ..> ParserUtil
 
 ArgumentTokenizer .left.> ArgumentMultimap
+ArgumentTokenizer ..> Prefix
 CliSyntax ..> Prefix
 ParserUtil .down.> Prefix
 
 XYZCommand -up-|> Command
 @enduml
-
