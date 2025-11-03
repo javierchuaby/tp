@@ -1,4 +1,3 @@
-ParserClassDiagram.puml:
 @startuml
 !include style.puml
 skinparam arrowThickness 1.1
@@ -12,8 +11,6 @@ package "Parser classes"{
 Class "<<interface>>\nParser" as Parser
 Class ClubTrackParser
 Class XYZCommandParser
-Class SearchCommandParser
-Class SwitchCommandParser
 Class CliSyntax
 Class ParserUtil
 Class ArgumentMultimap
@@ -25,37 +22,21 @@ Class HiddenOutside #FFFFFF
 HiddenOutside ..> ClubTrackParser
 
 ClubTrackParser .down.> XYZCommandParser: <<create>>
-ClubTrackParser .down.> SearchCommandParser: <<create>>
-ClubTrackParser .down.> SwitchCommandParser: <<create>>
 
 XYZCommandParser ..> XYZCommand : <<create>>
-SearchCommandParser ..> XYZCommand : <<create>>
-SwitchCommandParser ..> XYZCommand : <<create>>
 
 ClubTrackParser ..> Command : <<use>>
 XYZCommandParser .up.|> Parser
-SearchCommandParser .up.|> Parser
-SwitchCommandParser .up.|> Parser
 
 XYZCommandParser ..> ArgumentMultimap
 XYZCommandParser ..> ArgumentTokenizer
 XYZCommandParser ..> CliSyntax
 XYZCommandParser ..> ParserUtil
 
-SearchCommandParser ..> ArgumentMultimap
-SearchCommandParser ..> ArgumentTokenizer
-SearchCommandParser ..> CliSyntax
-SearchCommandParser ..> ParserUtil
-
-SwitchCommandParser ..> ArgumentMultimap
-SwitchCommandParser ..> ArgumentTokenizer
-SwitchCommandParser ..> CliSyntax
-SwitchCommandParser ..> ParserUtil
-
 ArgumentTokenizer .left.> ArgumentMultimap
+ArgumentTokenizer ..> Prefix
 CliSyntax ..> Prefix
 ParserUtil .down.> Prefix
 
 XYZCommand -up-|> Command
 @enduml
-
