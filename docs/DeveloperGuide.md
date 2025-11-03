@@ -609,7 +609,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
   * 1a1. ClubTrack shows message indicating no members found and an empty list.
   Use case ends.
 
-### UC07 – Clear current lis
+### UC07 – Clear current list
 
 **System:** ClubTrack
 
@@ -726,7 +726,7 @@ Expected: error about phone constraints.
 4. Switch back:
 
    ```tex
-   switch defaul
+   switch default
    ```
 
    Expected: you see the original list.
@@ -757,7 +757,7 @@ Expected: error about phone constraints.
 1. Switch to a test list:
 
    ```tex
-   switch TestLis
+   switch TestList
    add n/Test p/91234567 e/test@example.com a/Biz y/1 f/SoC
    clear
    ```
