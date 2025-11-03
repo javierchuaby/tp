@@ -97,7 +97,7 @@ This keeps the architecture the same as AB3, but with an extra “current file�
 
 ---
 
-## 3. UI Componen
+## 3. UI Component
 
 The UI layer is JavaFX-based and largely follows AB3.
 
@@ -127,7 +127,7 @@ When the model reloads a different list (due to `switch`), the observable list c
 
 ---
 
-## 4. Logic Componen
+## 4. Logic Component
 
 The **Logic** component is responsible for:
 
@@ -182,7 +182,7 @@ After **every** successful mutating command, `LogicManager` asks `Storage` to sa
 
 ---
 
-## 5. Model Componen
+## 5. Model Component
 
 The **Model** layer keeps application state and provides observable lists to the UI.
 
@@ -224,7 +224,7 @@ We also changed **identity**:
 
 ---
 
-## 6. Storage Componen
+## 6. Storage Component
 
 The Storage layer reads/writes JSON using the usual AB3 JSON storage classes, but with an extra concept: **active list name = file name**.
 
@@ -609,7 +609,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
   * 1a1. ClubTrack shows message indicating no members found and an empty list.
   Use case ends.
 
-### UC07 – Clear current lis
+### UC07 – Clear current list
 
 **System:** ClubTrack
 
@@ -726,7 +726,7 @@ Expected: error about phone constraints.
 4. Switch back:
 
    ```tex
-   switch defaul
+   switch default
    ```
 
    Expected: you see the original list.
@@ -757,7 +757,7 @@ Expected: error about phone constraints.
 1. Switch to a test list:
 
    ```tex
-   switch TestLis
+   switch TestList
    add n/Test p/91234567 e/test@example.com a/Biz y/1 f/SoC
    clear
    ```
@@ -766,7 +766,7 @@ Expected: error about phone constraints.
 
 ---
 
-## Appendix B – Effor
+## Appendix B – Effort
 
 **Team size:** 5
 

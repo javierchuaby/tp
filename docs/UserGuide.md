@@ -31,7 +31,7 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
 
 ---
 
-## Quick star
+## Quick start
 
 1. **Check your Java version**
 
