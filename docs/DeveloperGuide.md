@@ -20,11 +20,12 @@ title: Developer Guide
     - [7.4 Points features](#74-points-features)
 - [8. Testing and Test Updates](#8-testing-and-test-updates)
 - [9. Editing the data file](#9-editing-the-data-file)
-- [10. User stories](#10-user-stories)
-- [11. Use cases](#11-use-cases)
-- [12. Non-Functional Requirements](#12-non-functional-requirements)
-- [13. Glossary](#13-glossary)
-- [14. Acknowledgements](#14-acknowledgements)
+- [10. Product scope](#10-product-scope)
+- [11. User stories](#11-user-stories)
+- [12. Use cases](#12-use-cases)
+- [13. Non-Functional Requirements](#13-non-functional-requirements)
+- [14. Glossary](#14-glossary)
+- [15. Acknowledgements](#15-acknowledgements)
 - [Appendix A – Instructions for Manual Testing](#appendix-a--instructions-for-manual-testing)
 - [Appendix B – Effort](#appendix-b--effort)
 - [Appendix C – Planned Enhancements](#appendix-c--planned-enhancements)
@@ -452,8 +453,24 @@ Advanced users may edit these JSON files manually.
 
 ---
 
-\
-## 10. User stories
+## 10. Product scope
+
+### Target user profile:
+
+* is part of a university club executive committee
+* needs to manage a large roster of members across multiple events or lists
+* prefers **desktop apps** for reliability and offline access
+* types fast and prefers keyboard-driven workflows
+* is comfortable using **Command Line Interface (CLI)** apps with structured commands
+* wants to easily track attendance, points, and roles without using spreadsheets
+
+### Value proposition:
+
+ClubTrack enables club executives to **manage members, track attendance, and assign points up to 3× faster** than traditional spreadsheet-based solutions through an intuitive command-line interface optimized for power users.
+
+---
+
+## 11. User stories
 
 Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (unlikely to have) – `*`
 
@@ -479,7 +496,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 | `* *`    | Club Exco Member | access help information                | learn how to use the available commands   |
 | `* *`    | Club Exco Member | exit the program                       | close the application safely              |
 | `*`      | Club Secretary   | view attendance summary for a date     | check how many people showed up           |
-| `*`      | Club Exco Member | list members sorted by attendance rate | see who participates most/least           |
+| `*`      | Club Exco Member | list members sorted by points          | identify top contributors                 |
 | `*`      | Club Exco Member | generate a random selection of members | pick someone fairly                       |
 | `*`      | Club Exco Member | export member data to a file           | share it with other committees/executives |
 
@@ -487,7 +504,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 ---
 
-## 11. Use cases
+## 12. Use cases
 
 (For all use cases below, the **System** is `ClubTrack` and the **Actor** is the `user`, unless specified otherwise.)
 
@@ -702,7 +719,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 ---
 
-## 12. Non-Functional Requirements
+## 13. Non-Functional Requirements
 
 1. Should work on any **mainstream OS** with Java 17 or above installed.
 2. Should be able to support **up to 500 members per list**, with common commands such as `add`, `edit`, or `find` completing within **2 seconds under normal conditions**.
@@ -715,7 +732,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 ---
 
-## 13. Glossary
+## 14. Glossary
 
 * **Club Exco Member** – executive committee member responsible for club administration.
 * **Attendance Record** – a log entry indicating whether a member was present at a specific event.
@@ -730,7 +747,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 ---
 
-## 14. Acknowledgements
+## 15. Acknowledgements
 
 * Project structure, Gradle setup, JSON storage utilities, and some diagrams are **adapted from** the official **AddressBook Level 3 (AB3)** project by the CS2103T teaching team.
 * Some command patterns (parser → command → command test) follow AB3’s recommended structure.

@@ -17,7 +17,7 @@ ClubTrack is a **desktop app for managing club members and attendance, optimized
 
 ClubTrack is designed for **university student club executive committee (exco) members** who need to:
 
-* Manage large member databases (50–200 members)
+* Manage large member databases (50–500 members)
 * Track attendance across multiple events and sessions
 * Assign roles and responsibilities to members
 * Monitor member participation through points systems
