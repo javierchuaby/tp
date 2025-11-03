@@ -694,7 +694,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 1. Ensure you have Java 17.
 2. Run `java -jar ClubTrack.jar`.
-3. Verify that a `data/ClubTrack.json` file is created (if it didn’t exist).
+3. Verify that the respective JSON save file is created after making a change to the data.
 4. Close the window → app should exit cleanly.
 
 ### A.2 Adding a member

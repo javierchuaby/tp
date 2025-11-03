@@ -179,6 +179,12 @@ public class ClubTrackListManager {
         }
 
         try {
+            // Ensure the list actually exists in storage before attempting removal.
+            Optional<ReadOnlyClubTrack> existing = storage.readClubTrack(filePath);
+            if (existing.isEmpty()) {
+                throw new CommandException("List '" + listName + "' does not exist.");
+            }
+
             java.nio.file.Files.deleteIfExists(filePath);
             // If the removed list was the currently loaded one, revert to default
             if (filePath.equals(model.getClubTrackFilePath())) {
@@ -198,6 +204,10 @@ public class ClubTrackListManager {
                     model.setClubTrackFilePath(defaultPath);
                 }
             }
+        } catch (DataLoadingException dle) {
+            // If we couldn't read the specified list due to format issues, signal an error
+            throw new CommandException("Failed to verify existence of list '" + listName + "': "
+                    + dle.getMessage(), dle);
         } catch (IOException ioe) {
             throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
         }
