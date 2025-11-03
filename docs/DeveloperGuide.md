@@ -752,6 +752,8 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 * Project structure, Gradle setup, JSON storage utilities, and some diagrams are **adapted from** the official **AddressBook Level 3 (AB3)** project by the CS2103T teaching team.
 * Some command patterns (parser → command → command test) follow AB3’s recommended structure.
 * Original AB3 documentation: credit to CS2103T teaching team.
+* GitHub Copilot was used to provide code autocompletion and boilerplate suggestions. All AI-generated code was reviewed and verified by team members to ensure it aligned with the intended functionality and project requirements.
+* ChatGPT (OpenAI) was used to improve documentation clarity, generate explanatory comments, and refine diagrams or test descriptions for time efficiency. The team ensured that all final content accurately reflected our own understanding and implementation decisions.
 
 ---
 
@@ -858,19 +860,24 @@ Expected: error about phone constraints.
 
 1. **What was harder than AB3?**
 
-    * Supporting **multiple JSON files** (one per list) without rewriting AB3’s storage.
-    * Making `y/` and `f/` compulsory → cascaded into parser tests, typical persons, and logic tests.
-    * Tightening phone validation → broke a lot of upstream AB3 test data.
+    * Implementing **switchable member lists**, each backed by its own JSON file, without breaking AB3’s single-file storage design.
+    * Enforcing **compulsory fields (`y/`, `f/`)** required deep changes across parsers, model classes, and test utilities.
+    * Enhancing **validation rules** (e.g. stricter phone and email formats) that invalidated large portions of inherited AB3 test data.
+    * Maintaining **data consistency** and auto-save behaviour when switching between lists — required careful model–storage synchronization.
+
 2. **What we reused:**
 
-    * AB3 command–parser–storage structure
-    * AB3 diagram style and sectioning
-    * AB3 test patterns
+    * AB3’s **Command → Parser → Model → Storage** architectural pattern.
+    * AB3’s **diagram conventions** and documentation layout for visual clarity.
+    * AB3’s **JUnit test scaffolding** for command and parser testing.
+
 3. **What we added:**
 
-    * `SwitchCommand` + model/state to remember active list name
-    * UI changes to display year/faculty/points
-    * Tag-prefix search
+    * **`SwitchCommand`** and supporting model state to enable seamless switching between multiple club rosters.
+    * **Persistent points and attendance tracking**, including updated UI and storage integration.
+    * **Enhanced tag and search system** with prefix-based filtering for roles (e.g. `committee`, `exco`).
+    * **Refined UI layout** showing key fields (year, faculty, points) and dynamic updates after each command.
+    * **Improved parser utilities** to handle stricter validation and prevent unsafe path inputs (e.g. `../` in filenames).
 
 ---
 
