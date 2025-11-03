@@ -7,74 +7,74 @@ skinparam classBackgroundColor MODEL_COLOR
 ' Simplified Model class diagram for ClubTrack / AddressBook slice
 
 package Model {
-	interface "<<interface>>\nModel" as Model
-	interface "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
-	interface "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
+  interface "<<interface>>\nModel" as Model
+  interface "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
+  interface "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
 
-	class AddressBook {
-		- persons : UniquePersonList
-		+ getPersonList() : ObservableList<Person>
-	}
+  class AddressBook {
+    - persons : UniquePersonList
+    + getPersonList() : ObservableList<Person>
+  }
 
-	class ModelManager {
-		- addressBook : AddressBook
-		- userPrefs : UserPrefs
-		- filteredPersons : FilteredList<Person>
-		+ getFilteredPersonList() : ObservableList<Person>
-		+ updateFilteredPersonList(p : Predicate<Person>) : void
-	}
+  class ModelManager {
+    - addressBook : AddressBook
+    - userPrefs : UserPrefs
+    - filteredPersons : FilteredList<Person>
+    + getFilteredPersonList() : ObservableList<Person>
+    + updateFilteredPersonList(p : Predicate<Person>) : void
+  }
 
-	class UserPrefs {
-		- guiSettings : GuiSettings
-		- addressBookFilePath : Path
-		+ getAddressBookFilePath() : Path
-	}
+  class UserPrefs {
+    - guiSettings : GuiSettings
+    - addressBookFilePath : Path
+    + getAddressBookFilePath() : Path
+  }
 
-	class UniquePersonList {
-		- internalList : List<Person>
-		+ add(p : Person)
-		+ remove(p : Person)
-	}
+  class UniquePersonList {
+    - internalList : List<Person>
+    + add(p : Person)
+    + remove(p : Person)
+  }
 
-	class Person {
-		- name : Name
-		- phone : Phone
-		- email : Email
-		- address : Address
-		- yearOfStudy : int
-		- faculty : String
-		- tags : Set<Tag>
-		- isPresent : boolean
-		- points : Points
-		+ getName() : Name
-		+ getPoints() : Points
-	}
+  class Person {
+    - yearOfStudy : int
+    - faculty : String
+    + getName() : Name
+    + getPoints() : Points
+  }
 
-	' Value objects
-	class Name
-	class Phone
-	class Email
-	class Address
-	class Tag
-	class YearOfStudy
-	class Faculty
-	class Points
+  ' show only Person attributes (AB3 style hides members by default)
+  show Person attributes
+  hide Person methods
+  skinparam ClassAttributeFontColor white
 
-	' Relationships
-	ModelManager ..|> Model
-	AddressBook .up.|> ReadOnlyAddressBook
-	UserPrefs .up.|> ReadOnlyUserPrefs
+  ' Value objects
+  class Name
+  class Phone
+  class Email
+  class Address
+  class Tag
+  class Points
 
-	ModelManager --> "1" AddressBook
-	ModelManager --> "1" UserPrefs
-	AddressBook *--> "1" UniquePersonList
-	UniquePersonList --> "*" Person
-	Person *-- Name
-	Person *-- Phone
-	Person *-- Email
-	Person *-- Address
-	Person *-- Points
-	Person *-- Tag
+  ' Relationships
+  ModelManager ..|> Model
+  AddressBook .up.|> ReadOnlyAddressBook
+  UserPrefs .up.|> ReadOnlyUserPrefs
+
+  ModelManager --> "1" AddressBook
+  ModelManager --> "1" UserPrefs
+  AddressBook *--> "1" UniquePersonList
+
+  ' --- AB3-style list semantics ---
+  UniquePersonList --> "~* all" Person
+  ModelManager --> "~* filtered" Person
+
+  ' Object-valued compositions
+  Person *-- Name
+  Person *-- Phone
+  Person *-- Email
+  Person *-- Address
+  Person *-- Points
+  Person *-- Tag
 }
-
 @enduml
