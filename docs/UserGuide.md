@@ -4,10 +4,14 @@ layout: page
 title: User Guide
 ---
 
+# User Guide
+
 ClubTrack is a **desktop app for managing club members and attendance, optimized for use via a Command Line Interface (CLI)** while retaining the benefits of a Graphical User Interface (GUI).
 
 * Table of Contents
   {:toc}
+
+***
 
 ## Target User Profile
 
@@ -25,13 +29,17 @@ ClubTrack is designed for **university student club executive committee (exco) m
 * Prefer keyboard input over mouse clicking
 * Manage active clubs with regular events and meetings
 
+***
+
 ## Value Proposition
 
 ClubTrack enables club executives to **manage members, track attendance, and assign points up to 3× faster** than traditional spreadsheet-based solutions through an intuitive command-line interface optimized for power users.
 
 ---
 
-## Quick start
+<div style="page-break-after: always;"></div>
+
+## Quick Start
 
 1. **Check your Java version**
 
@@ -72,8 +80,6 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
    A GUI similar to the one below should appear in a few seconds. The app starts with sample data.
    ![Ui](images/Ui-ClubTrack-v1.6.png)
 
-6. **Try your first command**
-
    Type a command in the command box and press Enter to execute it.
    For example, typing **`help`** will open the help window.
 
@@ -89,6 +95,8 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
 7. Refer to the [Features](#features) below for details of each command.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## Features
 
@@ -115,7 +123,7 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
 
 </div>
 
----
+***
 
 ### Viewing help : `help`
 
@@ -123,7 +131,9 @@ Shows a message explaining how to access the help page.
 
 **Format:** `help`
 
----
+***
+
+<div style="page-break-after: always;"></div>
 
 ### Adding a member : `add`
 
@@ -150,7 +160,7 @@ A member can have any number of tags (including 0), e.g. their role or committee
 * `add n/John Doe p/98123456 e/johnd@example.com a/John street y/3 f/SOC`
 * `add n/Betsy Crowe p/83123456 e/betsycrowe@example.com a/Newgate Prison y/2 f/CDE  t/Treasurer t/Logistics`
 
----
+***
 
 ### Listing all members : `list`
 
@@ -158,7 +168,9 @@ Shows a list of all members **in the current list**.
 
 **Format:** `list`
 
----
+***
+
+<div style="page-break-after: always;"></div>
 
 ### Editing a member : `edit`
 
@@ -181,37 +193,34 @@ _Field constraints (e.g., max lengths, year 1–5) follow the same rules as in [
 * `edit 1 p/91234567 e/johndoe@example.com`
 * `edit 2 n/Betsy Crower t/`
 
----
+***
+
+<div style="page-break-after: always;"></div>
 
 ### Locating members by keyword : `find`
 
-Finds members whose **non-tag fields** contain **any** of the given keywords.
+Finds members whose **name field only** contains **any** of the given keywords.
 
 **Format:**
 `find KEYWORD [MORE_KEYWORDS]`
 
 **What it searches:**
-- name
-- phone
-- email
-- address
-- faculty
-- year of study
+- **name only** (for quick lookup by name)
 
 **Rules:**
 
 - Match is **case-insensitive** (`john` matches `John`)
-- Match is **substring-based** (`alex` matches `Alexander`, `alex@example.com`)
+- Match is **substring-based** (`alex` matches `Alexander`)
 - Order of keywords **does not** matter
-- A member is returned if **any** of these fields contains **any** of the keywords (logical **OR**)
-- **Tags are not searched here** — use [`search`](#searching-members-by-tag-prefix--search) for tag-based filtering.
+- A member is returned if the **name field** contains **any** of the keywords (logical **OR**)
+- **Does NOT search tags, faculty, year, phone, email, or address** — use [`search`](#searching-members-by-tag-prefix--search) for tag-based filtering
 
 **Examples:**
 
-- `find john`
-- `find soc`
-- `find 9876`
-- `find Y2`
+- `find john` → matches `John`, `Johnathan`
+- `find alex david` → matches `Alex David`, `Alexander`, `David Lee`
+
+***
 
 ### Searching members by tag prefix : `search`
 
@@ -234,7 +243,9 @@ Use this when your club has tag conventions like `exco-*`, `dance-*`, `logi-*`.
 * `search t/dan t/perf` → matches members tagged `dance`, `dance-lead`, `performance`, `performer`
 * `search t/comm` → matches `committee`, `comm-head`, `comm-logi`
 
----
+***
+
+<div style="page-break-after: always;"></div>
 
 ### Marking attendance : `present`
 
@@ -248,7 +259,7 @@ Marks the specified member as present **in the current list**.
 * `present 1`
 * `present 4`
 
----
+***
 
 ### Unmarking attendance : `absent`
 
@@ -262,22 +273,26 @@ Unmarks the specified member, setting them as absent **in the current list**.
 * `absent 1`
 * `absent 3`
 
----
+***
 
 ### Viewing attendance : `attendance`
 
-Displays the current attendance list, showing who is present and absent **for the current list**.
+Displays the current attendance list, showing who is present **for the current list**.
 
 **Format:**
 `attendance`
 
----
+**Note:** This command shows only members who are marked as present. To see all members (both present and absent), use the `list` command.
+
+***
+
+<div style="page-break-after: always;"></div>
 
 ### Switching between lists : `switch`
 
 Switches between different member/attendance lists, such as separate event rosters.
 If the specified list does **not** exist, ClubTrack **creates a new empty list** with that name.
-The app starts on the default list named `default`.
+The app starts on the default list named `ClubTrack`.
 
 **Format:**
 `switch NAME_OF_LIST`
@@ -289,7 +304,7 @@ The app starts on the default list named `default`.
 
 After switching, **all subsequent commands** (`add`, `present`, `clear`, `list`, `delete`, `points`, etc.) apply **only to the current list**.
 
----
+***
 
 ### Removing a list : `remove`
 
@@ -302,7 +317,9 @@ Removes an existing list from ClubTrack.
 
 * `remove Training_2025_10_20`
 
----
+***
+
+<div style="page-break-after: always;"></div>
 
 ### Adding points : `addpoints`
 
@@ -321,7 +338,7 @@ Adds a specified number of points to a member.
 * `addpoints 2 pts/5`
 * `addpoints 1 pts/10`
 
----
+***
 
 ### Deleting points : `minuspoints`
 
@@ -338,7 +355,9 @@ Removes a specified number of points from a member.
 * `minuspoints 1 pts/3`
 * `minuspoints 4 pts/10`
 
----
+***
+
+<div style="page-break-after: always;"></div>
 
 ### Viewing member points : `points`
 
@@ -352,7 +371,7 @@ Shows the **current points** of a specified member in the current list.
 * `points 1`
 * `points 3`
 
----
+***
 
 ### Adding tags to a member : `tag`
 
@@ -368,7 +387,7 @@ Adds a tag to the specified member.
 * `tag 1 Treasurer`
 * `tag 2 Committee`
 
----
+***
 
 ### Removing tags from a member : `untag`
 
@@ -384,7 +403,9 @@ Removes a tag from the specified member.
 * `untag 1 Treasurer`
 * `untag 2 Committee`
 
----
+***
+
+<div style="page-break-after: always;"></div>
 
 ### Deleting a member : `delete`
 
@@ -398,7 +419,7 @@ Deletes the specified member **from the current list**.
 * `delete 3`
 * `find John` followed by `delete 1`
 
----
+***
 
 ### Clearing all entries in the current list : `clear`
 
@@ -411,7 +432,7 @@ Clears **all members in the current list**. Other lists are not affected.
 This action cannot be undone.
 </div>
 
----
+***
 
 ### Exiting the program : `exit`
 
@@ -420,21 +441,23 @@ Exits the ClubTrack application.
 **Format:**
 `exit`
 
----
+***
+
+<div style="page-break-after: always;"></div>
 
 ### Saving the data
 
 ClubTrack data are saved automatically after any command that changes the data.
 There is no need to save manually.
 
----
+***
 
 ### Editing the data files
 
 ClubTrack stores **each list in its own JSON file** inside the `data/` folder (next to the `.jar`).
 
 - The default list is saved as:
-  `data/default.json`
+  `data/ClubTrack.json`
 - When you run `switch Training_2025_10_20`, ClubTrack creates/uses:
   `data/Training_2025_10_20.json`
 - Every list name maps 1-to-1 to a JSON file with the **same name**.
@@ -446,27 +469,43 @@ Advanced users may edit these JSON files directly.
 > - If a file is edited incorrectly, ClubTrack may reset that list or refuse to load it.
 > - Do **not** rename the JSON files manually unless you also use the same name in the `switch` command.
 
----
+***
+
+<div style="page-break-after: always;"></div>
 
 ## FAQ
 
 **Q:** How do I transfer my data to another computer?
+
 **A:** Install the app on the other computer and replace the empty data file it creates with your existing ClubTrack data file.
 
+<br>
+
 **Q:** I entered the wrong command. Will it break my data?
+
 **A:** No. Invalid commands are safely ignored, and an error message will appear.
 
+<br>
+
 **Q:** The app does not open.
+
 **A:** Ensure you are using Java 17 or above. If issues persist, download the latest `.jar` file and try again.
 
-**Q:** Will I have to create a completely new list from scratch for separate events?
-**A:** No, excos can simply duplicate a previous event's JSON file, rename it, and load it as a new list to
-serve as a base template, eliminating the need to re-enter records manually. From there, edit the names accordingly.
+<br>
 
-**Q:** Why do some fields reject very long input?  
+**Q:** Will I have to create a completely new list from scratch for separate events?
+
+**A:** No, excos can simply duplicate a previous event's JSON file, rename it, and load it as a new list to serve as a base template, eliminating the need to re-enter records manually. From there, edit the names accordingly.
+
+<br>
+
+**Q:** Why do some fields reject very long input?
+
 **A:** To ensure smooth performance and prevent corrupted files, ClubTrack limits field lengths (e.g., Name ≤ 100 chars).
 
----
+***
+
+<div style="page-break-after: always;"></div>
 
 ## Command summary
 
@@ -477,7 +516,7 @@ serve as a base template, eliminating the need to re-enter records manually. Fro
 | **Delete Member**        | `delete INDEX` e.g. `delete 3`                                                                                                                             |
 | **List Members**         | `list`                                                                                                                                                     |
 | **Find Member**          | `find KEYWORD [MORE_KEYWORDS]` e.g. `find John David`                                                                                                      |
-| **Search (Name & Tags)** | `search [t/TAG]… [any/]` e.g. `search t/Logistics any/`                                                                                     |
+| **Search by Tags**       | `search t/TAG_PREFIX…` e.g. `search t/exco t/dance`                                                                                                        |
 | **Mark Attendance**      | `present INDEX`                                                                                                                                            |
 | **Unmark Attendance**    | `absent INDEX`                                                                                                                                             |
 | **View Attendance**      | `attendance`                                                                                                                                               |

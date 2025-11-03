@@ -29,8 +29,7 @@ import seedu.address.storage.Storage;
  */
 public class ClubTrackListManagerTest {
 
-    // update test expectation to match app's default data file name
-    private static final Path DEFAULT_PATH = Paths.get("data", "default.json");
+    private static final Path DEFAULT_PATH = Paths.get("data", "ClubTrack.json");
 
     private ClubTrackListManager listManager;
     private FakeStorage storage;
@@ -122,7 +121,7 @@ public class ClubTrackListManagerTest {
         model.setClubTrack(defaultAb);
 
         try {
-            listManager.removeList("default", model);
+            listManager.removeList("ClubTrack", model);
             // If no exception thrown, fail the test
             org.junit.jupiter.api.Assertions.fail("Expected CommandException when removing default list");
         } catch (seedu.address.logic.commands.exceptions.CommandException e) {

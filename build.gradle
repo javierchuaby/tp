@@ -90,7 +90,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveFileName = 'addressbook.jar'
+    archiveFileName = 'ClubTrack.jar'
 }
 
 defaultTasks 'clean', 'test'
