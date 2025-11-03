@@ -166,7 +166,7 @@ This interaction pattern is consistent across all commands — every command goe
 - `CommandResult` — encapsulates the output of command execution.
 - `Model` — the data layer that performs the actual operation (e.g., delete, add).
 
-**Design intent:**  
+**Design intent:**
 This structure cleanly separates concerns between **command parsing**, **command execution**, and **data management**, allowing new commands to be added with minimal coupling.
 
 ---
@@ -178,9 +178,9 @@ The diagram below provides a detailed view of the **Parser layer**, showing how 
 ![Parser Class Diagram](diagrams/ParserClassDiagram.png)
 
 **Description:**
-- `ClubTrackParser` serves as the **entry point** for all command strings.  
+- `ClubTrackParser` serves as the **entry point** for all command strings.
   It reads the user input, identifies the command word, and delegates parsing to the corresponding command parser (represented collectively as `XYZCommandParser`).
-- Each concrete command parser (e.g., `SearchCommandParser`, `SwitchCommandParser`) implements the `Parser` interface and follows the same structure:  
+- Each concrete command parser (e.g., `SearchCommandParser`, `SwitchCommandParser`) implements the `Parser` interface and follows the same structure:
   tokenize input → extract arguments → create the corresponding `Command`.
 - `XYZCommandParser` represents all other command parsers (`AddCommandParser`, `EditCommandParser`, etc.) in simplified form for clarity.
 - `CliSyntax`, `Prefix`, `ArgumentTokenizer`, and `ArgumentMultimap` form the utility layer responsible for processing argument prefixes (e.g., `n/`, `p/`, `t/`) and mapping them to their values.
@@ -192,7 +192,7 @@ The diagram below provides a detailed view of the **Parser layer**, showing how 
 - `ParserUtil`, `ArgumentTokenizer`, and `ArgumentMultimap` are **used** across multiple parsers to handle argument processing.
 - `CliSyntax` and `Prefix` define how argument prefixes are recognized and structured.
 
-**Design intent:**  
+**Design intent:**
 This modular parser design ensures that adding new commands only requires:
 1. Creating a new `*CommandParser` class implementing the `Parser` interface, and
 2. Registering it in `ClubTrackParser`.
