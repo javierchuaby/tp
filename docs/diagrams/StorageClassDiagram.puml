@@ -43,7 +43,7 @@ JsonAdaptedPerson --> "*" JsonAdaptedTag
 note right of JsonClubTrackStorage
   ClubTrack uses an active list context:
   data/<LIST_NAME>.json
-  e.g., data/default.json, data/freshers.json
+  e.g., data/ClubTrack.json, data/freshers.json
   (resolved by commands like SwitchCommand)
 end note
 @enduml

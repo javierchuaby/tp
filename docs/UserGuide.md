@@ -292,7 +292,7 @@ Displays the current attendance list, showing who is present **for the current l
 
 Switches between different member/attendance lists, such as separate event rosters.
 If the specified list does **not** exist, ClubTrack **creates a new empty list** with that name.
-The app starts on the default list named `default`.
+The app starts on the default list named `ClubTrack`.
 
 **Format:**
 `switch NAME_OF_LIST`
@@ -457,7 +457,7 @@ There is no need to save manually.
 ClubTrack stores **each list in its own JSON file** inside the `data/` folder (next to the `.jar`).
 
 - The default list is saved as:
-  `data/default.json`
+  `data/ClubTrack.json`
 - When you run `switch Training_2025_10_20`, ClubTrack creates/uses:
   `data/Training_2025_10_20.json`
 - Every list name maps 1-to-1 to a JSON file with the **same name**.

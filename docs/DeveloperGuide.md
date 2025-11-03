@@ -76,7 +76,7 @@ In AB3, storage always pointed to **one** file (`addressbook.json`).
 In ClubTrack, storage can point to **different files** depending on the **active list name**. The default file is:
 
 ```tex
-data/default.json
+data/ClubTrack.json
 ````
 
 Whenever the user runs:
@@ -97,7 +97,7 @@ This keeps the architecture the same as AB3, but with an extra “current file�
 
 ---
 
-## 3. UI Componen
+## 3. UI Component
 
 The UI layer is JavaFX-based and largely follows AB3.
 
@@ -127,7 +127,7 @@ When the model reloads a different list (due to `switch`), the observable list c
 
 ---
 
-## 4. Logic Componen
+## 4. Logic Component
 
 The **Logic** component is responsible for:
 
@@ -182,9 +182,9 @@ After **every** successful mutating command, `LogicManager` asks `Storage` to sa
 
 ---
 
-## 5. Model Componen
+## 5. Model Component
 
-The **Model** layer keeps application state and provides observable lists to the UI.
+The **Model** layer keeps the application state and provides observable lists to the UI.
 
 ![Model Class Diagram](diagrams/ModelClassDiagram.png)
 
@@ -192,7 +192,7 @@ The **Model** layer keeps application state and provides observable lists to the
 
 * hold the current `AddressBook` (for the active list),
 * expose `FilteredList<Person>` for UI,
-* remember the **active list name** (e.g. `default`, `Training_2025_10_20`),
+* remember the **active list name** (e.g. `ClubTrack`, `Training_2025_10_20`),
 * hold user preferences.
 
 ### 5.1 Person model
@@ -218,13 +218,13 @@ We also changed **identity**:
 * **Now:** **same person = same email OR same phone**
 
     * lets us store multiple people with the same name
-    * still guards against accidental duplicates using contact info
+    * it still guards against accidental duplicates using contact info
 
 `Points` is implemented as a small value object to make it easy to reason about add/subtract operations.
 
 ---
 
-## 6. Storage Componen
+## 6. Storage Component
 
 The Storage layer reads/writes JSON using the usual AB3 JSON storage classes, but with an extra concept: **active list name = file name**.
 
@@ -235,12 +235,12 @@ The Storage layer reads/writes JSON using the usual AB3 JSON storage classes, bu
 * On startup, we try to read:
 
   ```tex
-  data/default.json
+  data/ClubTrack.json
   ```
 
   If it does not exist, we create it with a sample ClubTrack dataset.
 
-* When user runs:
+* When the user runs:
 
   ```tex
   switch CCA_Showcase
@@ -277,7 +277,7 @@ switch LIST_NAME
 3. `Storage` tries to load `data/LIST_NAME.json`:
 
     * if present → load
-    * if missing → create new empty address book, save as `data/LIST_NAME.json`
+    * if missing → create a new empty address book, save as `data/LIST_NAME.json`
 4. UI refreshes because the model’s observable list changed.
 
 **Activity diagram:**
@@ -286,7 +286,7 @@ switch LIST_NAME
 
 **Design considerations:**
 
-* We store the active list name in the model layer, so that **all** mutating commands (add, edit, present, points, clear) can save to the correct file.
+* We store the active list name in the model layer so that **all** mutating commands (add, edit, present, points, clear) can save to the correct file.
 * We **reused** the same JSON structure from AB3 to minimise changes.
 * This fits the CS2103T expectation that *clear should not unexpectedly wipe unrelated data.*
 
@@ -415,13 +415,13 @@ ClubTrack stores data in:
 * Default list:
 
   ```tex
-  data/default.json
+  data/ClubTrack.json
   ```
 
-* After `switch clubtrack` (or any other name):
+* After `switch soccer` (or any other name):
 
   ```tex
-  data/clubtrack.json
+  data/soccer.json
   ```
 
 Advanced users may edit these JSON files manually.
@@ -559,7 +559,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
     Use case ends.
 * 3a. Duplicate identity (same phone or email already exists)
 
-  * 3a1. ClubTrack rejects the add and shows a duplicate-person error.
+  * 3a1. ClubTrack rejects the `add` and shows a duplicate-person error.
     Use case ends.
 
 ### UC05 – Edit a member
@@ -675,7 +675,7 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 1. Ensure you have Java 17.
 2. Run `java -jar ClubTrack.jar`.
-3. Verify that a `data/default.json` file is created (if it didn’t exist).
+3. Verify that a `data/ClubTrack.json` file is created (if it didn’t exist).
 4. Close the window → app should exit cleanly.
 
 ### A.2 Adding a member
@@ -766,7 +766,7 @@ Expected: error about phone constraints.
 
 ---
 
-## Appendix B – Effor
+## Appendix B – Effort
 
 **Team size:** 5
 

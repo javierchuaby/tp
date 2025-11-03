@@ -13,9 +13,9 @@ import seedu.address.commons.core.GuiSettings;
  */
 public class UserPrefs implements ReadOnlyUserPrefs {
 
-    // default data file name changed from addressbook.json to default.json
+    // default data file name changed from dafault.json to ClubTrack.json
     /** The default clubtrack/list base name (without extension). */
-    public static final String DEFAULT_CLUBTRACK_NAME = "default";
+    public static final String DEFAULT_CLUBTRACK_NAME = "ClubTrack";
 
     /** The default clubtrack file path (data/default.json). */
     public static final Path DEFAULT_CLUBTRACK_PATH = Paths.get("data", DEFAULT_CLUBTRACK_NAME + ".json");
