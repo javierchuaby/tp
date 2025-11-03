@@ -17,6 +17,12 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public DeleteCommand parse(String args) throws ParseException {
+        String trimmed = args.trim();
+
+        if ("0".equals(trimmed)) {
+            throw new ParseException("Index must be a positive integer (not 0).");
+        }
+
         try {
             Index index = ParserUtil.parseIndex(args);
             return new DeleteCommand(index);

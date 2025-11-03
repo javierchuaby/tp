@@ -17,6 +17,7 @@ public class SwitchCommandParser implements Parser<SwitchCommand> {
      */
     public SwitchCommand parse(String args) throws ParseException {
         String trimmed = args.trim();
+
         if (trimmed.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SwitchCommand.MESSAGE_USAGE));
         }
