@@ -34,6 +34,11 @@
       <!-- Meta: Year of Study · Faculty (shown/hidden by controller) -->
       <Label fx:id="meta" styleClass="cell_small_label"/>
 
+      <!-- Presence indicator (shown when person is marked present) -->
+      <FlowPane fx:id="presencePane" hgap="6" vgap="6">
+        <Label fx:id="presence" styleClass="presence-indicator" />
+      </FlowPane>
+
       <!-- Tags -->
       <FlowPane fx:id="tags" id="tags"/>
 

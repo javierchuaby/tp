@@ -28,6 +28,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML private Label points;
     @FXML private Label meta;
     @FXML private FlowPane tags;
+    @FXML private FlowPane presencePane;
+    @FXML private Label presence;
 
     /**
      * Creates a {@code PersonCard} with the given {@code Person} and index to display.
@@ -39,6 +41,7 @@ public class PersonCard extends UiPart<Region> {
         initializeBasicFields(displayedIndex);
         initializePointsField();
         initializeMetaField();
+        initializePresenceField();
         initializeTags();
     }
 
@@ -111,6 +114,32 @@ public class PersonCard extends UiPart<Region> {
         meta.setText(text);
         meta.setManaged(true);
         meta.setVisible(true);
+    }
+
+    /**
+     * Initializes the presence indicator; shows it if person.isPresent() is true.
+     */
+    private void initializePresenceField() {
+        if (presence == null || presencePane == null) {
+            return;
+        }
+
+        if (person.isPresent()) {
+            presence.setText("Present");
+            presence.getStyleClass().remove("absent");
+            if (!presence.getStyleClass().contains("present")) {
+                presence.getStyleClass().add("present");
+            }
+            presence.setManaged(true);
+            presence.setVisible(true);
+            presencePane.setManaged(true);
+            presencePane.setVisible(true);
+        } else {
+            presence.setManaged(false);
+            presence.setVisible(false);
+            presencePane.setManaged(false);
+            presencePane.setVisible(false);
+        }
     }
 
     /**
