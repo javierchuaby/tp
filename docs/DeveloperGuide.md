@@ -882,7 +882,7 @@ Expected: error about phone constraints.
    Since we now create JSON files on demand, users should be able to run something like `lists` to see available roster files.
 
 2. **Email validation extension**
-   Update validation to accept special characters (+, _, ., -) in the local-part to match standard email formats.
+   Update validation to accept the special character '+' in the local-part to match standard email formats.
 
 3. **Role-based tags**
    Some tags are “roles” (President, Secretary). We can display them differently in the UI.
