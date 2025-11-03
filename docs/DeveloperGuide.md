@@ -3,8 +3,6 @@ layout: page
 title: Developer Guide
 ---
 
-# Developer Guide
-
 - [1. Introduction](#1-introduction)
 - [2. Architecture](#2-architecture)
     - [2.1 Architectural Extension: Switchable Lists](#21-architectural-extension-switchable-lists)
