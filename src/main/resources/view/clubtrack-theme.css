@@ -147,4 +147,17 @@
     -fx-text-fill: #9AA3B2;
 }
 
+/* Presence indicator */
+.presence-indicator {
+    -fx-padding: 4 8 4 8;
+    -fx-background-radius: 999px;
+    -fx-font-weight: 700;
+    -fx-font-size: 11px;
+    -fx-border-width: 0;
+}
+
+.presence-indicator.present {
+    -fx-background-color: rgba(34,197,94,0.18); /* green-400 translucent */
+    -fx-text-fill: #22c55e; /* green-500 */
+}
 
