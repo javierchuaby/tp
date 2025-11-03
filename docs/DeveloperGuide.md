@@ -178,26 +178,29 @@ The diagram below provides a detailed view of the **Parser layer**, showing how 
 ![Parser Class Diagram](diagrams/ParserClassDiagram.png)
 
 **Description:**
-- `ClubTrackParser` serves as the **entry point** for all command strings.
-  It reads the user input, identifies the command word, and delegates parsing to the corresponding command parser (represented collectively as `XYZCommandParser`).
-- Each concrete command parser (e.g., `SearchCommandParser`, `SwitchCommandParser`) implements the `Parser` interface and follows the same structure:
-  tokenize input → extract arguments → create the corresponding `Command`.
-- `XYZCommandParser` represents all other command parsers (`AddCommandParser`, `EditCommandParser`, etc.) in simplified form for clarity.
-- `CliSyntax`, `Prefix`, `ArgumentTokenizer`, and `ArgumentMultimap` form the utility layer responsible for processing argument prefixes (e.g., `n/`, `p/`, `t/`) and mapping them to their values.
-- `ParserUtil` provides static helper methods for validating and converting these argument values into model types (e.g., `Name`, `Tag`, `Phone`).
+
+* `ClubTrackParser` serves as the **entry point** for all command strings.
+  It identifies the command word and delegates parsing to the appropriate command-specific parser (represented collectively as `XYZCommandParser`).
+* Each command parser (e.g. `AddCommandParser`, `EditCommandParser`, `SwitchCommandParser`, `SearchCommandParser`) implements the `Parser` interface and follows a consistent structure:
+  tokenize → extract arguments → validate → create the corresponding `Command`.
+* `XYZCommandParser` represents all individual command parsers in simplified form for clarity.
+* `CliSyntax`, `Prefix`, `ArgumentTokenizer`, and `ArgumentMultimap` form the utility layer that handles prefix-based argument extraction (e.g. `n/`, `p/`, `t/`).
+* `ParserUtil` provides static helper methods for validating and converting parsed strings into domain model objects (e.g. `Name`, `Tag`, `Faculty`).
 
 **Key relationships:**
-- `ClubTrackParser` **creates** the appropriate parser (`XYZCommandParser`) based on the user input.
-- Each parser **creates** a `Command` instance after parsing its arguments.
-- `ParserUtil`, `ArgumentTokenizer`, and `ArgumentMultimap` are **used** across multiple parsers to handle argument processing.
-- `CliSyntax` and `Prefix` define how argument prefixes are recognized and structured.
+
+* `ClubTrackParser` **creates** the relevant parser (`XYZCommandParser`) based on the user input.
+* Each parser **creates** a `Command` after successful parsing.
+* `ParserUtil`, `ArgumentTokenizer`, and `ArgumentMultimap` are **used** across all parsers for argument processing.
+* `CliSyntax` and `Prefix` **define** the shared command prefix structure used by all parsers.
 
 **Design intent:**
-This modular parser design ensures that adding new commands only requires:
-1. Creating a new `*CommandParser` class implementing the `Parser` interface, and
+This modular parser design ensures **extensibility**—adding a new command only requires:
+
+1. Implementing a new `*CommandParser` that adheres to the `Parser` interface, and
 2. Registering it in `ClubTrackParser`.
 
-This maintains **consistency**, **extensibility**, and **low coupling** across all commands.
+This design promotes **low coupling**, **code reuse**, and **consistent parsing behavior** across all commands.
 
 ---
 
