@@ -4,77 +4,66 @@ skinparam arrowThickness 1.1
 skinparam arrowColor MODEL_COLOR
 skinparam classBackgroundColor MODEL_COLOR
 
-' Simplified Model class diagram for ClubTrack / AddressBook slice
+Package Model as ModelPackage <<Rectangle>>{
+Class "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
+Class "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
+Class "<<interface>>\nModel" as Model
+Class AddressBook
+Class ModelManager
+Class UserPrefs
 
-package Model {
-  interface "<<interface>>\nModel" as Model
-  interface "<<interface>>\nReadOnlyAddressBook" as ReadOnlyAddressBook
-  interface "<<interface>>\nReadOnlyUserPrefs" as ReadOnlyUserPrefs
-
-  class AddressBook {
-    - persons : UniquePersonList
-    + getPersonList() : ObservableList<Person>
-  }
-
-  class ModelManager {
-    - addressBook : AddressBook
-    - userPrefs : UserPrefs
-    - filteredPersons : FilteredList<Person>
-    + getFilteredPersonList() : ObservableList<Person>
-    + updateFilteredPersonList(p : Predicate<Person>) : void
-  }
-
-  class UserPrefs {
-    - guiSettings : GuiSettings
-    - addressBookFilePath : Path
-    + getAddressBookFilePath() : Path
-  }
-
-  class UniquePersonList {
-    - internalList : List<Person>
-    + add(p : Person)
-    + remove(p : Person)
-  }
-
-  class Person {
-    - yearOfStudy : int
-    - faculty : String
-    + getName() : Name
-    + getPoints() : Points
-  }
-
-  ' show only Person attributes (AB3 style hides members by default)
-  show Person attributes
-  hide Person methods
-  skinparam ClassAttributeFontColor white
-
-  ' Value objects
-  class Name
-  class Phone
-  class Email
-  class Address
-  class Tag
-  class Points
-
-  ' Relationships
-  ModelManager ..|> Model
-  AddressBook .up.|> ReadOnlyAddressBook
-  UserPrefs .up.|> ReadOnlyUserPrefs
-
-  ModelManager --> "1" AddressBook
-  ModelManager --> "1" UserPrefs
-  AddressBook *--> "1" UniquePersonList
-
-  ' --- AB3-style list semantics ---
-  UniquePersonList --> "~* all" Person
-  ModelManager --> "~* filtered" Person
-
-  ' Object-valued compositions
-  Person *-- Name
-  Person *-- Phone
-  Person *-- Email
-  Person *-- Address
-  Person *-- Points
-  Person *-- Tag
+Class UniquePersonList
+' Person with ClubTrack-specific primitive attributes
+Class Person {
+  - yearOfStudy : int
+  - faculty : String
 }
+Class Address
+Class Email
+Class Name
+Class Phone
+Class Tag
+Class Points
+
+Class I #FFFFFF
+}
+
+' AB3-style outer ref (keep identical)
+Class HiddenOutside #FFFFFF
+HiddenOutside ..> Model
+
+' Interfaces and realizations (keep identical order/direction)
+AddressBook .up.|> ReadOnlyAddressBook
+
+ModelManager .up.|> Model
+Model .right.> ReadOnlyUserPrefs
+Model .left.> ReadOnlyAddressBook
+ModelManager -left-> "1" AddressBook
+ModelManager -right-> "1" UserPrefs
+UserPrefs .up.|> ReadOnlyUserPrefs
+
+' Collections and compositions
+AddressBook *--> "1" UniquePersonList
+UniquePersonList --> "~* all" Person
+Person *--> Name
+Person *--> Phone
+Person *--> Email
+Person *--> Address
+Person *--> "*" Tag
+Person *--> Points
+
+Person -[hidden]up--> I
+UniquePersonList -[hidden]right-> I
+
+Name -[hidden]right-> Phone
+Phone -[hidden]right-> Address
+Address -[hidden]right-> Email
+
+' Filtered list exposure
+ModelManager --> "~* filtered" Person
+
+' Show just Person attributes (AB3 theme hides members globally)
+show Person attributes
+hide Person methods
+skinparam ClassAttributeFontColor white
 @enduml
