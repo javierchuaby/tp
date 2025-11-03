@@ -877,7 +877,7 @@ Expected: error about phone constraints.
     * **Persistent points and attendance tracking**, including updated UI and storage integration.
     * **Enhanced tag and search system** with prefix-based filtering for roles (e.g. `committee`, `exco`).
     * **Refined UI layout** showing key fields (year, faculty, points) and dynamic updates after each command.
-    * **Improved parser utilities** to handle stricter validation and prevent unsafe path inputs (e.g. `../` in filenames).
+    * **Improved parser utilities** to handle stricter validation.
 
 ---
 
