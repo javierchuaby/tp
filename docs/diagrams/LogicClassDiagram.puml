@@ -3,95 +3,55 @@
 skinparam arrowThickness 1.1
 skinparam arrowColor LOGIC_COLOR_T4
 skinparam classBackgroundColor LOGIC_COLOR
-
 title ClubTrack — Logic Component
 
-package Logic as LogicPackage {
+package Logic as LogicPkg {
 
-  package "Parser" as ParserPkg {
-    class "<<interface>>\nParser<T>" as IParser
-    class ClubTrackParser
-    class XYZCommandParser
-
-    class ArgumentTokenizer
-    class ArgumentMultimap
-    class Prefix
-    class CliSyntax
-    class ParserUtil
-  }
-
-  package "Commands" as CmdPkg {
-    class CommandResult
-    abstract class Command
-    class XYZCommand
-
-    package "exceptions" {
-      class CommandException
-      class ParseException
-    }
+  package "Parser Classes" as ParserClasses {
+    ' Keep this package abstract like AB3 (no inner classes listed)
   }
 
   class "<<interface>>\nLogic" as Logic
   class LogicManager
+
+  abstract class Command
+  class XYZCommand
+  class CommandResult
+
+  ' ClubTrack-specific helper for list switching
   class ClubTrackListManager
-  class Messages
 }
 
 package Model {
-  interface Model
+  class HiddenModel #FFFFFF
 }
 
-'===========================
-'  Component relationships
-'===========================
+package Storage {
+  class HiddenStorage #FFFFFF
+}
 
+' --- Relationships (mirrors AB3 + our extra helper) ---
 LogicManager .right.|> Logic
+LogicManager -right-> "1" ParserClasses
+ParserClasses ..> XYZCommand : <<create>>
+
+XYZCommand -up-|> Command
+LogicManager .left.> Command : <<call>>
+
 LogicManager --> Model
-LogicManager --> ClubTrackParser
-LogicManager --> ClubTrackListManager
-LogicManager ..> Messages
+LogicManager --> Storage
+Command .right.> Model
+' (Commands may read/write model; storage is coordinated by LogicManager)
 
 Logic ..> CommandResult
-LogicManager ..> CommandResult : returns
+LogicManager .down.> CommandResult
+Command .up.> CommandResult : <<create>>
 
-LogicManager .down.> Command : executes()
-XYZCommand -up-|> Command
-CmdPkg.Command ..> Model : reads/writes
-
-'===========================
-'  Parser relationships
-'===========================
-
-IParser <|.. XYZCommandParser
-ClubTrackParser ..> XYZCommandParser : delegates
-ParserUtil ..> Prefix
-ParserUtil ..> CliSyntax
-XYZCommandParser ..> ArgumentTokenizer
-ArgumentTokenizer --> ArgumentMultimap
-ArgumentMultimap ..> Prefix
-CliSyntax ..> Prefix
-
-' Parser creates concrete command instances (abstracted as XYZCommand)
-XYZCommandParser ..> XYZCommand : <<create>>
-
-'===========================
-'  Notes
-'===========================
+' Extra helper used by switch-feature commands
+LogicManager ..> ClubTrackListManager : <<use>>
 
 note right of XYZCommand
-  Represents all concrete commands in ClubTrack, e.g.:
-  - AddCommand / EditCommand / DeleteCommand
-  - FindCommand, SearchCommand (n/, t/, any/)
-  - TagCommand / UntagCommand
-  - MarkCommand / UnmarkCommand
-  - AttendanceCommand
-  - SwitchCommand (active list)
-  - AddPointsCommand / MinusPointsCommand / PointsCommand
-  - ListCommand / RemoveCommand / HelpCommand / ExitCommand / ClearCommand
-end note
-
-note bottom of ClubTrackListManager
-  Used by Switch-related command(s) to change the active list.
+  XYZCommand = AddCommand, FindCommand, SwitchCommand, etc.
 end note
 
 @enduml

@@ -8,6 +8,11 @@ ClubTrack is a **desktop app for managing club members and attendance, optimized
 
 ***
 
+* Table of Contents
+  {:toc}
+
+---
+
 ## Target User Profile
 
 ClubTrack is designed for **university student club executive committee (exco) members** who need to:

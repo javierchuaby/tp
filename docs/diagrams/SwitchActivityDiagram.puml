@@ -4,23 +4,17 @@ title Switch to another member list
 start
 
 :User enters "switch LIST_NAME";
-
 :Logic parses LIST_NAME;
 
-if ("LIST_NAME" exists) then ([yes])
-  :Load address book
-  from `data/LIST_NAME.json`;
-else ([no])
-  :Create empty address book
-  for LIST_NAME;
+' Empty diamond; guards live on branches
+if () then ([LIST_NAME exists])
+  :Load address book from data/LIST_NAME.json;
+else ([else])
+  :Create empty address book for LIST_NAME;
 endif
 
-:Mark LIST_NAME as
-current list;
-
-:Update UI to show
-current list name
-and members;
+:Mark LIST_NAME as current list;
+:Update UI to show current list name and members;
 
 stop
 @enduml

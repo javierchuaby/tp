@@ -44,7 +44,6 @@
                     <MenuItem text="Exit" onAction="#handleExit" />
                   </items>
                 </Menu>
-                <Menu text="Edit" />
                 <Menu text="Help">
                   <items>
                     <MenuItem fx:id="helpMenuItem" text="Help" onAction="#handleHelp" />

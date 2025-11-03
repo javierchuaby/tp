@@ -45,6 +45,10 @@ public class Messages {
                 .append(person.getEmail())
                 .append("; Address: ")
                 .append(person.getAddress())
+                .append("; Year: Y")
+                .append(person.getYearOfStudy())
+                .append("; Faculty: ")
+                .append(person.getFaculty())
                 .append("; Tags: ");
         person.getTags().forEach(builder::append);
         return builder.toString();
