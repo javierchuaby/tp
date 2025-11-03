@@ -77,6 +77,9 @@ public class ClubTrackListManagerTest {
 
         // Set model currently using a list file
         Path removedPath = Paths.get("data", "toremove.json");
+        // Ensure the removed list actually exists in storage for this test
+        storage.put(removedPath, new ClubTrack());
+
         model.setClubTrackFilePath(removedPath);
         model.setClubTrack(new ClubTrack());
 
@@ -96,6 +99,9 @@ public class ClubTrackListManagerTest {
         storage.clear();
 
         Path removedPath = Paths.get("data", "toremove2.json");
+        // Ensure the removed list actually exists in storage for this test
+        storage.put(removedPath, new ClubTrack());
+
         model.setClubTrackFilePath(removedPath);
         model.setClubTrack(new ClubTrack());
 
