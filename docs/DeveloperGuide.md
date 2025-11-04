@@ -142,6 +142,8 @@ The **Logic** component is responsible for:
 
 ![Logic Class Diagram](diagrams/LogicClassDiagram.png)
 
+<div style="page-break-after: always;"></div>
+
 ### 4.1 Command Execution
 
 The sequence diagram below illustrates the interactions inside the Logic component when executing a `delete` command. It shows how a user command string flows through the parsing layer to create a `Command` object, which is then executed to interact with the `Model` component.
@@ -221,6 +223,7 @@ The **Model** layer keeps the application state and provides observable lists to
 * expose `FilteredList<Person>` for UI,
 * remember the **active list name** (e.g. `ClubTrack`, `Training_2025_10_20`),
 * hold user preferences.
+<div style="page-break-after: always;"></div>
 
 ### 5.1 Person model
 
@@ -323,6 +326,8 @@ switch LIST_NAME
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ### 7.2 `add` command (updated)
 
 **Old (AB3):** name, phone, email, **address** were compulsory; others optional.
@@ -391,6 +396,8 @@ We deliberately split them to reduce PE bugs and to make behaviour easy to expla
 You may also supply a name component in the future, but for v1.5 the key is: **“find is for names; search is for tags.”**
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ### 7.4 Points features
 
@@ -580,6 +587,8 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ### **UC03 – Mark attendance for an event**
 
 **MSS**
@@ -626,6 +635,8 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
     * 1a1. ClubTrack shows an error message. Use case ends.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ### **UC05 – Search for members by tag**
 
@@ -743,8 +754,6 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 ---
 
-<div style="page-break-after: always;"></div>
-
 ## 13. Non-Functional Requirements
 
 1. Should work on any **mainstream OS** with Java 17 or above installed.
@@ -772,6 +781,8 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 * **Common operations** – frequently used commands such as `add`, `edit`, `delete`, `find`, `list`, and `switch`.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 15. Acknowledgements
 
@@ -819,6 +830,8 @@ add n/Bob p/123 e/bob@example.com a/Tampines y/2 f/SOC
 ```
 
 Expected: error about phone constraints.
+
+<div style="page-break-after: always;"></div>
 
 ### A.3 Switching lists
 
@@ -868,6 +881,8 @@ Expected: error about phone constraints.
 
    Expected: **does not** return them unless “log” appears in their **name**.
 
+<div style="page-break-after: always;"></div>
+
 ### A.5 Clearing current list
 
 1. Switch to a test list:
@@ -881,8 +896,6 @@ Expected: error about phone constraints.
 2. Expected: current list becomes empty; other lists are **not** affected.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## Appendix B – Effort
 
