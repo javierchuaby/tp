@@ -6,7 +6,7 @@ title: ClubTrack
 [![CI Status](https://github.com/AY2526S1-CS2103T-W10-4/tp/workflows/Java%20CI/badge.svg)](https://github.com/AY2526S1-CS2103T-W10-4/tp/actions)
 [![codecov](https://codecov.io/gh/AY2526S1-CS2103T-W10-4/tp/branch/master/graph/badge.svg)](https://codecov.io/gh/AY2526S1-CS2103T-W10-4/tp)
 
-![Ui](images/Ui-ClubTrack-v1.6.png)
+![Ui](images/Ui.png)
 
 **ClubTrack is a desktop application for managing club members and attendance, optimized for university student club executive committee (exco) members.** While it has a GUI, most of the user interactions happen using a CLI (Command Line Interface).
 

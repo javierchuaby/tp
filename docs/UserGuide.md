@@ -80,7 +80,7 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
 <div style="page-break-after: always;"></div>
 
    A GUI similar to the one below should appear in a few seconds. The app starts with sample data.
-   ![Ui](images/Ui-ClubTrack-v1.6.png)
+   ![Ui](images/Ui.png)
 
    Type a command in the command box and press Enter to execute it.
    For example, typing **`help`** will open the help window.
