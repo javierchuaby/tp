@@ -32,6 +32,8 @@ title: Developer Guide
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 1. Introduction
 
 This Developer Guide describes the architecture, design, and implementation details of **ClubTrack**, a desktop app for university club executives to manage members, track attendance, and award participation points quickly via a CLI-first workflow.
@@ -67,7 +69,7 @@ The entry point is `MainApp`. On startup it:
 4. creates the logic; and
 5. hands control to the UI.
 
-![Architecture Diagram](diagrams/MainClassDiagram.png)
+![Architecture Diagram](images/ArchitectureDiagram.png)
 
 ### 2.1 Architectural Extension: Switchable Lists
 
@@ -96,6 +98,8 @@ All **mutating** commands (`add`, `edit`, `present`, `absent`, `clear`, `addpoin
 This keeps the architecture the same as AB3, but with an extra “current file” concept held by the Model/Storage.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 3. UI Component
 
@@ -126,6 +130,8 @@ Because we made `y/` and `f/` compulsory at the parser level, the UI can safely 
 When the model reloads a different list (due to `switch`), the observable list changes and the UI automatically refreshes.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 4. Logic Component
 
@@ -172,6 +178,8 @@ This structure cleanly separates concerns between **command parsing**, **command
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ### 4.2 Parser Class Diagram
 
 The diagram below provides a detailed view of the **Parser layer**, showing how user input is transformed into executable `Command` objects.
@@ -204,6 +212,8 @@ This modular parser design ensures **extensibility**—adding a new command only
 This design promotes **low coupling**, **code reuse**, and **consistent parsing behavior** across all commands.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 5. Model Component
 
@@ -247,6 +257,8 @@ We also changed **identity**:
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 6. Storage Component
 
 The Storage layer reads/writes JSON using the usual AB3 JSON storage classes, but with an extra concept: **active list name = file name**.
@@ -280,6 +292,8 @@ The Storage layer reads/writes JSON using the usual AB3 JSON storage classes, bu
 This design keeps lists isolated. Each event/training/day can have its own file, but the rest of the architecture is unchanged.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 7. Feature Implementation
 
@@ -348,6 +362,8 @@ add n/John Doe p/91234567 e/johnd@example.com a/Blk 123, #02-01 y/2 f/School of 
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ### 7.3 `find` vs `search`
 
 We deliberately split them to reduce PE bugs and to make behaviour easy to explain.
@@ -394,6 +410,8 @@ This is model-only, so the UI just renders `Points: X` from the person.
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 8. Testing and Test Updates
 
 Because we tightened phone validation **and** made `y/` + `f/` compulsory, several AB3 tests needed updating.
@@ -427,6 +445,8 @@ This keeps test data aligned with the real rules users see in the UI/UG.
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 9. Editing the data file
 
 ClubTrack stores data in:
@@ -453,6 +473,8 @@ Advanced users may edit these JSON files manually.
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 10. Product scope
 
 ### Target user profile:
@@ -469,6 +491,8 @@ Advanced users may edit these JSON files manually.
 ClubTrack enables club executives to **manage members, track attendance, and assign points up to 3× faster** than traditional spreadsheet-based solutions through an intuitive command-line interface optimized for power users.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 11. User stories
 
@@ -503,6 +527,8 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 *Note: Some user stories above are for future versions and may not be in the current build.*
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 12. Use cases
 
@@ -719,6 +745,8 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 13. Non-Functional Requirements
 
 1. Should work on any **mainstream OS** with Java 17 or above installed.
@@ -756,6 +784,8 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 * ChatGPT (OpenAI) was used to improve documentation clarity, generate explanatory comments, and refine diagrams or test descriptions for time efficiency. The team ensured that all final content accurately reflected our own understanding and implementation decisions.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## Appendix A – Instructions for Manual Testing
 
@@ -854,6 +884,8 @@ Expected: error about phone constraints.
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## Appendix B – Effort
 
 **Team size:** 5
@@ -880,6 +912,8 @@ Expected: error about phone constraints.
     * **Improved parser utilities** to handle stricter validation.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## Appendix C – Planned Enhancements
 

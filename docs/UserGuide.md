@@ -77,6 +77,8 @@ ClubTrack enables club executives to **manage members, track attendance, and ass
    java -jar ClubTrack.jar
    ```
 
+<div style="page-break-after: always;"></div>
+
    A GUI similar to the one below should appear in a few seconds. The app starts with sample data.
    ![Ui](images/Ui-ClubTrack-v1.6.png)
 
@@ -221,6 +223,8 @@ Finds members whose **name field only** contains **any** of the given keywords.
 - `find alex david` → matches `Alex David`, `Alexander`, `David Lee`
 
 ***
+
+<div style="page-break-after: always;"></div>
 
 ### Searching members by tag prefix : `search`
 
