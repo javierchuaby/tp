@@ -161,6 +161,7 @@ The sequence diagram below illustrates the interactions inside the Logic compone
 8. `LogicManager` returns the `CommandResult` to the caller (e.g., the UI).
 
 This interaction pattern is consistent across all commands — every command goes through the same **parse → create → execute → result** cycle.
+<div style="page-break-after: always;"></div>
 
 **Key classes involved:**
 - `LogicManager` — main orchestrator that executes user commands.
@@ -443,8 +444,6 @@ Because we tightened phone validation **and** made `y/` + `f/` compulsory, sever
 This keeps test data aligned with the real rules users see in the UI/UG.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## 9. Editing the data file
 
@@ -896,6 +895,8 @@ Expected: error about phone constraints.
 2. Expected: current list becomes empty; other lists are **not** affected.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## Appendix B – Effort
 
