@@ -99,8 +99,6 @@ This keeps the architecture the same as AB3, but with an extra “current file�
 
 ---
 
-<div style="page-break-after: always;"></div>
-
 ## 3. UI Component
 
 The UI layer is JavaFX-based and largely follows AB3.
@@ -130,8 +128,6 @@ Because we made `y/` and `f/` compulsory at the parser level, the UI can safely 
 When the model reloads a different list (due to `switch`), the observable list changes and the UI automatically refreshes.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## 4. Logic Component
 
@@ -177,8 +173,6 @@ This interaction pattern is consistent across all commands — every command goe
 This structure cleanly separates concerns between **command parsing**, **command execution**, and **data management**, allowing new commands to be added with minimal coupling.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ### 4.2 Parser Class Diagram
 
@@ -293,8 +287,6 @@ This design keeps lists isolated. Each event/training/day can have its own file,
 
 ---
 
-<div style="page-break-after: always;"></div>
-
 ## 7. Feature Implementation
 
 ### 7.1 `switch` feature
@@ -316,6 +308,8 @@ switch LIST_NAME
     * if present → load
     * if missing → create a new empty address book, save as `data/LIST_NAME.json`
 4. UI refreshes because the model’s observable list changed.
+
+<div style="page-break-after: always;"></div>
 
 **Activity diagram:**
 
@@ -409,8 +403,6 @@ We added a lightweight points system for participation:
 This is model-only, so the UI just renders `Points: X` from the person.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## 8. Testing and Test Updates
 
@@ -561,6 +553,8 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ### **UC02 – Edit a member**
 
 **MSS**
@@ -654,6 +648,8 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ### **UC06 – Switch to another member list**
 
 **MSS**
@@ -696,6 +692,8 @@ Priorities: High (must have) – `* * *`, Medium (nice to have) – `* *`, Low (
     * 1a1. ClubTrack shows an invalid index error. Use case ends.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ### **UC08 – Clear current list**
 
