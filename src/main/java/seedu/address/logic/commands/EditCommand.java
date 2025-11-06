@@ -135,6 +135,7 @@ public class EditCommand extends Command {
      * Converts a string to title case: first letter of each word capitalized, other letters lower-cased.
      * Words are split on whitespace.
      */
+    @SuppressWarnings("unused")
     private static String toTitleCase(String input) {
         String trimmed = input == null ? "" : input.trim();
         if (trimmed.isEmpty()) {

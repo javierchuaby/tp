@@ -13,7 +13,10 @@ import seedu.address.model.person.Person;
 public interface Model {
     /** {@code Predicate} that always evaluate to true */
     Predicate<Person> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
-    Predicate<Person> PREDICATE_SHOW_PRESENT_PERSONS = (Person person) -> person.isPresent();
+    Predicate<Person> PREDICATE_SHOW_PRESENT_PERSONS = (Person person) -> {
+        Boolean isPresent = person.isPresent();
+        return isPresent != null && isPresent;
+    };
 
     /**
      * Replaces user prefs data with the data in {@code userPrefs}.

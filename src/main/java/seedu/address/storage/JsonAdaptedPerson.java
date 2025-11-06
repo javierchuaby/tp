@@ -149,7 +149,8 @@ class JsonAdaptedPerson {
         // Tags & Points
         final Set<Tag> modelTags = new HashSet<>(personTags);
         final Points modelPoints = new Points(points == null ? 0 : points);
-        final boolean modelIsPresent = isPresent != null && isPresent;
+        // Preserve null to represent "unmarked" state
+        final Boolean modelIsPresent = isPresent;
 
         // Build the Person using the full constructor
         return new Person(

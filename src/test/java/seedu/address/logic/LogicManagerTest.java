@@ -34,7 +34,9 @@ import seedu.address.storage.StorageManager;
 import seedu.address.testutil.PersonBuilder;
 
 public class LogicManagerTest {
+    @SuppressWarnings("unused")
     private static final IOException DUMMY_IO_EXCEPTION = new IOException("dummy IO exception");
+    @SuppressWarnings("unused")
     private static final IOException DUMMY_AD_EXCEPTION = new AccessDeniedException("dummy access denied exception");
 
     @TempDir
@@ -151,6 +153,7 @@ public class LogicManagerTest {
      * @param e               the exception to be thrown by the Storage component
      * @param expectedMessage the message expected inside exception thrown by the Logic component
      */
+    @SuppressWarnings("unused")
     private void assertCommandFailureForExceptionFromStorage(IOException e, String expectedMessage) {
         Path prefPath = temporaryFolder.resolve("ExceptionUserPrefs.json");
 

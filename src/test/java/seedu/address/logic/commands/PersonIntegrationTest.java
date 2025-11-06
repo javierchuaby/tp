@@ -37,7 +37,7 @@ public class PersonIntegrationTest {
         Address address = new Address("123 Test Street");
         Set<Tag> tags = new HashSet<>();
         tags.add(new Tag("President"));
-        boolean isPresent = true;
+        Boolean isPresent = true;
         Points points = new Points(100);
 
         Person person = new Person(name, phone, email, yearOfStudy, faculty,
@@ -59,7 +59,7 @@ public class PersonIntegrationTest {
     public void person_pointsOperations_success() {
         Person person = new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(),
             ALICE.getYearOfStudy(), ALICE.getFaculty(), ALICE.getAddress(),
-            ALICE.getTags(), false, new Points(50));
+            ALICE.getTags(), Boolean.FALSE, new Points(50));
 
         // Test points addition
         Points newPoints = person.getPoints().add(25);
