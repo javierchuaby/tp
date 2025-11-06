@@ -7,7 +7,6 @@
     "yearOfStudy" : 2,
     "faculty" : "School of Computing",
     "address" : "123, Jurong West Ave 6, #08-111",
-    "isPresent" : false,
     "points" : 0,
     "tags" : [ "friends" ]
   }, {
@@ -17,7 +16,6 @@
     "yearOfStudy" : 1,
     "faculty" : "Faculty of Science",
     "address" : "311, Clementi Ave 2, #02-25",
-    "isPresent" : false,
     "points" : 0,
     "tags" : [ "owesMoney", "friends" ]
   }, {
@@ -27,7 +25,6 @@
     "yearOfStudy" : 3,
     "faculty" : "School of Computing",
     "address" : "wall street",
-    "isPresent" : false,
     "points" : 0,
     "tags" : [ ]
   }, {
@@ -37,7 +34,6 @@
     "yearOfStudy" : 4,
     "faculty" : "School of Business",
     "address" : "10th street",
-    "isPresent" : false,
     "points" : 0,
     "tags" : [ "friends" ]
   }, {
@@ -47,7 +43,6 @@
     "yearOfStudy" : 2,
     "faculty" : "Faculty of Science",
     "address" : "michegan ave",
-    "isPresent" : false,
     "points" : 0,
     "tags" : [ ]
   }, {
@@ -57,7 +52,6 @@
     "yearOfStudy" : 3,
     "faculty" : "Faculty of Arts & Social Sciences",
     "address" : "little tokyo",
-    "isPresent" : false,
     "points" : 0,
     "tags" : [ ]
   }, {
@@ -67,7 +61,6 @@
     "yearOfStudy" : 4,
     "faculty" : "Faculty of Science",
     "address" : "4th street",
-    "isPresent" : false,
     "points" : 0,
     "tags" : [ ]
   } ]

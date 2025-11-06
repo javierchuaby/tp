@@ -25,11 +25,11 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
-    private final boolean isPresent;
+    private final Boolean isPresent; // null = unmarked, true = present, false = absent
     private final Points points;
 
     /**
-     * Constructs a {@code Person} with {@code isPresent=false} and fresh {@code Points}.
+     * Constructs a {@code Person} with {@code isPresent=null} (unmarked) and fresh {@code Points}.
      * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email,
@@ -43,17 +43,18 @@ public class Person {
         this.faculty = faculty;
         this.address = address;
         this.tags.addAll(tags);
-        this.isPresent = false;
+        this.isPresent = null; // unmarked by default
         this.points = new Points();
     }
 
     /**
      * Constructs a {@code Person} with explicit presence.
+     * @param isPresent null = unmarked, true = present, false = absent
      */
     public Person(Name name, Phone phone, Email email,
                   int yearOfStudy, String faculty,
                   Address address, Set<Tag> tags,
-                  boolean isPresent) {
+                  Boolean isPresent) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
@@ -68,11 +69,12 @@ public class Person {
 
     /**
      * Constructs a {@code Person} with explicit presence and points.
+     * @param isPresent null = unmarked, true = present, false = absent
      */
     public Person(Name name, Phone phone, Email email,
                   int yearOfStudy, String faculty,
                   Address address, Set<Tag> tags,
-                  boolean isPresent, Points points) {
+                  Boolean isPresent, Points points) {
         requireAllNonNull(name, phone, email, address, tags, points);
         this.name = name;
         this.phone = phone;
@@ -113,7 +115,11 @@ public class Person {
         return Collections.unmodifiableSet(tags);
     }
 
-    public boolean isPresent() {
+    /**
+     * Returns the presence status of this person.
+     * @return null if unmarked, true if present, false if absent
+     */
+    public Boolean isPresent() {
         return isPresent;
     }
 
@@ -148,7 +154,7 @@ public class Person {
                 && Objects.equals(faculty, o.faculty)
                 && address.equals(o.address)
                 && tags.equals(o.tags)
-                && isPresent == o.isPresent
+                && Objects.equals(isPresent, o.isPresent)
                 && points.equals(o.points);
     }
 

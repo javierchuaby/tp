@@ -117,28 +117,42 @@ public class PersonCard extends UiPart<Region> {
     }
 
     /**
-     * Initializes the presence indicator; shows it if person.isPresent() is true.
+     * Initializes the presence indicator; shows "Present" (green), "Absent" (red), or hides it if unmarked (null).
      */
     private void initializePresenceField() {
         if (presence == null || presencePane == null) {
             return;
         }
 
-        if (person.isPresent()) {
-            presence.setText("Present");
-            presence.getStyleClass().remove("absent");
-            if (!presence.getStyleClass().contains("present")) {
-                presence.getStyleClass().add("present");
-            }
-            presence.setManaged(true);
-            presence.setVisible(true);
-            presencePane.setManaged(true);
-            presencePane.setVisible(true);
-        } else {
+        Boolean isPresent = person.isPresent();
+
+        // Only show indicator if explicitly marked (not null)
+        if (isPresent == null) {
+            // Unmarked - hide the indicator
             presence.setManaged(false);
             presence.setVisible(false);
             presencePane.setManaged(false);
             presencePane.setVisible(false);
+        } else {
+            // Show indicator with appropriate styling
+            presence.setManaged(true);
+            presence.setVisible(true);
+            presencePane.setManaged(true);
+            presencePane.setVisible(true);
+
+            if (isPresent) {
+                presence.setText("Present");
+                presence.getStyleClass().remove("absent");
+                if (!presence.getStyleClass().contains("present")) {
+                    presence.getStyleClass().add("present");
+                }
+            } else {
+                presence.setText("Absent");
+                presence.getStyleClass().remove("present");
+                if (!presence.getStyleClass().contains("absent")) {
+                    presence.getStyleClass().add("absent");
+                }
+            }
         }
     }
 

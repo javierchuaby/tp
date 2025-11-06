@@ -161,3 +161,8 @@
     -fx-text-fill: #22c55e; /* green-500 */
 }
 
+.presence-indicator.absent {
+    -fx-background-color: rgba(239,68,68,0.18); /* red-400 translucent */
+    -fx-text-fill: #ef4444; /* red-500 */
+}
+

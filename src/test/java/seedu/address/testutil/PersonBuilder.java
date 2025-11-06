@@ -31,7 +31,7 @@ public class PersonBuilder {
     private String faculty;
     private Address address;
     private Set<Tag> tags;
-    private boolean isPresent = false;
+    private Boolean isPresent = null; // null = unmarked by default
     private Points points;
 
     /**
@@ -45,7 +45,7 @@ public class PersonBuilder {
         faculty = DEFAULT_FACULTY;
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
-        isPresent = false; // Ensure default is set
+        isPresent = null; // Unmarked by default
         points = new Points(); // Initialize with default 0 points
     }
 
@@ -122,8 +122,9 @@ public class PersonBuilder {
 
     /**
      * Sets the {@code Present} status of the {@code Person} that we are building.
+     * @param isPresent null = unmarked, true = present, false = absent
      */
-    public PersonBuilder withPresent(boolean isPresent) {
+    public PersonBuilder withPresent(Boolean isPresent) {
         this.isPresent = isPresent;
         return this;
     }
